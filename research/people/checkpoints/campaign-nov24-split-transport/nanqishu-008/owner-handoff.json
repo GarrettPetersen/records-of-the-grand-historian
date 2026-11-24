@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "kind": "split-transport-identity-owner-handoff",
+  "scope": {
+    "book": "nanqishu",
+    "chapter": "008"
+  },
+  "ownerAgentId": "bc-57d78b4f-f75f-42da-927e-a8e87fa358e5",
+  "campaignWorker": "cursor-nov24-partitioned-2",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "79ae4c4de6c6739c3dc12f011c3b789dba50e3c1",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-partitioned-owner-transports",
+    "commit": "9be1bddf9a2d45496c8f0694583a74b973ec027c",
+    "planFingerprint": "sha256:6f067e4fee6dafd7dd63eba73cb1e6c6328f3a8fa218f775a5aab845f9ab0270",
+    "sourcePacketSha256": "sha256:1902e65713604cc93a6d1c440cfc168ef33481287bcef9711b083f14be8b082a",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "sha256:5b249bf6d24a098152f4dce293a7e1c4f9895b23323ae8a2918b7e2b357ae3e0",
+        "caseCount": 22
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "sha256:69571d68731b29636ef76645f89bf5cf1acd50490f60f70416e9e31ff6feab23",
+        "caseCount": 22
+      }
+    ],
+    "preparationReceiptSha256": "sha256:5ab28c091e0dce48d6987e266d1f44146a0a4efccc281e56743fa55cfd7386c5"
+  },
+  "sealedInputs": {
+    "source": "sha256:866757326567ae9968abf680597aa8cc1ff09ada05fac9a7fb0e30b0436e87df",
+    "extraction": "sha256:c24895be18dc1b4e1cb6d29f2cd518a528aa166df6075209a78f9a68639eb341",
+    "editorial": "sha256:3fe539bb34844f89d6c2d83551b8b4e7cdbc5bc506f3444de8a666906d045847",
+    "dateAudit": "sha256:37ac509d31a8d6daa67ee4b2067865d783fbca0e17f6a31304b7c0fbb515b5a4"
+  },
+  "chronologyStatus": "audited (independent date audit on sealed extraction)",
+  "editorialStatus": "7 applied editorial decisions; no pending proposals",
+  "reviewCases": 44,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 44 cases retain preparation-proposed canonicalPersonId with unresolvedIdentity true. 23 overflow cases preserve bounded-retrieval uncertainty; no false-merge or wrong-actor contradiction found. No canonical extraction or shared-registry edits.",
+  "ownerEvidenceSha256": "sha256:01a60e5e2a9edaada92f704c92bc7425d04e481492eaea6173b7710356aaa807",
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-nov24-split-transport/nanqishu-008/preparation-receipt.json",
+    "transportPart001": "research/people/checkpoints/campaign-nov24-split-transport/nanqishu-008/transport-part-001.json",
+    "transportPart002": "research/people/checkpoints/campaign-nov24-split-transport/nanqishu-008/transport-part-002.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-nov24-split-transport/nanqishu-008/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-nov24-split-transport/nanqishu-008/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/campaign-nov24-split-transport/nanqishu-008/lookup-receipt.json"
+  },
+  "reproduce": {
+    "verifyTransportPart001": "sha256sum research/people/checkpoints/campaign-nov24-split-transport/nanqishu-008/transport-part-001.json",
+    "verifyTransportPart002": "sha256sum research/people/checkpoints/campaign-nov24-split-transport/nanqishu-008/transport-part-002.json",
+    "validateChapter": "npm run people:validate -- --book nanqishu --chapter 008"
+  },
+  "notes": "Owner evidence is not independent approval. Reviewer must seal requiredReport per transport instructions."
+}
