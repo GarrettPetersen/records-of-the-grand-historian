@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "278"
+  },
+  "ownerAgentId": "bc-b1524905-c914-4161-8283-fb44e76947f1",
+  "workerId": "cursor-nov24-retained-staging-w15-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "08cda70c9fa8613d8c0579e302faec7e9f71c71ccf34fe72c79c7bc1142ed8b6",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-278-947f1",
+  "extractionBytes": 114744,
+  "inputBlobWitness": {
+    "source": "b6a08ad9c2e73806786bed408b4012f73a3e9c48",
+    "extraction": "523a25a01a3a66bc891b647cef80ad06c17d23e1",
+    "editorial": "763ce95dfe0dce4a85506b3de16dfcf24bec04e7"
+  },
+  "sealedInputs": {
+    "source": "sha256:2379184b40ee6d28130e3a68c78e30225a632b7462a5c280a64f8010632408e5",
+    "extraction": "sha256:32d2d0e09e3b1e779bc89c0d4a25e9a51f3cdb5b46bd8fd64094a6656788c0f6",
+    "editorial": "sha256:bbbd0f11d00562ddebe57603d7d07a564a3e45297f679ea9de443ac1384dd4b6"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 194,
+    "translatedCount": 194,
+    "missingEnglish": 0,
+    "sourceTitle": "Volume 278 Biographies 65: Mu Tianyan, A Shan, Ga Li",
+    "fullEnglishCoverage": true,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0
+  },
+  "extractionReuse": {
+    "promptVersion": 7,
+    "people": 81,
+    "claimsInWorkOrder": 314,
+    "noReextraction": true,
+    "sourceExtractionSha256Verified": "sha256:32d2d0e09e3b1e779bc89c0d4a25e9a51f3cdb5b46bd8fd64094a6656788c0f6"
+  },
+  "editorialReuse": {
+    "acceptedDecisionCount": 5,
+    "status": "reviewed-with-applied-proposals",
+    "noReseal": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-278/date-packet.json",
+    "sha256": "sha256:eee51eb440a915de9fb2ea83b7675e9dcb5ea0e59e5537c1d3ec1f410f30ecf3",
+    "command": "npm run people:dates:packet -- --book qingshigao --chapter 278 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-278/date-packet.json",
+    "dateHintChecks": 214,
+    "peopleInPacket": 81,
+    "sourceUnitsInPacket": 0,
+    "extractionHashInPacket": "sha256:b8a049613d99509b874d08e6da4e5e2df1fffab7e135f20571f10645d26bd095"
+  },
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 278",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/278: 1 extraction(s), 81 local people, 659 mentions, 532 claims, 0 proposed repair(s), 5 applied repair(s), 5 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 278",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "un-audited",
+    "independentDateAuditMissing": true,
+    "notIndependentApproval": true,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "substantiveFindings": "Pinned three-part inputs witness-verified at staging 20b8d0e3. No data/people/date-audits/qingshigao/278.json (no-native-date-report). Source English coverage complete on all 194 Chinese units; sealed extraction and 5 accepted editorial repairs pass people:validate with zero proposed repairs. Native date packet sealed; people:dates:verify un-audited — owner did not record independent date approval.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "gate": "independent-native-date-audit",
+      "status": "missing",
+      "artifactPath": "data/people/date-audits/qingshigao/278.json",
+      "datePacketPath": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-278/date-packet.json",
+      "datePacketSha256": "sha256:eee51eb440a915de9fb2ea83b7675e9dcb5ea0e59e5537c1d3ec1f410f30ecf3",
+      "instruction": "Independent reviewer audits all 214 packet items; record with people:dates:record. Owner handoff is not date approval."
+    },
+    "identity": {
+      "gate": "independent-canonical-identity-review",
+      "instruction": "Bounded dossier identity review on sealed extraction after date gate; owner did not seal identity approval."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 278",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 278",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 278 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-278/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; no sealed input edits, registry, deploy, or merge."
+}
