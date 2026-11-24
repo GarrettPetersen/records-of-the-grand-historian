@@ -2,6 +2,7 @@
 import { IDENTITY_UNCERTAINTY_NOTE } from './lib/people-chapter-identity.mjs';
 
 import fs from 'node:fs';
+import { assertRemotePeopleGeneration } from './lib/people-generation-policy.mjs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -809,6 +810,7 @@ function renderReferences(person) {
       const zh = visibleTableText(chineseText(unit));
       const en = visibleTableText(englishText(unit));
       return `<article class="person-reference" data-person-reference-item>
+        ${reference.inference ? `<p class="person-reference-inference">${escapeHtml(reference.inference)}</p>` : ''}
         ${zh ? `<a class="person-reference-zh" lang="zh-Hant" href="${chapterBase}#zh-${escapeAttribute(reference.unitId)}">${escapeHtml(zh)}</a>` : ''}
         ${en ? `<a class="person-reference-en" href="${chapterBase}#en-${escapeAttribute(reference.unitId)}">${escapeHtml(en)}</a>` : ''}
       </article>`;
@@ -1525,6 +1527,7 @@ export function generatePeoplePages(options = parseArgs([])) {
 
 if (isMain) {
   try {
+    assertRemotePeopleGeneration('Website person shard generation');
     generatePeoplePages(parseArgs(process.argv.slice(2)));
   } catch (error) {
     console.error(error instanceof Error ? error.message : error);
