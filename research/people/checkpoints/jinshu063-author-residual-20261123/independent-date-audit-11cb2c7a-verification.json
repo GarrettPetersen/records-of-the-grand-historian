@@ -298,8 +298,11 @@
   "nativeReportEligibility": {
     "itemChecksDrafted": 414,
     "itemChecksComplete": true,
-    "personChecksComplete": false,
-    "missingPersonCheckIds": [
+    "personChecksComplete": true,
+    "personCoverageReceipt": "independent-date-audit-person-coverage-receipt.json",
+    "unitCoverageReceipt": "independent-date-audit-unit-coverage-receipt.json",
+    "missingPersonCheckIds": [],
+    "priorMissingPersonCheckIds": [
       "p001",
       "p002",
       "p003",
@@ -491,8 +494,11 @@
       "p189",
       "p190"
     ],
-    "reviewedUnitsComplete": false,
+    "reviewedUnitsComplete": true,
+    "nativeReportCheckpoint": "independent-date-audit-11cb2c7a-report-draft.json",
+    "nativeReportStatus": "audited",
+    "validateDateAuditReportPasses": true,
     "canRecordToDataPeopleDateAudits": false,
-    "blocker": "190 independent personChecks and full reviewedUnits list not completed in prior scopes; checkpoint only per PEOPLE_DATE_AUDIT gate."
+    "blocker": "Checkpoint-only independent report; no people:dates:record on this review branch and no canonical data/people/date-audits write without host merge review."
   }
 }

@@ -51,7 +51,10 @@ Independent replay on pinned extraction at `11cb2c7ae6024949c65651a49617fc0d7f0d
 
 - **Ten era hint/claim pairs** (`tenEraHintClaimPairs`): all five Chinese witnesses present (s0026, s0073, s0170, s0226, s0288); each pair keeps `sourceDate.text` only, adds qualitative English without Western years, and clears the old `unresolved` flag — **verified, not approved for chapter `audited`** (host reign calendar still external).
 - **Six grokbot-27 chunk producers** restored on unchanged ranges 001–006; semantic extraction matches `92b6c31f` aside from the era round above (`independent-date-audit-11cb2c7a-verification.json`).
-- **414/414 item judgments** rebound: **394 invariant**, **20 refreshed** (10 claims + 10 hints). Native draft report validates against the live packet but is **checkpoint-only** — **190 `personChecks` missing** (`independent-date-audit-11cb2c7a-report-draft.json`, status `needs-revision`). **No `people:dates:record`** and no canonical `data/people` edits.
+- **414/414 item judgments** rebound: **394 invariant**, **20 refreshed** (10 claims + 10 hints).
+- **190/190 person checks** filed in five blocks (`independent-date-audit-person-checks-001.json` … `005.json`); coverage receipt lists exact IDs (`independent-date-audit-person-coverage-receipt.json`).
+- **342/342 unit coverage** attested (`independent-date-audit-unit-coverage-receipt.json`).
+- Native report checkpoint **`independent-date-audit-11cb2c7a-report-draft.json`** now **`audited`** and passes `validateDateAuditReport` at extraction `11cb2c7a` — still **checkpoint-only** (no `people:dates:record`, no `data/people/date-audits` write on this branch).
 
 ## Pending actions (not approved here)
 
