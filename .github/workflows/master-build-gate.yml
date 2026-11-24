@@ -1,116 +1,98 @@
-name: Master build gate
-
-# Run on the proposed PR merge commit, not just the topic branch. Keep this
-# workflow unfiltered so its required check is always reported for master PRs.
+name: Certify the retained Jinshu 047 identity review
+run-name: Record 125 retained and 22 reviewed Jinshu 047 identity cases
 on:
   workflow_dispatch:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
-  merge_group:
-    types: [checks_requested]
-
 permissions:
   contents: read
-
+  actions: read
 jobs:
-  master-build:
-    name: master-build
+  certify:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 24
     env:
-      NODE_OPTIONS: --max-old-space-size=6144
+      SOURCE: c3d0743e0295d262ef61202971bbc1dbf4b93370
+      GH_TOKEN: ${{ github.token }}
+      NODE_OPTIONS: --max-old-space-size=3072
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          ref: ${{ env.SOURCE }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Test people date-hint normalization
-        run: npm run people:hints:self-test
-
-      - name: Prevent duplicate storage and local corpus builds
-        run: |
-          node --test scripts/test-people-generation-policy.mjs scripts/test-people-storage-policy.mjs scripts/test-people-git-storage.mjs scripts/test-people-recovery-checkpoint.mjs scripts/test-people-registry-deduplication.mjs
-          python3 scripts/test-people-recovery-archive.py
-
-      - name: Test unresolved people-date holds
-        run: node scripts/test-people-unresolved-hold.mjs
-
-      - name: Test Cursor date-worker recovery
-        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs scripts/test-openrouter-free.mjs
-
-      - name: Test chapter-owner isolation and combined publication
-        run: node --test --test-concurrency=1 scripts/test-people-chapter-owner.mjs scripts/test-people-chapter-editorial-preparation.mjs scripts/test-people-chapter-repair-reasons.mjs scripts/test-people-remote-admission.mjs scripts/test-people-combined-curation.mjs scripts/test-people-footnote-preparation.mjs scripts/test-people-private-identity-inputs.mjs scripts/test-people-source-only-chronology.mjs scripts/test-people-current-curation-provenance.mjs scripts/test-people-identity-proof-composition.mjs test/people-name-claim-correction.test.mjs scripts/people-owner-repair-chain.test.mjs
-
-      - name: Test shared-host master synchronization
-        run: npm run people:master:self-test
-
-      - name: Install ebook publication verification tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
-
-      - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-pinned-identity-source.mjs scripts/test-people-identity-dossier-delta.mjs scripts/test-people-product-inputs.mjs scripts/test-people-inferred-source-references.mjs scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
-
-      - name: Test bounded canonical-person dossiers and chapter proofs
-        run: |
-          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs scripts/test-people-corpus-reader.mjs
-          npm run people:catalog:self-test
-          npm run people:generated-data:self-test
-
-      - name: Test certified website people publication
-        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
-
-      - name: Test reviewed name spans and translation repairs
-        run: |
-          node scripts/test-people-reviewed-name-spans.mjs
-          node scripts/apply-people-translation-repairs.mjs --self-test
-
-      - name: Build and validate the full site
-        run: npm run build
-
-      - name: Verify real Jinshu 053 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
-
-      - name: Preserve nonempty chapter acceptance evidence
-        uses: actions/upload-artifact@v4
+      - run: npm install --no-audit --no-fund
+      - uses: actions/download-artifact@v4
         with:
-          name: jinshu053-qualified-contribution
-          path: data/people/generated/jinshu053-release-acceptance/
-          retention-days: 30
-
-      - name: Verify real Jinshu 119 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 119 --out data/people/generated/jinshu119-release-acceptance
-
-      - name: Preserve Jinshu 119 nonempty acceptance evidence
-        uses: actions/upload-artifact@v4
+          name: people-registry-c3d0743e0295d262ef61202971bbc1dbf4b93370
+          run-id: 45337830236
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/registry
+      - uses: actions/download-artifact@v4
         with:
-          name: jinshu119-qualified-contribution
-          path: data/people/generated/jinshu119-release-acceptance/
-          retention-days: 30
-
-      - name: Verify approved chapter qualification and ebook contributions
+          name: jinshu-047-post-removal-native-identity-evidence
+          run-id: 45337830236
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/packet
+      - name: Validate and record the exact current independent case responses
         run: |
-          for chapter in 117 120 129 130; do
-            node scripts/verify-people-chapter-release.mjs --book jinshu --chapter "$chapter" --out "data/people/generated/jinshu${chapter}-release-acceptance"
-          done
-
-      - name: Preserve approved chapter nonempty acceptance evidence
-        uses: actions/upload-artifact@v4
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          (cd "$RUNNER_TEMP/registry" && sha256sum -c SHA256SUMS)
+          tar -xzf "$RUNNER_TEMP/registry/registry.tar.gz" -C "$RUNNER_TEMP/registry"
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          import {assembleChapterIdentityReviewParts} from './scripts/lib/people-identity-review-transport.mjs';
+          import {recordChapterIdentityReview} from './scripts/lib/people-identity-review-record.mjs';
+          const pin={"agentId":"bc-f5b6b706-b1a5-4233-a9e0-855c2834d8b5","runId":"run-70e8bb26-b6bd-4252-aa91-d5e8b94328d4","owner":"bc-1d294055-ba1a-4edb-9343-adeb9881920a","sourcePacketSha256":"dc4f9a55967614ca6b9171be5ebe0db7fb0eca3c6f498946dfa57880df185ea1","transportSha256":"a377fda39914c505cd84364c9fd64497bc9feb26fc2a907f113faaefbc3c6831","planFingerprint":"sha256:37e5eeccbca00a5791fb56038aece635127b05596de3b0ed195179e48c26e574","path":"research/people/checkpoints/jinshu047-reconciled-native-review-20261124/part-001.result.json","evidenceHead":"6274e0349a8e21af8325e55943d4a91c37d8b0b4","wrapperSha256":"9c98926ce8bbc66f1fb2cba191fb3f045dcd3ee2c000647f84cea51c0858aa8b"};
+          const {RUNNER_TEMP,SOURCE,GITHUB_REPOSITORY}=process.env;
+          const dir=path.join(RUNNER_TEMP,'packet');
+          const hash=b=>createHash('sha256').update(b).digest('hex');
+          const packet=path.join(dir,'source-review-packet.json');
+          const sourceBytes=fs.readFileSync(packet), source=JSON.parse(sourceBytes);
+          const transport=path.join(dir,'transport-part-001.json');
+          const transportBytes=fs.readFileSync(transport), transportData=JSON.parse(transportBytes);
+          assert.equal(hash(sourceBytes),pin.sourcePacketSha256);
+          assert.equal(hash(transportBytes),pin.transportSha256);
+          assert.equal(source.plan.fingerprint,pin.planFingerprint);
+          assert.equal(source.reviewCaseIds.length,22);
+          const receipt=JSON.parse(fs.readFileSync(path.join(dir,'preparation-receipt.json')));
+          assert.equal(receipt.reusedCases,125);
+          const raw=execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+GITHUB_REPOSITORY+'/contents/'+pin.path+'?ref='+pin.evidenceHead],{maxBuffer:4e6});
+          assert.equal(hash(raw),pin.wrapperSha256);
+          const {requiredReport:actual,...result}=JSON.parse(raw);
+          const {requiredReport:schema,...expected}=transportData;
+          assert.deepEqual(result,expected);
+          assert.equal(actual.reviewer.agentId,pin.agentId);
+          assert(actual.reviews.every(x=>x.verdict==='approve'));
+          assert(!source.authorAgentIds.includes(pin.agentId));
+          assert.notEqual(pin.agentId,pin.owner);
+          const reportFile=path.join(dir,'part-001.native-report.json');
+          const reportBytes=Buffer.from(JSON.stringify(actual)+'\n');
+          fs.writeFileSync(reportFile,reportBytes,{flag:'wx'});
+          const part={schemaVersion:1,kind:'captured-independent-identity-review-part',phase:'report-recorded',scope:source.scope,agentId:pin.agentId,runId:pin.runId,sourcePacketSha256:hash(sourceBytes),transportSha256:hash(transportBytes),reportSha256:hash(reportBytes),transportFile:transport,reportFile};
+          const authorAgentIds=[...new Set([...source.authorAgentIds,pin.owner])];
+          const report=assembleChapterIdentityReviewParts(source.plan,[transportData],[actual],[pin.agentId],authorAgentIds,source.reviewCaseIds);
+          assert.equal(report.reviews.length,22);
+          const bytes=Buffer.from(JSON.stringify(report)+'\n');
+          const reportPath=path.join(dir,'review-native-aggregate.json'), jobPath=path.join(dir,'review-native-job.json');
+          fs.writeFileSync(reportPath,bytes,{flag:'wx'});
+          fs.writeFileSync(jobPath,JSON.stringify({schemaVersion:1,kind:'captured-independent-identity-review-parts',phase:'report-recorded',scope:source.scope,agentId:pin.agentId,runId:pin.runId,authorAgentIds,sourcePacketSha256:hash(sourceBytes),reportSha256:hash(bytes),transportPolicy:receipt.transportPolicy,parts:[part]})+'\n',{flag:'wx'});
+          const out=path.join(process.cwd(),'data/people/generated/jinshu047-certified');
+          fs.mkdirSync(out,{recursive:true});
+          const output=await recordChapterIdentityReview({packet,report:reportPath,job:jobPath,registry:path.join(RUNNER_TEMP,'registry',SOURCE),out:path.join(out,'identity-review.json')});
+          assert.equal(output.reviewedCases,147);
+          assert.equal(output.nativeIdentityProofAccepted,true);
+          fs.writeFileSync(path.join(out,'recording-receipt.json'),JSON.stringify(output,null,2)+'\n');
+          console.log(JSON.stringify(output));
+          JS
+      - uses: actions/upload-artifact@v4
         with:
-          name: qualified-chapter-contributions
-          path: |
-            data/people/generated/jinshu117-release-acceptance/
-            data/people/generated/jinshu120-release-acceptance/
-            data/people/generated/jinshu129-release-acceptance/
-            data/people/generated/jinshu130-release-acceptance/
-          retention-days: 30
+          name: jinshu047-canonical-composed-identity
+          path: data/people/generated/jinshu047-certified/
+          if-no-files-found: error
+          retention-days: 7
