@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "chenshu",
+    "chapter": "004"
+  },
+  "ownerAgentId": "bc-dfa689d0-bb3f-426d-a067-481f502c0852",
+  "worker": "cursor-nov24-retained-staging-w6-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "17955ba2daba6f9e916be8b05811db8a81b2409cf427c8041f0fb23a7d2ea2ea",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-chenshu-004-c0852",
+  "inputBlobWitness": {
+    "source": "ba715257c5b7e82768af3162fdc9adec7134aabc",
+    "extraction": "2b983259fb4b90cc09b2737ac19f3f30b2c36d60",
+    "dateAudit": "48411ba85a4724b762be7ecc5109d96f59d9b32a",
+    "editorial": "2542574e062fd16eb08245446e0fe5cd22a13ced"
+  },
+  "sealedInputs": {
+    "source": "sha256:2469b460829124aad6ee5b47b66f01e00b43792820d804a0e4ec5f77be87f1ae",
+    "extraction": "sha256:9093c33fa5c39bf59eb8dc298b7dcdc09d1a45bb6dcd956591b08fcc481946a2",
+    "dateAudit": "sha256:29e33a29f107bfe7eca7ad586e0169025502f332b5e8de1b5e655fa559305f25",
+    "editorial": "sha256:40c2cc4d214ce61146b8a722203340f3672f3f5747b3fa38d59ae190ccdc2955"
+  },
+  "workOrderAudit": {
+    "state": "research-blocked",
+    "sha256": "29e33a29f107bfe7eca7ad586e0169025502f332b5e8de1b5e655fa559305f25",
+    "affectedItems": 8,
+    "findings": 4,
+    "verifiedAgainstBytes": true
+  },
+  "priorDateAudit": {
+    "status": "research-blocked",
+    "reviewedAt": "2026-09-23T03:17:45.682Z",
+    "extractionHash": "sha256:603151a539dc856e570057773aea93273c93e44caeef91a49e0ba3f113fee9fc",
+    "sourceHash": "sha256:2469b460829124aad6ee5b47b66f01e00b43792820d804a0e4ec5f77be87f1ae",
+    "preserved": true,
+    "overwritten": false,
+    "summary": "Post-curation source review confirms the four retrospective/comparative claims and their active hints are correctly paired research holds. The p048 BC/AD contradiction is removed. These genuine unresolved endpoint holds prevent date approval."
+  },
+  "staleReason": "extractionHash changed after the independent review while sourceHash is unchanged; npm run people:dates:verify reports stale against current packet, not the recorded research-blocked status in the preserved report bytes.",
+  "sourceCoverage": {
+    "title": {
+      "zh": "卷四 本紀第四: 廢帝",
+      "en": "Volume 4: Emperor Fei"
+    },
+    "sentenceCount": 159,
+    "extractionBytes": 96623,
+    "localPeople": 48,
+    "mentions": 264,
+    "claims": 450,
+    "editorialAppliedRepairs": 4
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book chenshu --chapter 004",
+      "passed": true,
+      "summary": "Scoped person data validation passed for chenshu/004: 1 extraction(s), 48 local people, 264 mentions, 450 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book chenshu --chapter 004",
+      "passed": false,
+      "nativeStatus": "stale",
+      "recordedReportStatus": "research-blocked",
+      "result": {
+        "total": 1,
+        "counts": { "stale": 1 },
+        "chapters": [
+          {
+            "book": "chenshu",
+            "chapter": "004",
+            "status": "stale",
+            "auditVersion": 1
+          }
+        ]
+      },
+      "fingerprintWitness": {
+        "reportSourceHash": "sha256:2469b460829124aad6ee5b47b66f01e00b43792820d804a0e4ec5f77be87f1ae",
+        "packetSourceHash": "sha256:2469b460829124aad6ee5b47b66f01e00b43792820d804a0e4ec5f77be87f1ae",
+        "sourceMatch": true,
+        "reportExtractionHash": "sha256:603151a539dc856e570057773aea93273c93e44caeef91a49e0ba3f113fee9fc",
+        "packetExtractionHash": "sha256:9093c33fa5c39bf59eb8dc298b7dcdc09d1a45bb6dcd956591b08fcc481946a2",
+        "extractionMatch": false
+      }
+    },
+    "extractionValidate": "data/people/extractions/chenshu/004.json: ok (48 people, 264 mentions, 450 claims, 470 candidates)",
+    "englishCoverage": {
+      "sentenceCount": 159,
+      "translatedCount": 159,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "schemaValid": true,
+      "legacyTemporalDebt": 0,
+      "legacyAliasDispositionDebt": 0
+    },
+    "chronologyStatus": "stale-native-verify",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "editorialDecisionCount": 4
+  },
+  "substantiveFindings": [
+    "All four work-order git blobs match at staging tip; date-audit file sha256 matches work-order audit.sha256.",
+    "Sealed English is complete on 159 sentence units after four applied editorial repairs (司徒/title fixes at s0015/s0065; 元相 office vs personal name at s0098).",
+    "Current extraction already carries the four paired research holds reflected in the preserved independent report; no new definite English omission or extraction coverage gap found in this owner pass.",
+    "Native people:dates:verify is stale because extractionHash drifted after review; owner did not rewrite date-audit hashes or approve the historical report."
+  ],
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "itemIds": ["claim-245", "p032"],
+      "units": ["s0089"],
+      "quote": "高祖武皇帝撥亂反正，膺圖御籙，重懸三象，還補二儀；",
+      "problem": "Source does not supply a verified personal chronology endpoint.",
+      "action": "Retain paired research holds unless independent chronology is supplied.",
+      "taxonomy": "undated retrospective or comparative reference"
+    },
+    {
+      "itemIds": ["claim-252", "p037"],
+      "units": ["s0103"],
+      "quote": "豈止罪浮於昌邑，非唯聲醜於太和。",
+      "problem": "Source does not supply a verified personal chronology endpoint.",
+      "action": "Retain paired research holds unless independent chronology is supplied.",
+      "taxonomy": "undated retrospective or comparative reference"
+    },
+    {
+      "itemIds": ["claim-254", "p038"],
+      "units": ["s0103"],
+      "quote": "豈止罪浮於昌邑，非唯聲醜於太和。",
+      "problem": "Source does not supply a verified personal chronology endpoint.",
+      "action": "Retain paired research holds unless independent chronology is supplied.",
+      "taxonomy": "undated retrospective or comparative reference"
+    },
+    {
+      "itemIds": ["claim-272", "p048"],
+      "units": ["s0128"],
+      "quote": "蓋帝摯、漢惠之流也。",
+      "problem": "Source does not supply a verified personal chronology endpoint.",
+      "action": "Retain paired research holds unless independent chronology is supplied.",
+      "taxonomy": "undated historiographical comparison; prior BC/AD contradiction on p048 removed in extraction"
+    }
+  ],
+  "minimumIndependentContinuation": {
+    "dateAudit": "Scoped independent re-audit against current extractionHash sha256:9093c33fa5c39bf59eb8dc298b7dcdc09d1a45bb6dcd956591b08fcc481946a2, confirming the four retained holds; owner handoff is not approval.",
+    "chronology": "No owner-proposed chronology edits; holds already encoded in current extraction.",
+    "identity": "Deferred to host sealed final review packets."
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; blob witness; full-sentence English scan; npm run people:validate; npm run people:dates:verify; validate-people-extraction; retained independent date and editorial artifacts; no canonical extraction or source edits.",
+    "completedAt": "2026-11-24T16:45:00.000Z"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book chenshu --chapter 004",
+    "verifyDates": "npm run people:dates:verify -- --book chenshu --chapter 004"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; preserved date-audit bytes unchanged; next gate is stale-safe independent re-audit before chapterReady."
+}
