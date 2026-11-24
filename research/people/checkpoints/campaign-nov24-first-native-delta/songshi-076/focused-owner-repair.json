@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "kind": "focused-owner-repair",
+  "scope": {
+    "book": "songshi",
+    "chapter": "076"
+  },
+  "ownerAgentId": "bc-1c736b0a-e0f6-4ff0-8c48-abe80623c603",
+  "idempotencyKey": "aef329f0e6bb8f04b4ddfb7847d90a7555aee02e7cd9eed3138da73f722f6ab0",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "ownerHead": "a1575ee240bcad4958f251a8a681219b5edc28f9",
+  "handoffRef": "cursor/nov24-first-native-date-delta-w1-3c603",
+  "preservedIndependentReport": {
+    "path": "research/people/checkpoints/campaign-nov24-first-independent-date/songshi-076/independent-date-report.json",
+    "revision": "c465ac96f550e4c732a11bf82c1cb8a7b48f1754",
+    "contentSha256": "sha256:b3595711d1f319f0ba8eb2ae468c6fcd6434849f19d34ba5c9092b7f012c9bb4",
+    "gitBlob": "7ded369687301bd737ac392531ebff5622bf05ff",
+    "status": "needs-revision",
+    "findings": 6,
+    "itemChecks": 73
+  },
+  "inputPins": {
+    "source": {
+      "path": "data/songshi/076.json",
+      "gitBlob": "6b4e43769affd622b38dde49c613d6a59fdaf84f"
+    },
+    "extraction": {
+      "path": "data/people/extractions/songshi/076.json",
+      "gitBlob": "ca840dc99b5d45dfd72ef39eda3de76602e0d0fc"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/songshi/076.json",
+      "gitBlob": "81f05f0634df18b8be18b6c711de411899c4d539"
+    }
+  },
+  "inputHashes": {
+    "sourceHash": "sha256:e0c22c1e7d7dfdd964411edf0fdccdd81de191caa4bc5c2adf7c5660cfd42fa5",
+    "extractionHash": "sha256:354ccd3294563f83e07eab44e0b42d5eb87da54b385b4f26d732a150f3a21e58",
+    "sealedOwnerPacketSha256": "sha256:79b5958c67132db105379bec634653049fb5bc0db50a80eb6762d4bf260c4d0e"
+  },
+  "outputHashes": {
+    "candidateExtractionHash": "sha256:bc0dffd90557b51d20a659909d131fc4d7794291ae34dda1a1a105bd60dafba6",
+    "candidateCanonicalExtractionHash": "sha256:bc0dffd90557b51d20a659909d131fc4d7794291ae34dda1a1a105bd60dafba6",
+    "candidateDatePacketSha256": "sha256:0e8504e5997d83c005bafd7ba72c6224f4f9062bbb1f7ed201731f2f3a7a1034",
+    "proposalSha256": "sha256:10f49f808043196f480119b3efc6e765155518f9d5a94a2e0aa808bd8aa9f454"
+  },
+  "artifacts": {
+    "focusedOwnerRepair": "focused-owner-repair.json",
+    "proposal": "date-repair-proposal.json",
+    "candidateExtraction": "candidate-extraction.json",
+    "candidateDatePacket": "candidate-date-packet.json",
+    "preservedReportCopy": "independent-date-report.json"
+  },
+  "changedItemIds": [
+    "claim-34",
+    "hints-p003",
+    "claim-36",
+    "hints-p005",
+    "claim-40",
+    "claim-41",
+    "claim-42",
+    "claim-43",
+    "claim-44",
+    "claim-46",
+    "hints-p009",
+    "hints-p010",
+    "hints-p011",
+    "hints-p012",
+    "hints-p013",
+    "hints-p014",
+    "hints-p024"
+  ],
+  "findingResolution": [
+    {
+      "findingIndex": 0,
+      "items": [
+        "claim-34",
+        "hints-p003",
+        "p003"
+      ],
+      "addressed": true,
+      "ownerAction": "Drop explicit westernYear or mark unresolved; retain qualitative/sourceDate 太初曆 only until a hash-pinned conversion witness is approved."
+    },
+    {
+      "findingIndex": 1,
+      "items": [
+        "claim-36",
+        "hints-p005",
+        "p005"
+      ],
+      "addressed": true,
+      "ownerAction": "Re-anchor to undated Eastern Han consult or move the year to Jia Kui installation evidence on s0006; clear the unsupported hint."
+    },
+    {
+      "findingIndex": 2,
+      "items": [
+        "claim-40",
+        "claim-41",
+        "claim-42",
+        "claim-43",
+        "claim-44",
+        "claim-46"
+      ],
+      "addressed": true,
+      "ownerAction": "Replace intervals with undated 其後 reception or dynasty-level bounds only; remove per-person Western precision from s0008."
+    },
+    {
+      "findingIndex": 3,
+      "items": [
+        "hints-p009",
+        "hints-p010",
+        "hints-p011",
+        "hints-p012",
+        "hints-p013",
+        "hints-p014"
+      ],
+      "addressed": true,
+      "ownerAction": "Clear or align hints to undated list reception until external biography is hash-pinned; keep 皇祐初 hints where separately witnessed."
+    },
+    {
+      "findingIndex": 4,
+      "items": [
+        "hints-p024",
+        "p024"
+      ],
+      "addressed": true,
+      "ownerAction": "Limit hint to Liu-Song dynasty framing or remove explicit Western years absent from the chapter."
+    },
+    {
+      "findingIndex": 5,
+      "items": [
+        "p009",
+        "p010",
+        "p011",
+        "p012",
+        "p013",
+        "p014"
+      ],
+      "addressed": true,
+      "ownerAction": "After item repairs, re-run packet build; person checks should return supported once unsourced Western intervals are cleared."
+    }
+  ],
+  "definiteTranslationRepairs": [],
+  "remainingHolds": [],
+  "independentApprovalIssued": false,
+  "canonicalPublished": false,
+  "nativeValidation": {
+    "validateCompactPeopleExtraction": {
+      "passed": true
+    },
+    "peopleValidateWithTempSwap": {
+      "passed": true
+    }
+  },
+  "notes": "[CF-Pages-Skip] Checkpoint-only candidate extraction; canonical data/ paths unchanged pending independent delta review."
+}
