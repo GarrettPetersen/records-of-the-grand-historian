@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "chenshu",
+    "chapter": "025"
+  },
+  "ownerAgentId": "bc-7c291193-59e6-437c-83d8-347d70592046",
+  "workerId": "cursor-nov24-retained-staging-w6-o2",
+  "model": "composer-2.5",
+  "idempotencyKey": "6deb790d5e4dede6dcc2c93f9b519a7b9dc1a8998b671b13529264b7fb44ec60",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-chenshu-025-92046",
+  "inputBlobWitness": {
+    "source": "454b8ade6c5104dc538ebf426e9b308a8ce39ac4",
+    "extraction": "f9b0d82f3e6a23cd5f3f3e1320214ae5e3187a76",
+    "dateAudit": "81905e0fee4b064601a556fba6e5e6f7c11613b6",
+    "editorial": "8f2b0d463483b8afb9b886fd0cfa6b6f6836f313"
+  },
+  "sealedInputContentSha256": {
+    "source": "sha256:6abbae3fe07c1a95d13a303c478a65f7085d9e93f95bd93fb4541a4abd1496b2",
+    "extraction": "sha256:9bcd9486530023539c91b145c55f8c5418504ffb74ebb31748590cab508a6d2c",
+    "dateAudit": "sha256:a46b972d2c5c1430a00e5ef7a8e327acdd83c0c3b9379823f8464bf7843aafc9",
+    "editorial": "sha256:906a7887d1baedd710faa34a13cb0dbb5ec50c971029e34c667ff299cc5475bf"
+  },
+  "inputWitnessMismatches": [],
+  "auditRecord": {
+    "state": "research-blocked",
+    "sha256": "a46b972d2c5c1430a00e5ef7a8e327acdd83c0c3b9379823f8464bf7843aafc9",
+    "affectedItems": 12,
+    "findings": 1,
+    "preservedReportBytes": true,
+    "reportFileStatus": "research-blocked",
+    "reviewedAt": "2026-09-23T04:19:56.804Z",
+    "summary": "Complete fresh post-curation audit: all 121 Chinese source units, 102 temporal or active-hint items, and 41 people were source-checked against the translation. The four repaired temporal-only claims and four paired research-required hints correctly retain undated allusion/commentary holds; all other event ownership, chronology, conversions, age wording, reception distinctions, and temporal geometry are sound. The chapter remains research-blocked because the Chinese contexts do not establish personal activity dates for the two rhetorical comparators or two textual-note witnesses."
+  },
+  "sourceCoverage": {
+    "chineseUnits": 121,
+    "translatedCount": 121,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 73087,
+    "localPeople": 41
+  },
+  "validation": {
+    "peopleValidatePassed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book chenshu --chapter 025",
+    "peopleValidateSummary": "Scoped person data validation passed for chenshu/025: 1 extraction(s), 41 local people, 255 mentions, 359 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerifyCommand": "npm run people:dates:verify -- --book chenshu --chapter 025",
+    "dateAuditFileStatus": "research-blocked",
+    "dateAuditScopedVerifyStatus": "research-blocked",
+    "datesVerifyExitNonZero": true,
+    "extractionHashAlignedWithAudit": true,
+    "sourceHashAlignedWithAudit": true,
+    "editorialProposalCount": 6,
+    "editorialDecisionCount": 6,
+    "blockedClaimIds": [
+      "claim-185",
+      "claim-196",
+      "claim-197",
+      "claim-198",
+      "hints-p030",
+      "hints-p038",
+      "hints-p039",
+      "hints-p040"
+    ],
+    "blockedPersonIds": [
+      "p030",
+      "p038",
+      "p039",
+      "p040"
+    ],
+    "blobWitnessVerified": true
+  },
+  "substantiveFindings": "Retained staging owner pass on sealed inputs: Complete fresh post-curation audit: all 121 Chinese source units, 102 temporal or active-hint items, and 41 people were source-checked against the translation. The four repaired temporal-only claims and four paired research-required hints correctly retain undated allusion/commentary holds; all other event ownership, chronology, conversions, age wording, reception distinctions, and temporal geometry are sound. The chapter remains research-blocked because the Chinese contexts do not establish personal activity dates for the two rhetorical comparators or two textual-note witnesses. Independent date report remains research-blocked with 12 held item(s) in 1 native finding(s). people:validate passed on current extraction without new repairs. No definite English omission identified beyond already-applied editorial decisions (6 applied). Scoped people:dates:verify returns research-blocked, matching the retained report status.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "id": "finding-1",
+      "items": [
+        "claim-185",
+        "claim-196",
+        "claim-197",
+        "claim-198",
+        "hints-p030",
+        "hints-p038",
+        "hints-p039",
+        "hints-p040",
+        "p030",
+        "p038",
+        "p039",
+        "p040"
+      ],
+      "problem": "Zhu Maichen and Chen Tang are used only as rhetorical comparisons, while Hu Sanxing and Zhang Senkai occur only as commentary or collation authorities. These Chinese contexts establish no locally dated personal event, so each retained source-specific unresolved claim and hint remains a research hold.",
+      "action": "Retain the unresolved source-specific allusion/commentary holds and do not infer or restore borrowed external activity chronology without independently sourced personal-date evidence.",
+      "preserved": true
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained staging chapter-owner handoff only; sealed inputs unchanged.",
+  "completedAt": "2026-11-24T16:44:09.094Z"
+}
