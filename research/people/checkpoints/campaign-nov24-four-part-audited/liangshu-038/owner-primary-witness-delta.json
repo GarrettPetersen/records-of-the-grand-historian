@@ -1,0 +1,283 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-primary-witness-delta",
+  "mode": "targeted-primary-witness",
+  "chapterKey": "liangshu/038",
+  "ownerAgentId": "bc-dffa34d0-07eb-4b8f-a0cb-73b78c664b73",
+  "workerId": "cursor-nov24-four-part-owner-1",
+  "ownerRevision": "24665875cef6b4834079f97a27ea19cbaf315dbf",
+  "sourceReviewHead": "6f85a1a2b6e41029b779f7aede007086d02a580c",
+  "sourceReviewRef": "cursor/nov24-four-part-independent-liangshu-038",
+  "ownerHead": "cf8ef6304d11267e9d0d122f309315f9812cf1dc",
+  "ownerHeadRef": "cursor/nov24-four-part-owner-liangshu-038-664b73",
+  "idempotencyKey": "ff378e8507e3167ac530b4ebfa95acab5a8a037e08d5fdaffb4b2fc065454dcf",
+  "originalIdempotencyKey": "ba8fc1d8800bbb7b8d234460b2bf3d30955bb8ea6e52f162918c8ade43dfb97a",
+  "inputBlobWitness": {
+    "source": "d0e714152ef8fea3abcc925455470d3444ff8a80",
+    "extraction": "a8910370bf9a48289ed478fcc912efd370302bdd",
+    "dateAudit": "8d1527c77149df8374771aeb1db50ff012976ab4",
+    "editorial": "8ee2a065efdec183d800285892b5fb189cd92109"
+  },
+  "cases": [
+    {
+      "caseId": "sha256:f7565542d998756e08fb689f974cc6feb8b5d8e058533653bd2d42b4f7f4911d",
+      "localPersonId": "liangshu:038:p025",
+      "canonicalPersonId": "per_NPMN5P1E17AJXAXDX048",
+      "priorReviewerVerdict": "hold",
+      "ownerDisposition": "propose-remove-unwitnessed-local-person",
+      "sourceWitness": {
+        "unitId": "s0078",
+        "zh": "伯父蒨，步兵校尉，爲世碩儒。",
+        "quotedFormsInUnit": [
+          "伯父蒨",
+          "蒨"
+        ],
+        "absentForms": [
+          "賀琛之父",
+          "父"
+        ]
+      },
+      "assessment": "He Chen’s paternal elder uncle He Qian (賀蒨) is named on s0078 via 伯父蒨. The chapter never names He Chen’s father. The blocking labels 賀琛之父 / Father of He Chen are synthesis from uncle→father inference, not quotable primary surfaces. Retain explicit uncle teaching (s0079) and remove the unnamed-father person record."
+    },
+    {
+      "caseId": "sha256:381daba7cf8e9eb43c1188321d715eca681352a2c89c1e63d4df6a0c11e052a7",
+      "localPersonId": "liangshu:038:p006",
+      "canonicalPersonId": "per_SA52WDQV0FT2C35M8RBX",
+      "priorReviewerVerdict": "hold",
+      "ownerDisposition": "propose-remove-unwitnessed-local-person",
+      "sourceWitness": {
+        "unitId": "s0005",
+        "zh": "异年數歲，外祖顧歡撫之，謂异祖昭之曰：「此兒非常器，當成卿門戶。」",
+        "quotedFormsInUnit": [
+          "异",
+          "外祖顧歡",
+          "异祖昭之"
+        ],
+        "absentForms": [
+          "朱异之母",
+          "母"
+        ]
+      },
+      "relatedWitness": {
+        "unitId": "s0004",
+        "zh": "父巽，以義烈知名，官至齊江夏王參軍、吳平令。",
+        "note": "Father Zhu Xun (p003) is explicit; mother remains unnamed in chapter."
+      },
+      "assessment": "Maternal grandfather Gu Huan (顧歡) and child 异 are explicit on s0005; paternal grandfather Zhao Zhi (昭之) is addressed but not named as mother. 朱异之母 is a fabricated descriptive-kinship surface with no Chinese witness. Remove p006; keep p003 father and p005 外祖 links."
+    }
+  ],
+  "proposedChanges": [
+    {
+      "id": "liangshu-038-retract-p025",
+      "kind": "extraction-repair-proposal",
+      "target": "data/people/extractions/liangshu/038.json",
+      "affectedPersonIds": [
+        "p025"
+      ],
+      "reason": "Remove person record invented from uncle evidence without quotable 賀琛之父.",
+      "operations": [
+        {
+          "op": "remove-person",
+          "personId": "p025"
+        },
+        {
+          "op": "patch-person-relations",
+          "personId": "p002",
+          "path": "/3/r",
+          "before": [
+            "p010",
+            "p013",
+            "p020",
+            "p024",
+            "p025",
+            "p026",
+            "p027"
+          ],
+          "after": [
+            "p010",
+            "p013",
+            "p020",
+            "p024",
+            "p026",
+            "p027"
+          ]
+        },
+        {
+          "op": "patch-person-relations",
+          "personId": "p024",
+          "path": "/3/r",
+          "before": [
+            "p002",
+            "p025"
+          ],
+          "after": [
+            "p002"
+          ]
+        },
+        {
+          "op": "retract-claims",
+          "personId": "p025",
+          "claimSelectors": [
+            [
+              "p025",
+              "sex"
+            ],
+            [
+              "p025",
+              "attestation"
+            ],
+            [
+              "p025",
+              "lineage"
+            ],
+            [
+              "p025",
+              "family-relationship"
+            ]
+          ]
+        },
+        {
+          "op": "revise-claim",
+          "selector": [
+            "p024",
+            "family-relationship",
+            "p002"
+          ],
+          "before": {
+            "relation": "kin-of",
+            "personId": "p002",
+            "kinshipTerm": {
+              "zh": "伯父",
+              "en": "paternal elder uncle"
+            },
+            "line": "paternal",
+            "generationDistance": 1,
+            "intermediaryPersonIds": [
+              "p025"
+            ]
+          },
+          "after": {
+            "relation": "kin-of",
+            "personId": "p002",
+            "kinshipTerm": {
+              "zh": "伯父",
+              "en": "paternal elder uncle"
+            },
+            "line": "paternal",
+            "generationDistance": 1
+          },
+          "evidence": [
+            "s0078"
+          ],
+          "sourceQuote": "伯父蒨"
+        }
+      ]
+    },
+    {
+      "id": "liangshu-038-retract-p006",
+      "kind": "extraction-repair-proposal",
+      "target": "data/people/extractions/liangshu/038.json",
+      "affectedPersonIds": [
+        "p006"
+      ],
+      "reason": "Remove fabricated 朱异之母; mother not named while 外祖 and 父巽 are witnessed elsewhere.",
+      "operations": [
+        {
+          "op": "remove-person",
+          "personId": "p006"
+        },
+        {
+          "op": "patch-person-relations",
+          "personId": "p001",
+          "path": "/3/r",
+          "beforeIncludes": "p006",
+          "afterRemoves": [
+            "p006"
+          ]
+        },
+        {
+          "op": "patch-person-relations",
+          "personId": "p005",
+          "path": "/3/r",
+          "beforeIncludes": "p006",
+          "afterRemoves": [
+            "p006"
+          ]
+        },
+        {
+          "op": "retract-claims",
+          "personId": "p006",
+          "claimSelectors": [
+            [
+              "p006",
+              "sex"
+            ],
+            [
+              "p006",
+              "attestation"
+            ],
+            [
+              "p006",
+              "family-relationship"
+            ]
+          ]
+        },
+        {
+          "op": "retract-claims",
+          "personId": "p005",
+          "claimSelectors": [
+            [
+              "p005",
+              "family-relationship",
+              "p006"
+            ]
+          ]
+        },
+        {
+          "op": "revise-claim",
+          "selector": [
+            "p005",
+            "family-relationship",
+            "p001"
+          ],
+          "before": {
+            "relation": "ancestor-of",
+            "personId": "p001",
+            "kinshipTerm": {
+              "zh": "外祖",
+              "en": "maternal grandfather"
+            },
+            "generationDistance": 2,
+            "line": "maternal",
+            "intermediaryPersonIds": [
+              "p006"
+            ]
+          },
+          "after": {
+            "relation": "ancestor-of",
+            "personId": "p001",
+            "kinshipTerm": {
+              "zh": "外祖",
+              "en": "maternal grandfather"
+            },
+            "generationDistance": 2,
+            "line": "maternal"
+          },
+          "evidence": [
+            "s0005"
+          ],
+          "sourceQuote": "外祖顧歡撫之"
+        }
+      ]
+    }
+  ],
+  "held": [],
+  "definiteTranslationRepairs": [],
+  "validation": {
+    "primaryWitnessReview": "complete",
+    "canonicalFilesModified": false,
+    "reproduce": "npm run people:validate -- --book liangshu --chapter 038",
+    "note": "Proposals are artifact-only until independently reviewed extraction repair; current pinned extraction still validates."
+  },
+  "notes": "[CF-Pages-Skip] Owner primary-witness delta; not independent identity approval."
+}
