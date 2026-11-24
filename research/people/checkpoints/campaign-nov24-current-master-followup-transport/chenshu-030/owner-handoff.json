@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "kind": "followup-transport-identity-owner-handoff",
+  "scope": {
+    "book": "chenshu",
+    "chapter": "030"
+  },
+  "ownerAgentId": "bc-9c0ce645-8155-4f97-9353-f991ee0773c8",
+  "campaignWorker": "cursor-nov24-current-master-followup-2",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "1c48e717db8614a1f2a2c5bf3900e817ce295542",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-unclaimed-followup-owner-transports",
+    "commit": "9094f5860702af124e1cff98aa6d06597ec062af",
+    "planFingerprint": "sha256:ea00c502e8d94dd404ae3b9b3d99ab007a112ddeffef3305675e9e23d698293f",
+    "sourcePacketSha256": "fb9b681d6fb98b67fc549466b4680a1229875b7bc7588432aafb300352a616fe",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "sha256:1e9a60e749d2b845884452c320d238c46d2679903e643e8ef98a71287ddae10d",
+        "caseCount": 18
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "sha256:5e373aca3cb6082e17b80a55e770711127f41ab25bbc1903aac8a36811034aad",
+        "caseCount": 18
+      },
+      {
+        "path": "transport-part-003.json",
+        "sha256": "sha256:efc901bc4b2ff696e597f9f146749eeec8b1500c4b03cd58f7a615e402309e10",
+        "caseCount": 37
+      }
+    ],
+    "preparationReceiptSha256": "sha256:883148141fc03d4202cfbb289933a793f53cc24b9bab345feb4f1e83231afc50"
+  },
+  "sealedInputs": {
+    "source": "sha256:15498d7d565f68daf5c44566068d31da69d7c54b57dd3c7333acf585f69f19f8",
+    "extraction": "sha256:d001747262bbe4347b2b0c95f1dc124d5653473eec3045d28b5c57878f1464ab",
+    "editorial": "sha256:4837fbd1a69dbedce7e9fd1c4eca9e67c6d4273a1eb3d4c62020c36655ff297e",
+    "dateAudit": "sha256:85ddf3c9214b95dbc3f42a86963e32d1e707671576a60943bad1c9171f2ff534"
+  },
+  "chronologyStatus": "independent date audit on sealed extraction (audited)",
+  "editorialStatus": "12 applied editorial decisions on sealed extraction",
+  "reviewCases": 73,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 73 cases retain preparation-proposed canonicalPersonId and unresolvedIdentity flags (62 unresolved, 11 resolved). 34 overflow cases preserve bounded-retrieval uncertainty; no false-merge or wrong-actor contradiction found. No canonical extraction or shared-registry edits.",
+  "ownerEvidenceSha256": "sha256:f4f68359c8ff9f2555276b33534398093114cb681b886ee6dd34fdc286ac7101",
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/chenshu-030/preparation-receipt.json",
+    "transportPart001": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/chenshu-030/transport-part-001.json",
+    "transportPart002": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/chenshu-030/transport-part-002.json",
+    "transportPart003": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/chenshu-030/transport-part-003.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/chenshu-030/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/chenshu-030/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/chenshu-030/lookup-receipt.json"
+  },
+  "reproduce": {
+    "verifyTransportPart001": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/chenshu-030/transport-part-001.json",
+    "verifyTransportPart002": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/chenshu-030/transport-part-002.json",
+    "verifyTransportPart003": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/chenshu-030/transport-part-003.json",
+    "verifyOwnerEvidence": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/chenshu-030/owner-evidence.json",
+    "validateChapter": "npm run people:validate -- --book chenshu --chapter 030"
+  },
+  "notes": "Owner evidence is not independent approval. Reviewer must seal requiredReport per transport instructions."
+}
