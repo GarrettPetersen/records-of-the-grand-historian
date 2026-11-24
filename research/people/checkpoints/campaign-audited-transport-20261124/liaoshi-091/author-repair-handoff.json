@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "kind": "campaign-audited-identity-author-repair-handoff",
+  "scope": { "book": "liaoshi", "chapter": "091" },
+  "authorAgentId": "bc-a1d9fb49-57cd-49f8-a504-e22bc5dcc56f",
+  "pullRequest": 5511,
+  "branch": "cursor/liaoshi-091-audited-owner-c56f",
+  "pinnedOwnerHead": "fdff5f8f70914f44a055697801f8b6a6c6d2c96e",
+  "independentReport": {
+    "path": "independent-identity-report.json",
+    "commit": "2d6061d250d6f539c45fea90672912f428d6774c",
+    "sha256": "14f902cccc7626ef739dc886cef9417a86fb7bb070d13628eefcfe0fa0fdc838",
+    "reviewerAgentId": "bc-854d0953-b85c-4575-b209-b4446bdb5884",
+    "reviewerName": "cursor-nov24-independent-liaoshi-091"
+  },
+  "nativeFinding": {
+    "message": "Witness does not support this person in the current primary source: liaoshi:091:p011 liaoshi:091:s0026 quote=\"於越屋質之庶子\"",
+    "caseId": "sha256:8d05cb0b46af0fe3dc80292cb3168403316a583661522644e45e2435c93c1058"
+  },
+  "sealedInputsUnchanged": {
+    "source": "sha256:33324a5cb271ceda1b5843f23cd5007c8e55e409fa6bbd2b11cd37faaa5786d8",
+    "extraction": "sha256:61a16145458c6fabb1b679a7acba20525f61e8cd489e331839afb42f9630f613",
+    "editorial": "sha256:39a4860db8bcbd25eedb92f0dfc36d33c8532e8109e28a991d24d3d09b49866e",
+    "dateAudit": "sha256:7090764add9f1d64aca43165056eb65216b043aa00aeff4b63c9a807f7e6412f"
+  },
+  "defect": {
+    "localId": "liaoshi:091:p011",
+    "kind": "descriptive-kinship-without-chapter-literal",
+    "unitId": "s0026",
+    "unitZh": "耶律唐古，字敵隱，於越屋質之庶子。",
+    "claimedNameZh": "庶母",
+    "notes": "Extraction ties name 庶母 to s0026 but the unit attests Yelu Tanggu as 於越屋質之庶子 (庶子). No 庶母 in chapter 091 source."
+  },
+  "sourceSupportedLiteralWitness": {
+    "forRelatedPerson": "liaoshi:091:p002",
+    "unitId": "s0026",
+    "quote": "耶律唐古"
+  },
+  "preservedDecisions": {
+    "otherCases": 33,
+    "independentApprovals": "All other reviews in independent-identity-report.json unchanged",
+    "doNotRewriteIndependentReport": true
+  },
+  "proposal": {
+    "chapterInputsMutation": "NONE",
+    "minimalExtractionRepairOutOfScopeHere": "Retract descriptive-kinship name 庶母 on s0026 or remove p011; would change extraction hash only.",
+    "ownerEvidenceSupplement": "owner-evidence-repair-supplement.json",
+    "independentRecorderAction": "Case p011: hold with empty chapter witness; do not attribute s0026 於越屋質之庶子 to mother."
+  },
+  "affectedScope": ["liaoshi:091:p011", "case sha256:8d05cb0b46af0fe3dc80292cb3168403316a583661522644e45e2435c93c1058"]
+}
