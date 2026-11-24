@@ -1,116 +1,151 @@
-name: Master build gate
-
-# Run on the proposed PR merge commit, not just the topic branch. Keep this
-# workflow unfiltered so its required check is always reported for master PRs.
+name: Certify partitioned glossary owner reviews
+run-name: Certify exact four-part-final scoped identity reviews
 on:
   workflow_dispatch:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
-  merge_group:
-    types: [checks_requested]
-
 permissions:
   contents: read
-
+  actions: read
 jobs:
-  master-build:
-    name: master-build
+  certify:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0]
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 25
     env:
-      NODE_OPTIONS: --max-old-space-size=6144
+      NODE_OPTIONS: --max-old-space-size=3072
+      SOURCE: e61eedae77bea163ec10120e88e806cde91315dd
+      SHARD: ${{ matrix.shard }}
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          ref: ${{ env.SOURCE }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Test people date-hint normalization
-        run: npm run people:hints:self-test
-
-      - name: Prevent duplicate storage and local corpus builds
-        run: |
-          node --test scripts/test-people-generation-policy.mjs scripts/test-people-storage-policy.mjs scripts/test-people-git-storage.mjs scripts/test-people-recovery-checkpoint.mjs scripts/test-people-registry-deduplication.mjs
-          python3 scripts/test-people-recovery-archive.py
-
-      - name: Test unresolved people-date holds
-        run: node scripts/test-people-unresolved-hold.mjs
-
-      - name: Test Cursor date-worker recovery
-        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs scripts/test-openrouter-free.mjs
-
-      - name: Test chapter-owner isolation and combined publication
-        run: node --test --test-concurrency=1 scripts/test-people-chapter-owner.mjs scripts/test-people-chapter-editorial-preparation.mjs scripts/test-people-chapter-repair-reasons.mjs scripts/test-people-remote-admission.mjs scripts/test-people-combined-curation.mjs scripts/test-people-footnote-preparation.mjs scripts/test-people-private-identity-inputs.mjs scripts/test-people-source-only-chronology.mjs scripts/test-people-current-curation-provenance.mjs scripts/test-people-identity-proof-composition.mjs test/people-name-claim-correction.test.mjs scripts/people-owner-repair-chain.test.mjs
-
-      - name: Test shared-host master synchronization
-        run: npm run people:master:self-test
-
-      - name: Install ebook publication verification tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
-
-      - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-pinned-identity-source.mjs scripts/test-people-identity-dossier-delta.mjs scripts/test-people-product-inputs.mjs scripts/test-people-inferred-source-references.mjs scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
-
-      - name: Test bounded canonical-person dossiers and chapter proofs
-        run: |
-          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs scripts/test-people-corpus-reader.mjs
-          npm run people:catalog:self-test
-          npm run people:generated-data:self-test
-
-      - name: Test certified website people publication
-        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
-
-      - name: Test reviewed name spans and translation repairs
-        run: |
-          node scripts/test-people-reviewed-name-spans.mjs
-          node scripts/apply-people-translation-repairs.mjs --self-test
-
-      - name: Build and validate the full site
-        run: npm run build
-
-      - name: Verify real Jinshu 053 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
-
-      - name: Preserve nonempty chapter acceptance evidence
-        uses: actions/upload-artifact@v4
+      - run: npm install --no-audit --no-fund
+      - uses: actions/download-artifact@v4
         with:
-          name: jinshu053-qualified-contribution
-          path: data/people/generated/jinshu053-release-acceptance/
-          retention-days: 30
-
-      - name: Verify real Jinshu 119 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 119 --out data/people/generated/jinshu119-release-acceptance
-
-      - name: Preserve Jinshu 119 nonempty acceptance evidence
-        uses: actions/upload-artifact@v4
-        with:
-          name: jinshu119-qualified-contribution
-          path: data/people/generated/jinshu119-release-acceptance/
-          retention-days: 30
-
-      - name: Verify approved chapter qualification and ebook contributions
+          name: nov24-four-part-audited-chapter-packets
+          run-id: 45405684667
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/packets
+      - name: Verify captures and run the native identity recorder
         run: |
-          for chapter in 117 120 129 130; do
-            node scripts/verify-people-chapter-release.mjs --book jinshu --chapter "$chapter" --out "data/people/generated/jinshu${chapter}-release-acceptance"
-          done
-
-      - name: Preserve approved chapter nonempty acceptance evidence
-        uses: actions/upload-artifact@v4
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          mkdir -p "$GITHUB_WORKSPACE/data/people/generated/identity-dossiers"
+          node scripts/people-identity-registry-worker.mjs --out "$GITHUB_WORKSPACE/data/people/generated/identity-dossiers/$SOURCE" --revision "$SOURCE"
+          node --input-type=module <<'JS'
+          const expected=[{"key":"jiutangshu/185","shard":0,"actor":"bc-cf1c5b22-63bf-4d1e-994b-dbc04d88e011","run":"run-a6e72cb9-fd39-4cc9-a2d9-cb35e496cc51","owner":"bc-55fcc16a-2fa6-4a05-8ec9-d1a96ced0a7b","packetSha256":"ceaefc5426d6802f5ac48be68a9be7c2ce1b28ed9ce5033693cb356b76701596","planFingerprint":"sha256:ac90be70bf7a7315fee303d3f0957bda608d0b516435dda22234c577f9754160","cases":72,"parts":[{"file":"transport-part-001.json","sha256":"28d0a9a70ebdcf9980e61a46b01fcdf548b2e5c0858048354715453e20ca3e85"},{"file":"transport-part-002.json","sha256":"0e7afcf940c0eb3a2be7ee61acd1a83c0537b3863d1a2c4adf27601570526444"},{"file":"transport-part-003.json","sha256":"da1c1eec92c1ab3d692d16a01481296bb6a86711eb4d103ad600b67ca8f1e245"},{"file":"transport-part-004.json","sha256":"f41d192360a27c7de2613695eb54ad905b56326a5b890c38f6442ee533913306"}],"reports":[{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiutangshu-185/independent-identity-report-part-001.json","sha256":"7471a706863066a2ff18a994ac743a431c699bffc274a8a7071afcab94274e75","projection":"flat-attested-report"},{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiutangshu-185/independent-identity-report-part-002.json","sha256":"0cd66563fe112e0a2ef45d73984936a325642e71d4366e56c73d9b0675735dbf","projection":"flat-attested-report"},{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiutangshu-185/independent-identity-report-part-003.json","sha256":"351765b58e0727b18e58464396d84a5455baf6a64f45e6ffb41aff2fbe13bd49","projection":"flat-attested-report"},{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiutangshu-185/independent-identity-report-part-004.json","sha256":"ef25a23e3835bf35730b228ef60730981b0d99c04d90d1c5f80f470dcfa196f6","projection":"flat-attested-report"}],"reviewHead":"22d00358c0bf3795e54abc9204d473f704153c3c"},{"key":"liangshu/029","shard":0,"actor":"bc-fc0003e8-1ed4-485f-9a8e-27bcbc535b1e","run":"run-a0e0cc43-57a4-4df7-ac35-eefd89e51a45","owner":"bc-977db51c-ec93-4d60-9d14-c6f7f3527c76","packetSha256":"41007842993ee42083f74116794d79ff3d0c2bd74c696a6e1fcce43fde81362a","planFingerprint":"sha256:9968e61f1fdefce2db78fb1e2864038f3cf03bcbcc873fb573b46a02911addb9","cases":80,"parts":[{"file":"transport-part-001.json","sha256":"bc514edb84ef91034b40c9d454f6091e09ea07c676fb2e0707f1970babfff96a"},{"file":"transport-part-002.json","sha256":"baefc418a9e0831b75ef75f6eedcab78007d272f129ea43438be625f207ee9fe"},{"file":"transport-part-003.json","sha256":"57e19eed59d034fed13e502acf1ca56ccae088dcbf6edb799139f3893aa266b5"},{"file":"transport-part-004.json","sha256":"865b9508597ef0d8e0a61ee3295d7ba992511f9aa0743bfb10601a58f5156a03"}],"reports":[{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/liangshu-029/independent-identity-report-part-001.json","sha256":"7a38d207a8b89aea175a59dc619fe8ca69f168a894dd929599ce9fc7040c8dcb","projection":null},{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/liangshu-029/independent-identity-report-part-002.json","sha256":"e81cc42c451cbc5854d930b9438fc02f2d9a2e14ac3416856467d7254f99ffa8","projection":null},{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/liangshu-029/independent-identity-report-part-003.json","sha256":"d9cafb7dce42816476278ad8f062f7a4d18a1ac98a5b9570066dceaa58d01239","projection":null},{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/liangshu-029/independent-identity-report-part-004.json","sha256":"812e6b6e17ec10852f25335c8187bed408d2262542003c6f04c12ac5f3515945","projection":null}],"reviewHead":"c7df26bc43998286b32f3b96f081003668bfefe6"},{"key":"jiuwudaishi/136","shard":0,"actor":"bc-a92185ba-a29d-41f6-ba56-840bbfd26eed","run":"run-a7b14c58-ba39-4808-ad81-6aaee59b0990","owner":"bc-7e44ff29-fd0a-40b3-afba-2b66bc99de9f","packetSha256":"f4d2aeed88c3e82c413537b28d9f1de3d88840f988cc3247c3214c99adfb4ddb","planFingerprint":"sha256:95bb1d5ed26cf07645f4283c896f83d9ded776d8175c81451b36b31ef79c55c6","cases":82,"parts":[{"file":"transport-part-001.json","sha256":"d70933c8ba345c15cdc38ff64d944a710cf4a17a9446e5ee2b114fc02c799e1d"},{"file":"transport-part-002.json","sha256":"3f5211272c50869928a09c04a0d52ef72b69846ae352a9c56720db60e9fb216b"},{"file":"transport-part-003.json","sha256":"7c20fa53be00bb02731d5991585a4f0493a0bfc546a1a3e9b6db716d7f75e0d6"},{"file":"transport-part-004.json","sha256":"1d01bc072e9daf4e016400d494e78b8515b0f7aaab3eb313abcea593fa0e26e8"}],"reports":[{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiuwudaishi-136/independent-identity-report-part-001.json","sha256":"6f1ef1fa84d8120921dfdec7239b72da822f7eaf0ef7bd3c66c52f35841d1a1c","projection":null},{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiuwudaishi-136/independent-identity-report-part-002.json","sha256":"e92f5bff32f160a489704bb366755c0829f5e726335f19b6fc5bebd0e966aedc","projection":null},{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiuwudaishi-136/independent-identity-report-part-003.json","sha256":"c52c346d6705033b2f5dc049def026b28b1c1f61126416e5aff4bc582230942b","projection":null},{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiuwudaishi-136/independent-identity-report-part-004.json","sha256":"c020622c359d4ced9bcc1c7a16f331a9b6eacfc790709f3587fc30462e6e9e2b","projection":null}],"reviewHead":"a6859a1a3a7f71167a5e3e3e88b8af4326f9329b"},{"key":"jiuwudaishi/062","shard":0,"actor":"bc-bf6eb42f-69fb-4ab4-ab8a-2636227d348c","run":"run-8aafc6e4-de28-49ba-ab13-cbe6a0de33ac","owner":"bc-977db51c-ec93-4d60-9d14-c6f7f3527c76","packetSha256":"e25be0295ac85fd4a52349aadce09ad075932111a0c645432aab270ba57ab0f2","planFingerprint":"sha256:122eea4a29256e31b5b147fb92786f4c8f3e38911d3dd835e10e6a840e307872","cases":92,"parts":[{"file":"transport-part-001.json","sha256":"2d667f87d3f0a67d1281a5fddf8b7e62b30f42407afb9dec3bba0a172daafa51"},{"file":"transport-part-002.json","sha256":"9610875088e60857db2260920b3a08462ce84bd75c3887c6e59dd56081c8597a"},{"file":"transport-part-003.json","sha256":"0ee427630b05adb63e704e8c7304b9f8df8c8ae7faa13007ea2dd5ac488d1d7d"},{"file":"transport-part-004.json","sha256":"7f0706bf9917e0f0f7445cfed673a0ebf0a5b61bb8d54212aea36c0ca311b134"}],"reports":[{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiuwudaishi-062/independent-identity-report-part-001.json","sha256":"0ce1372ebf37bb992a3f165a8e6d3a83e740f3326b30b06974fa5d68b7a51491","projection":"flat-attested-report"},{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiuwudaishi-062/independent-identity-report-part-002.json","sha256":"85fc7743ac20683b1ad118b6ef8de6b86c674a6ed41f56607d0e4ea0ba2e58c6","projection":"flat-attested-report"},{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiuwudaishi-062/independent-identity-report-part-003.json","sha256":"e396ab73100b44c0527b61974042ec2656ea4bd189a1b58fe3328ed1ecd2dd44","projection":"flat-attested-report"},{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiuwudaishi-062/independent-identity-report-part-004.json","sha256":"5e811a0fb0a10fbeea36073a8ab9ff878a4983923e33703fa377768b6f660d7d","projection":"flat-attested-report"}],"reviewHead":"d7585a4126dc222bb973f58a3089070aa8d82e62"},{"key":"jiuwudaishi/023","shard":0,"actor":"bc-9c258c53-2303-44a4-a94d-2f2efdd1d51c","run":"run-be175605-6e65-44b3-baf8-b3e345371a3d","owner":"bc-7e44ff29-fd0a-40b3-afba-2b66bc99de9f","packetSha256":"58139faa61c71dc47c774206960b6881e064f20d515ce4a1e0e2c78044c80af7","planFingerprint":"sha256:fe38b78ba4fc64d5c2336e4bc7a2f316d091d88ed848453490fe94ecf92365fd","cases":94,"parts":[{"file":"transport-part-001.json","sha256":"35a557264e2538f43c861a28fefcb320e301ef1f2639df07f85877d15d34698b"},{"file":"transport-part-002.json","sha256":"3313da918e522688759647a7264a7ac57e180340c2ac3905e52919ca9ead6abb"},{"file":"transport-part-003.json","sha256":"dd822a6c7533dbfad70658f22524c14b3d47af3dd745f0323206562517fec4be"},{"file":"transport-part-004.json","sha256":"551d6a500ffe8c9fbb2076c645ba0dc6cdc3e57d37d6098b61862c582c520234"}],"reports":[{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiuwudaishi-023/independent-identity-report-part-001.json","sha256":"87768aa6e6af0115b90c23cccd5071fb8758951b7ee880ac290c7e429f329ab1","projection":null},{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiuwudaishi-023/independent-identity-report-part-002.json","sha256":"001eab9b5fc58d66f6bf94d27dac802095518e3972ab1faafbf096f19319d940","projection":null},{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiuwudaishi-023/independent-identity-report-part-003.json","sha256":"e8d711cd27f9d538c9bb5f703aa195905ddba90bfdcd878f186c76d004b5057d","projection":null},{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiuwudaishi-023/independent-identity-report-part-004.json","sha256":"f61516dbd354491530b75f8be602a2a3d1fff46891e126f0ca203f90d62df61f","projection":null}],"reviewHead":"0c7d3213da3f24ce76d1859f4af80c64d7b8c05a"},{"key":"jiuwudaishi/063","shard":0,"actor":"bc-80b019e6-de48-46d4-83c1-641ed6fa09d3","run":"run-eb99b6b4-663f-4805-9334-3da0102da4b0","owner":"bc-dffa34d0-07eb-4b8f-a0cb-73b78c664b73","packetSha256":"d0387dd7ce5677368fe5c4b2d00d6784ee0417f46e10e8e95683becf13c9696c","planFingerprint":"sha256:d131fc3c1dda08ae85e52401f077561f7e5227b8e8aacb213c1480a815712d4c","cases":94,"parts":[{"file":"transport-part-001.json","sha256":"d5dcac7eb78b4ecf70432f9616565a9ae9b5b1592155f7f8959f8f82d446a5a0"},{"file":"transport-part-002.json","sha256":"1b9dd4df66a8f8617ea567125d3a695436c5a8bd134f4aad04bbf68ff67ef5f4"},{"file":"transport-part-003.json","sha256":"c07b1bbab1694f980d4551dfe638ba5d3101dd91c3d95083749a681ab81e0552"},{"file":"transport-part-004.json","sha256":"4b9be035e5c0e4cbc54f5e60b679bdf9412595c1cb7504a3e181b0eba1e2dbfc"}],"reports":[{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiuwudaishi-063/independent-identity-report-part-001.json","sha256":"d09d99b5c27deb1e66e368a6c8e5cbb026ca24def14d88372264bc1718f6364b","projection":null},{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiuwudaishi-063/independent-identity-report-part-002.json","sha256":"0595ec105d5104830b9366de1b0e66dab8567c1d0eb4de112a8d18b0a6fc84c3","projection":null},{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiuwudaishi-063/independent-identity-report-part-003.json","sha256":"2fe3cbe2f23837f253e421a72fcb9235a12eae340324a026ed8ba9ae80d5d7bf","projection":null},{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiuwudaishi-063/independent-identity-report-part-004.json","sha256":"4ec92eb3d3a9739cb78bd234ea9d47e0648951ab0efc61d1af1b363abd0dc771","projection":null}],"reviewHead":"e82a45342978d60562af63ce99a841d1c7485bf2"},{"key":"jiuwudaishi/016","shard":0,"actor":"bc-e4e12000-7e67-4690-9c2c-5e22dbc2d71d","run":"run-76bc2d0d-4e2c-47d4-9c80-82098a0e2b84","owner":"bc-7e44ff29-fd0a-40b3-afba-2b66bc99de9f","packetSha256":"97aa9e00e62fbc486d74e9b26b8b5539b84094d49bacc8e6351ce5be5aa398ed","planFingerprint":"sha256:cd585a739446d7ed6000602dc5003b5166871be4376b75df394f8c2a01f5853c","cases":104,"parts":[{"file":"transport-part-001.json","sha256":"8a47c12aa2f161395a2edb2bb76e848386a02af54dd4acbd88f4146f6044f5a9"},{"file":"transport-part-002.json","sha256":"413ccc19570bf0e3dd33711b8e7de49888a54b8550f3413a61514e6f5d1cbf00"},{"file":"transport-part-003.json","sha256":"28a5fe5bec8f6e17311a0634a85ba0f5d214c905e074171394d27ec137d45697"},{"file":"transport-part-004.json","sha256":"91cdd74933002158abb9bb07ede6e924182222b6da62b323436b8ce8c573f351"}],"reports":[{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiuwudaishi-016/independent-identity-report-part-001.json","sha256":"1efc79372f2ba66631583fb8b21ba49f6acb2f010e6c17118d97677009d5e46f","projection":"flat-attested-report"},{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiuwudaishi-016/independent-identity-report-part-002.json","sha256":"a74bda0141d3f9914ad6385a821297ce42b523960acd46bde3558d5210ddfaac","projection":"flat-attested-report"},{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiuwudaishi-016/independent-identity-report-part-003.json","sha256":"9f62c66becfbb09206ce97cb4449617fe2d58d9777555e73c4bc30da0fcc6e2a","projection":"flat-attested-report"},{"path":"research/people/checkpoints/campaign-nov24-four-part-audited/jiuwudaishi-016/independent-identity-report-part-004.json","sha256":"fc2c67b89b820c94f6af9e64aa7e7510864d992b0e545198187dce5714ba4bbe","projection":"flat-attested-report"}],"reviewHead":"175be39828c6e1554379b1ada990b6a496a4473d"}];
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {execFileSync} from 'node:child_process';
+          import {identityArtifactHash,recordChapterIdentityReview} from './scripts/lib/people-identity-review-record.mjs';
+          import {assembleChapterIdentityReviewParts,identityReviewTransportPolicy} from './scripts/lib/people-identity-review-transport.mjs';
+          import {assertDossierPrimaryWitness,validateDossierIdentityEvidence,memberContract} from './scripts/lib/people-identity-dossiers.mjs';
+          import {localNameKeys} from './scripts/lib/people-resolution.mjs';
+          import {peopleDigest} from './scripts/lib/people-identity-seal.mjs';
+          import {readIdentityDossierRegistry} from './scripts/lib/people-identity-dossier-delta.mjs';
+          import {loadProperNounMatcher} from './scripts/lib/people-candidates.mjs';
+          import {loadValidatedPeopleChapter} from './scripts/lib/people-validated-chapter.mjs';
+          import {loadCurrentIdentityEvidence} from './scripts/lib/people-identity-evidence.mjs';
+          const matcher=loadProperNounMatcher();
+          async function diagnoseExactCases(j,data,aggregated,registry){
+              const [book,chapter]=j.key.split('/');
+              const index=await readIdentityDossierRegistry(registry,new Map());
+              try{
+                const own=loadValidatedPeopleChapter(book,chapter,{properNounMatcher:matcher});
+                const covered=loadCurrentIdentityEvidence({plan:data.plan,report:aggregated,kind:'chapter-identity-review'},own,matcher);
+                const people=new Map(), units=new Map(), memberVersions=new Map();
+                for(const [key,source] of covered){
+                  for(const person of source.localPeople.values()){
+                    people.set(person.localId,person);
+                    memberVersions.set(person.localId,peopleDigest(memberContract(person,localNameKeys(person))));
+                  }
+                  for(const unit of source.packet.units)units.set(key+':'+unit.id,unit.zh);
+                }
+                const byCase=new Map(data.plan.cases.map(x=>[x.id,x])), nameEvidence=new Map();
+                const witnessIssues=[], caseIssues=[];
+                for(const row of aggregated.reviews){
+                  const item=byCase.get(row.caseId);
+                  assert(item,'The sealed report contains an unknown case');
+                  const anchor=item.canonicalMembership.anchorLocalId;
+                  for(const witness of row.sourceWitnesses??[]){
+                    try{
+                      const person=people.get(witness.localId);
+                      assert(person,'Source person not found');
+                      assertDossierPrimaryWitness(witness,person,units,localNameKeys,nameEvidence,people,index.localPersonMap);
+                    }catch(e){witnessIssues.push({caseId:item.id,anchor,witness,reason:e.message});}
+                  }
+                  const {fingerprint,...contract}=data.plan, single={...contract,cases:[item]};
+                  const plan={...single,fingerprint:peopleDigest(single)};
+                  const projected={...aggregated,planFingerprint:plan.fingerprint,reviews:[row]};
+                  const view={localPeople:people,memberVersions,localPersonMap:index.localPersonMap,canonicalByKnownId:index.canonicalByKnownId,chapters:new Map([[book+':'+chapter,new Map([[item.canonicalPersonId,item.localPeople]])]])};
+                  try{validateDossierIdentityEvidence(view,plan,projected,units,j.actor,[...data.authorAgentIds,j.owner],localNameKeys);}
+                  catch(e){caseIssues.push({caseId:item.id,anchor,localPeople:item.localPeople,reason:e.message});}
+                }
+                return {cases:aggregated.reviews.length,witnessIssues,caseIssues,approvalGranted:false};
+              }finally{index.close();}
+          }
+          const tmp=process.env.RUNNER_TEMP, registry=path.join(process.cwd(),'data/people/generated/identity-dossiers',process.env.SOURCE);
+          const output=path.join(process.cwd(),'data/people/generated/nov24-partitioned-validation');
+          fs.mkdirSync(output,{recursive:true});
+          const readRemote=(file,revision)=>execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+process.env.GITHUB_REPOSITORY+'/contents/'+file+'?ref='+revision],{maxBuffer:3e6,timeout:20000});
+          const results=[];
+          for(const j of expected.filter(y=>y.shard===Number(process.env.SHARD))){
+            try{
+              const id=j.key.replace('/','-'), dir=path.join(tmp,'packets',id);
+              const packet=path.join(dir,'source-review-packet.json'), p=fs.readFileSync(packet), data=JSON.parse(p);
+              const hash=b=>identityArtifactHash(b).replace(/^sha256:/u,'');
+              assert.equal(hash(p),j.packetSha256.replace(/^sha256:/u,''));
+              assert.equal(data.plan.fingerprint,j.planFingerprint);
+              assert.equal(data.registryReuse.sourceRevision,process.env.SOURCE);
+              assert(!data.authorAgentIds.includes(j.actor)&&j.owner!==j.actor);
+              const parts=[],transports=[],reports=[];
+              for(const [i,part] of j.parts.entries()){
+                const transportFile=path.join(dir,part.file),b=fs.readFileSync(transportFile);
+                const report=j.reports[i], reportFile=path.join(dir,'actual-report-'+(i+1)+'.json'), d=readRemote(report.path,report.evidenceHead??j.reviewHead);
+                assert.equal(hash(b),part.sha256.replace(/^sha256:/u,''));
+                assert.equal(hash(d),report.sha256);
+                const original=JSON.parse(d),rawReport=report.projection==='native-report-wrapper'?original.report:report.projection==='flat-attested-report'?Object.fromEntries(['schemaVersion','planFingerprint','reviewer','reviews'].map(k=>[k,original[k]])):original;const reportBytes=report.projection?Buffer.from(JSON.stringify(rawReport)+'\n'):d;
+                assert.equal(rawReport.reviewer.agentId,j.actor);
+                assert(rawReport.reviews.every(x=>x.verdict==='approve'));
+                fs.writeFileSync(reportFile,reportBytes,{flag:'wx'});
+                transports.push(JSON.parse(b));reports.push(rawReport);
+                parts.push({schemaVersion:1,kind:'captured-independent-identity-review-part',phase:'report-recorded',agentId:j.actor,runId:report.runId??j.run,sourcePacketSha256:identityArtifactHash(p),transportSha256:identityArtifactHash(b),reportSha256:identityArtifactHash(reportBytes),transportFile,reportFile});
+              }
+              const aggregated=assembleChapterIdentityReviewParts(data.plan,transports,reports,parts.map(x=>x.agentId),data.authorAgentIds,data.reviewCaseIds);
+              assert.equal(aggregated.reviews.length,j.cases);
+              const report=path.join(dir,'actual-aggregate.json'), job=path.join(dir,'actual-job.json');
+              const aggregateBytes=Buffer.from(JSON.stringify(aggregated)+'\n');
+              fs.writeFileSync(report,aggregateBytes,{flag:'wx'});
+              fs.writeFileSync(job,JSON.stringify({schemaVersion:1,kind:'captured-independent-identity-review-parts',phase:'report-recorded',scope:data.scope,agentId:j.actor,runId:j.run,authorAgentIds:[j.owner],sourcePacketSha256:identityArtifactHash(p),reportSha256:identityArtifactHash(aggregateBytes),transportPolicy:identityReviewTransportPolicy(384*1024),parts})+'\n',{flag:'wx'});
+              try{
+               const receipt=await recordChapterIdentityReview({packet,report,job,registry,out:path.join(output,id+'.json')});
+               results.push({key:j.key,receipt});
+              }catch(validationError){
+               try{
+                const diagnostics=await diagnoseExactCases(j,data,aggregated,registry);
+                results.push({key:j.key,error:validationError.message,diagnostics});
+               }catch(diagnosticError){
+                results.push({key:j.key,error:validationError.message,diagnosticError:diagnosticError.message});
+               }
+              }
+            }catch(e){results.push({key:j.key,error:e.message});}
+          }
+          fs.writeFileSync(path.join(output,'summary.json'),JSON.stringify(results,null,2)+'\n');
+          console.log(JSON.stringify(results.map(x=>({key:x.key,native:x.receipt?.nativeIdentityProofAccepted,error:x.error}))));
+          assert(results.some(x=>x.receipt?.nativeIdentityProofAccepted),'All exact reports failed native certification');
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: qualified-chapter-contributions
-          path: |
-            data/people/generated/jinshu117-release-acceptance/
-            data/people/generated/jinshu120-release-acceptance/
-            data/people/generated/jinshu129-release-acceptance/
-            data/people/generated/jinshu130-release-acceptance/
-          retention-days: 30
+          name: nov24-remaining-native-four-part-final-6
+          path: data/people/generated/nov24-partitioned-validation/
+          if-no-files-found: error
+          retention-days: 7
