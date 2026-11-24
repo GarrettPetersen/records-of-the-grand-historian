@@ -1,0 +1,257 @@
+{
+  "schemaVersion": 1,
+  "kind": "jinshu094-release-repair-5490-independent-review",
+  "reviewer": {
+    "agentId": "bc-aa913dc1-24e5-4aaf-9dd8-6d1b0651a008",
+    "name": "Independent Jinshu 094 reviewer (PR #5430 / #5484 staging proofs)"
+  },
+  "reviewedAt": "2026-11-24T02:30:00.000Z",
+  "target": {
+    "pullRequest": 5490,
+    "commit": "86afbb7e08944f446d78da4d00a5da2efd1c5e7e",
+    "extractionCommit": "697ed25d2818b05980ca8785aa9e8588a10832a1",
+    "base": "codex/people-glossary-staging-v2",
+    "ownerPinNamed": "d6c16dd927",
+    "buildFailureRun": 45306058689,
+    "failedCanonical": "per_6MFKJH0M9DXAV1M9B539",
+    "failedLocal": "p279"
+  },
+  "acceptedStagingProofsUsed": {
+    "dateAudit": {
+      "path": "data/people/date-audits/jinshu/094.json",
+      "status": "audited",
+      "extractionHashAtProof": "sha256:7d8094b04882bc04a9079c01e834b65c9b5d86d05144848dfe65c8caf829ee18",
+      "sourceHashAtProof": "sha256:91df3146ad1ad42aed31ebb9655096205d2f570dca6ad4a5d59da45910bd8415",
+      "reviewerAgentId": "bc-aa913dc1-24e5-4aaf-9dd8-6d1b0651a008"
+    },
+    "identity": {
+      "artifactRun": 45295088726,
+      "artifactId": 14875898251,
+      "planFingerprint": "sha256:532a2e2b195d48a81ef4a6cf3f560d75804f9e6fd9e99dcad148ae94f95dffe4",
+      "evidencePr": 5484,
+      "authoredParts": "001-017",
+      "p283Case": {
+        "localId": "jinshu:094:p283",
+        "canonicalPersonId": "per_GJKETT9ZPYX9Y4TCMG7K",
+        "membershipFingerprint": "sha256:a37202181a2f799b0f17e2392543d32bb0bd5010f85071c1bc78cd84c530bde2",
+        "verdict": "approve",
+        "note": "Identity membership retained on thin 兄 label with unresolvedIdentity; that sealed packet had no mention surfaces for p283."
+      }
+    }
+  },
+  "hashes": {
+    "extractionBeforeRepair": "sha256:8ce68a3ab750bac1d9fe362a8a842e9db18ce26e34d795c91e4075ddd0c1f922",
+    "extractionAfterRepair": "sha256:2d5049b7964b3f285cb45fa74bdad6d11b100f81c85563e2fb2c4bbf270e2d6a",
+    "chapterBytesAtTip": "sha256:41fdc45784a18442cbd620a15d29fd7de33c48f219cafa933bb42ee443b77019",
+    "receiptMatchesExtractionAfter": true
+  },
+  "overallVerdict": "accept-with-required-owner-repair",
+  "summary": "Approve the five descriptive-kinship + kinship-reference repairs and the three stale-exception clearances as source-faithful. Reject any claim that p283 is publication-ready: name kind personal remains ineligible for the public-reference path, and no non-overlapping inferred citation exists on s0719. Exact owner repair still required for p283 before scoped publication can pass the references.length gate.",
+  "changedIdentitiesExact": {
+    "kinshipDescriptiveWithMentions": [
+      {
+        "localId": "p279",
+        "unit": "s0188",
+        "zh": "中書令張華遣子勸其更仕，再徵博士，舉中書郎，皆不就。",
+        "beforeNameKind": "personal",
+        "afterNameKind": "descriptive-kinship",
+        "surfacesAdded": [
+          { "kind": "kinship-reference", "lang": "zh", "exact": "子", "span": [6, 7] },
+          { "kind": "kinship-reference", "lang": "en", "exact": "son", "span": [19, 22] }
+        ],
+        "mentionExceptionCleared": true,
+        "familyRetained": { "relation": "child-of", "personId": "p062", "kinshipTerm": { "zh": "子", "en": "son" } },
+        "reviewerVerdict": "approve",
+        "reason": "Exact bare 子 is independently attested; descriptive-kinship + kinship-reference is the eligible public-reference shape."
+      },
+      {
+        "localId": "p280",
+        "unit": "s0216",
+        "zh": "乃與妻荷擔入蜀，莫知所終。",
+        "beforeNameKind": "personal",
+        "afterNameKind": "descriptive-kinship",
+        "surfacesAdded": [
+          { "kind": "kinship-reference", "lang": "zh", "exact": "妻", "span": [2, 3] },
+          { "kind": "kinship-reference", "lang": "en", "exact": "wife", "span": [33, 37] }
+        ],
+        "mentionExceptionCleared": true,
+        "familyRetained": { "relation": "kin-of", "personId": "p074", "kinshipTerm": { "zh": "妻", "en": "wife" } },
+        "reviewerVerdict": "approve",
+        "reason": "Exact 妻 is independently attested and locates in both languages."
+      },
+      {
+        "localId": "p281",
+        "unit": "s0375",
+        "zh": "父叔為李特所害，壯積年不除喪，力弱不能復仇。",
+        "beforeNameKind": "personal",
+        "afterNameKind": "descriptive-kinship",
+        "surfacesAdded": [
+          { "kind": "kinship-reference", "lang": "zh", "exact": "父", "span": [0, 1] },
+          { "kind": "kinship-reference", "lang": "en", "exact": "father", "span": [14, 20] }
+        ],
+        "mentionExceptionCleared": true,
+        "familyRetained": { "relation": "kin-of", "personId": "p124", "kinshipTerm": { "zh": "父", "en": "father" } },
+        "reviewerVerdict": "approve",
+        "reason": "Exact independent 父 at [0,1) does not overlap 叔 at [1,2)."
+      },
+      {
+        "localId": "p282",
+        "unit": "s0375",
+        "zh": "父叔為李特所害，壯積年不除喪，力弱不能復仇。",
+        "beforeNameKind": "personal",
+        "afterNameKind": "descriptive-kinship",
+        "surfacesAdded": [
+          { "kind": "kinship-reference", "lang": "zh", "exact": "叔", "span": [1, 2] },
+          { "kind": "kinship-reference", "lang": "en", "exact": "uncle", "span": [25, 30] }
+        ],
+        "mentionExceptionCleared": true,
+        "familyRetained": { "relation": "kin-of", "personId": "p124", "kinshipTerm": { "zh": "叔", "en": "uncle" } },
+        "reviewerVerdict": "approve",
+        "reason": "Exact independent 叔 at [1,2); adjacent to but not overlapping 父."
+      },
+      {
+        "localId": "p284",
+        "unit": "s0719",
+        "zh": "師事術士范宣于豫章，宣異之，以兄女妻焉。",
+        "beforeNameKind": "personal",
+        "afterNameKind": "descriptive-kinship",
+        "surfacesAdded": [
+          { "kind": "kinship-reference", "lang": "zh", "exact": "兄女", "span": [15, 17] },
+          { "kind": "kinship-reference", "lang": "en", "exact": "niece", "span": [32, 37] }
+        ],
+        "mentionExceptionCleared": true,
+        "familyRetained": [
+          { "relation": "child-of", "personId": "p283", "kinshipTerm": { "zh": "兄女", "en": "elder brother's daughter" } },
+          { "relation": "kin-of", "personId": "p224", "kinshipTerm": { "zh": "妻", "en": "wife" } }
+        ],
+        "reviewerVerdict": "approve",
+        "reason": "Exact compound 兄女 is the niece surface; English idiomatic niece locates without inventing text."
+      }
+    ],
+    "clearedStaleMentionExceptionOnly": [
+      {
+        "localId": "p261",
+        "unit": "s0428",
+        "existingSurface": { "kind": "personal-name", "lang": "zh", "exact": "驤", "span": [14, 15], "context": "叔父驤、驤" },
+        "reviewerVerdict": "approve",
+        "reason": "Abbreviated 驤 surface already present and locates; clearing the stale geometry exception is correct. Full 李驤 is not required as an isolated surface."
+      },
+      {
+        "localId": "p262",
+        "unit": "s0459",
+        "existingSurface": { "kind": "personal-name", "lang": "zh", "exact": "法賜", "span": [2, 4], "context": "矯子法賜" },
+        "reviewerVerdict": "approve",
+        "reason": "Abbreviated 法賜 surface already present and locates; stale exception clearance only."
+      },
+      {
+        "localId": "p263",
+        "unit": "s0504",
+        "existingSurface": { "kind": "personal-name", "lang": "zh", "exact": "松", "span": [22, 23], "context": "享松喬之壽" },
+        "reviewerVerdict": "approve",
+        "reason": "Abbreviated 松 surface already present and locates beside 喬; stale exception clearance only."
+      }
+    ],
+    "unchangedSkipped": [
+      {
+        "localId": "p283",
+        "unit": "s0719",
+        "nameKindStill": "personal",
+        "mentionExceptionRetained": true,
+        "surfaces": []
+      }
+    ]
+  },
+  "p283PublicReferenceEligibility": {
+    "ruleApplied": "Scoped publication forms person.references only from mention surfaces (canonicalReferences). Name kind personal is the wrong/ineligible shape for bare kinship individuations on the public-reference path used by this repair; the accepted repair shape is descriptive-kinship plus non-overlapping kinship-reference mention(s). mentionException does not exempt references.length === 0.",
+    "unitZh": "師事術士范宣于豫章，宣異之，以兄女妻焉。",
+    "unitEnIdiomatic": "His teacher Fan Xuan gave him a niece in marriage.",
+    "nieceSpanZh": { "exact": "兄女", "startCodePoint": 15, "endCodePoint": 17 },
+    "bareBrotherWouldBeZh": { "exact": "兄", "startCodePoint": 15, "endCodePoint": 16, "overlapsNiece": true },
+    "englishSeparateElderBrother": false,
+    "acceptedGraph": {
+      "p283_sibling_of_p226": {
+        "relation": "sibling-of",
+        "personId": "p226",
+        "kinshipTerm": { "zh": "兄", "en": "elder brother" },
+        "evidence": ["s0719"]
+      },
+      "p284_child_of_p283": {
+        "relation": "child-of",
+        "personId": "p283",
+        "kinshipTerm": { "zh": "兄女", "en": "elder brother's daughter" },
+        "evidence": ["s0719"]
+      }
+    },
+    "inferredReferenceHelperDecision": {
+      "validWithoutOverlappingNieceSpan": false,
+      "reason": "Family-graph kinshipTerm support and descriptive-kinship renaming alone do not create canonical references. Any zh 兄 display span overlaps p284’s 兄女 [15,17). Idiomatic English supplies only niece, not a separate elder brother token. No reviewed helper emits a unit citation without a non-overlapping mention surface. Therefore an inferred descriptive-kinship citation for p283 is not valid under current publication rules."
+    },
+    "preciseOwnerRepairRequired": {
+      "blockingPublicationDefect": "p283 still has zero mentions; scoped projectPeopleProduct will throw the same class of error as the original p279 failure (no source mention references).",
+      "requiredOwnerChoices": [
+        "Do not add an overlapping 兄 kinship-reference on s0719 against p284’s 兄女.",
+        "If p283 remains a scoped local person, supply a non-overlapping source-supported surface (none exists in s0719 for bare 兄) or another host-approved non-overlapping citation path before publication.",
+        "Alternatively, retract or restructure the individuated brother so publication does not require a p283 reference, while preserving source-supported p284 兄女 and p226 范宣 facts.",
+        "If keeping the person for graph completeness only, name kind should still move off ineligible personal to descriptive-kinship for schema fidelity, but that alone does not clear the references gate."
+      ]
+    },
+    "reviewerVerdict": "hold-for-owner-repair"
+  },
+  "remainingPersonsWithNoEligibleSourceCitation": [
+    {
+      "localId": "p283",
+      "preferred": { "en": "Fan Xuan's elder brother", "zh": "兄" },
+      "nameKind": "personal",
+      "mentionException": "Unnamed or kinship-only figure at s0719; retained without forcing a display surface.",
+      "mentionCount": 0,
+      "eligiblePublicReference": false
+    }
+  ],
+  "enumerationMethod": {
+    "expandedPeople": 252,
+    "expandedMentions": 916,
+    "criterion": "After expandPeopleExtraction at 86afbb7e, every local person either has at least one mention surface or is listed here. Only p283 has zero mentions.",
+    "noMentionAndNoException": []
+  },
+  "datePacketImpact": {
+    "westernDatesEditedByRepair": false,
+    "sourceChapterEditedByRepair": false,
+    "extractionEditedByRepair": true,
+    "acceptedDateAuditStatus": "audited",
+    "acceptedDateAuditExtractionHash": "sha256:7d8094b04882bc04a9079c01e834b65c9b5d86d05144848dfe65c8caf829ee18",
+    "repairExtractionHash": "sha256:2d5049b7964b3f285cb45fa74bdad6d11b100f81c85563e2fb2c4bbf270e2d6a",
+    "dateApprovalCurrentForRepairExtraction": false,
+    "impact": "Repair advances extractionHash via name-kind/surface/mentionException rows for kinship locals. Accepted chronology payloads are not rewritten in #5490, but the audited extraction pin no longer matches. Host must rebind/re-record the native date approval against extraction sha256:2d5049b7… after the repair is the active extraction (or an equivalent reviewed rebind), without inventing Western years."
+  },
+  "approvalAndRebindDependencies": {
+    "preservePriorUnchangedProofs": true,
+    "identity": {
+      "sealedPacketStillAuthoritativeForPreRepairExtraction": true,
+      "postRepairIdentityPacketRequired": true,
+      "affectedLocals": ["p279", "p280", "p281", "p282", "p284", "p261", "p262", "p263"],
+      "p283IdentityMembership": "Prior approve of per_GJKETT9ZPYX9Y4TCMG7K remains a thin kinship membership decision on the sealed packet; it does not create a publishable mention or certify post-repair surfaces.",
+      "note": "Do not rewrite authored parts 001–017. Recompose a fresh native identity packet from the repaired extraction before any new identity certification."
+    },
+    "dates": {
+      "rebindRequired": true,
+      "reason": "extractionHash mismatch against accepted audited pin"
+    },
+    "editorial": {
+      "repairDoesNotEditEditorialDecisions": true
+    },
+    "publication": {
+      "blockedOn": ["p283 missing eligible source citation", "date extractionHash rebind", "post-repair identity packet recomposition"],
+      "notBlockedByApprovedKinshipRepairs": ["p279", "p280", "p281", "p282", "p284", "p261", "p262", "p263"]
+    },
+    "merge": false,
+    "canonicalEditsByReviewer": false
+  },
+  "nonActions": [
+    "No source edits",
+    "No extraction edits by this reviewer",
+    "No chronology/claim edits",
+    "No merge",
+    "No weakening of publication gates",
+    "Prior identity parts 001–017 left byte-stable"
+  ]
+}
