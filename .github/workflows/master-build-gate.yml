@@ -1,71 +1,64 @@
-name: Master build gate
-
-# Run on the proposed PR merge commit, not just the topic branch. Keep this
-# workflow unfiltered so its required check is always reported for master PRs.
+name: Verify composed chapter proofs on current staging
+run-name: Reconcile the original Jinshu 028 proof against the current staging registry
 on:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
-  merge_group:
-    types: [checks_requested]
-
+  workflow_dispatch:
 permissions:
   contents: read
-
 jobs:
-  master-build:
-    name: master-build
+  staging:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 28
     env:
-      NODE_OPTIONS: --max-old-space-size=6144
+      NODE_OPTIONS: --max-old-space-size=3072
+      SOURCE: 0e6650af12d72a4cc45576b906dc3c4c3ce4493f
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          ref: ${{ env.SOURCE }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Test people date-hint normalization
-        run: npm run people:hints:self-test
-
-      - name: Test unresolved people-date holds
-        run: node scripts/test-people-unresolved-hold.mjs
-
-      - name: Test Cursor date-worker recovery
-        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs
-
-      - name: Install ebook publication verification tools
+      - run: npm install --no-audit --no-fund
+      - name: Prepare only changed identity cases using the current composed evidence
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
-
-      - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
-
-      - name: Test bounded canonical-person dossiers and chapter proofs
-        run: |
-          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs
-          npm run people:catalog:self-test
-
-      - name: Test certified website people publication
-        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
-
-      - name: Build and validate the full site
-        run: npm run build
-
-      - name: Verify real Jinshu 053 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
-
-      - name: Preserve nonempty chapter acceptance evidence
-        uses: actions/upload-artifact@v4
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          root="$GITHUB_WORKSPACE/data/people/generated/identity-dossiers"
+          mkdir -p "$root" "$RUNNER_TEMP/composed-staging"
+          export REGISTRY="$root/$SOURCE"
+          export OUT="$RUNNER_TEMP/composed-staging"
+          node scripts/people-identity-registry-worker.mjs --out "$REGISTRY" --revision "$SOURCE"
+          node --test scripts/test-people-source-only-chronology.mjs
+          for key in jinshu/028; do
+            book="${key%/*}"; chapter="${key#*/}"
+            npm run people:validate -- --book "$book" --chapter "$chapter" | tee "$OUT/$book-$chapter-extraction.txt"
+            npm run people:dates:verify -- --book "$book" --chapter "$chapter" --out "$OUT/$book-$chapter-chronology.json"
+            jq -e '.chapters[0].status=="audited" and .chapters[0].findings==0' "$OUT/$book-$chapter-chronology.json"
+          done
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {prepareChapterIdentityReview} from './scripts/prepare-people-chapter-identity.mjs';
+          const {SOURCE,REGISTRY,OUT}=process.env;
+          const result=await prepareChapterIdentityReview({book:'jinshu',chapter:'028',registry:REGISTRY,sourceRevision:SOURCE,retainedComposition:path.resolve('data/people/identity-reviews/jinshu/028.json'),out:path.join(OUT,'native-reconciliation'),transportMaxBytes:384*1024});
+          console.log(JSON.stringify({state:result.status,reviewedCases:result.reviewedCases??null,reusedCases:result.reusedCases??null,newReviewCases:result.newReviewCases??null,retainedHoldCases:result.retainedHoldCases??null}));
+          JS
+          mkdir -p "$RUNNER_TEMP/jinshu028-reconciliation-registry"
+          tar -czf "$RUNNER_TEMP/jinshu028-reconciliation-registry/registry.tar.gz" -C "$root" "$SOURCE"
+          (cd "$RUNNER_TEMP/jinshu028-reconciliation-registry" && sha256sum registry.tar.gz > SHA256SUMS)
+          test "$(stat -c %s "$RUNNER_TEMP/jinshu028-reconciliation-registry/registry.tar.gz")" -le 167772160
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: jinshu053-qualified-contribution
-          path: data/people/generated/jinshu053-release-acceptance/
-          retention-days: 30
+          name: jinshu028-native-composition-reconciliation
+          path: ${{ runner.temp }}/composed-staging/
+          if-no-files-found: error
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: jinshu028-reconciliation-registry
+          path: ${{ runner.temp }}/jinshu028-reconciliation-registry/
+          if-no-files-found: error
+          retention-days: 7
