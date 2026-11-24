@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-blocked-chapter-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "043",
+    "key": "jiuwudaishi/043"
+  },
+  "ownerAgentId": "bc-7e463767-133a-4f87-aab6-c0f63ebf6684",
+  "worker": "cursor-nov24-retained-blocked-owner-2",
+  "idempotencyKey": "f12e8580a3b67064e94c0e5fcf0879fa39b18613c0c26db4d14fc58cf9290f89",
+  "stagingCommit": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterCommit": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-blocked-owner-jiuwudaishi-043-bf6684",
+  "observedBlocker": "Actual extractor identity required for every chunk",
+  "pinnedInputs": {
+    "source": {
+      "path": "data/jiuwudaishi/043.json",
+      "gitBlob": "85759af9ddc040e52276ada3b3acc5ca02a0aa4c",
+      "contentSha256": "sha256:bea299060cb0ac61ae1f55b957045ff08a6fba11868406e942e685f138e15092"
+    },
+    "extraction": {
+      "path": "data/people/extractions/jiuwudaishi/043.json",
+      "gitBlob": "0e83b0b6de61909d8845648c1f52675f314deff8",
+      "contentSha256": "sha256:837be287c3034081b0d7a782ab80b5f5925cdb03361dc6780b347ce7305a27e6"
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/jiuwudaishi/043.json",
+      "gitBlob": "2800fc1a13930d9e07c28f79eb46535d2a91fc81",
+      "contentSha256": "sha256:6eeb368eb627f7c59b12e7fc973ba1d68449c25620f6827a906fcf103fed42df"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/jiuwudaishi/043.json",
+      "gitBlob": "1a8c7153ed65d090cfd053635db4748af5a0068f",
+      "contentSha256": "sha256:1d73a3a9bbf49e7ca99105725df0d84025a4ff2d4cd5b025d0205935872cf3b9"
+    }
+  },
+  "testedRecoveryFindings": {
+    "gate": "scripts/lib/people-extraction-authorship.mjs#extractionAuthorAgentIds (master runtime)",
+    "reproducedError": "Actual extractor identity required for every chunk",
+    "peopleDatesVerify": "audited",
+    "peopleValidateExtraction": "passes on pinned extraction bytes",
+    "chunkByteProvenanceVerifiedAgainstAssembly": true,
+    "assemblyCommit": "cdccdc33d709e423e88169cf3f5e51c38d8209ba",
+    "postAuthorshipGateSimulation": {
+      "agentIds": [
+        "grokbot-13"
+      ],
+      "passes": true
+    }
+  },
+  "concreteProposedPatches": [
+    {
+      "target": "data/people/extractions/jiuwudaishi/043.json",
+      "kind": "authorship-only",
+      "description": "Stamp each chunk agentId to queue-verified grokbot-13; preserve null runId/completedAt and all people/mention/claim bytes",
+      "afterExample": {
+        "chunkAgentId": "grokbot-13",
+        "runIds": "retain null where unknown"
+      },
+      "proposedContentSha256": "sha256:8a4dff49e2bbac266e7fcdf2999b452f223bf36abd004ec30d64eb8b999063da",
+      "parentGitBlob": "0e83b0b6de61909d8845648c1f52675f314deff8",
+      "requiresIndependentApproval": true
+    }
+  ],
+  "relatedEvidenceHashes": {
+    "workQueueClaimCommit": "cd4f69aeb52dadb1d0e80c93fa23a08aa1bc7834",
+    "worker": "grokbot-13",
+    "chapterFingerprintAtClaim": "sha256:b8d5d17a8efd1ba6e0fa6e6bc7c1adc1f6a68c33bcbf396cd723b341290a9a30",
+    "checkpointPullRequest": {
+      "number": 3909,
+      "mergeCommit": "537e64b1f9abc73307b4da86cee63070a961bb4f"
+    },
+    "chunkByteProvenance": [
+      {
+        "chunkId": "001",
+        "startOrder": 0,
+        "endOrderExclusive": 43,
+        "claimCount": 43,
+        "claimsSha256": "sha256:ba16d8ed7e57c9582aa45261519a8255a396ee7207242ccc7874e01482089a7f",
+        "unchangedSinceAssemblyCommit": "cdccdc33d709e423e88169cf3f5e51c38d8209ba"
+      },
+      {
+        "chunkId": "002",
+        "startOrder": 43,
+        "endOrderExclusive": 69,
+        "claimCount": 26,
+        "claimsSha256": "sha256:8343427e0a1320972c489e99b0739d11091b2a6651a4f8219c29cd062721a5e0",
+        "unchangedSinceAssemblyCommit": "cdccdc33d709e423e88169cf3f5e51c38d8209ba"
+      },
+      {
+        "chunkId": "003",
+        "startOrder": 69,
+        "endOrderExclusive": 104,
+        "claimCount": 35,
+        "claimsSha256": "sha256:d3cfc1c72007b284bf1550bb90bbc03d39dd9717d9f8f18a314305ddabfb3f52",
+        "unchangedSinceAssemblyCommit": "cdccdc33d709e423e88169cf3f5e51c38d8209ba"
+      },
+      {
+        "chunkId": "004",
+        "startOrder": 104,
+        "endOrderExclusive": 136,
+        "claimCount": 32,
+        "claimsSha256": "sha256:81aecb4d9f852cbb9862ab41d4b5e6c81803a3594bd768e5fe1475dc0249f034",
+        "unchangedSinceAssemblyCommit": "cdccdc33d709e423e88169cf3f5e51c38d8209ba"
+      },
+      {
+        "chunkId": "005",
+        "startOrder": 136,
+        "endOrderExclusive": 180,
+        "claimCount": 44,
+        "claimsSha256": "sha256:48e1c82c979905bfd0fa9cd6ec1e33d49dd3d13e93263f4d8e32c20e84c46714",
+        "unchangedSinceAssemblyCommit": "cdccdc33d709e423e88169cf3f5e51c38d8209ba"
+      },
+      {
+        "chunkId": "006",
+        "startOrder": 180,
+        "endOrderExclusive": 213,
+        "claimCount": 33,
+        "claimsSha256": "sha256:d771e45643ae2c7e0b994842fe0580a2c5d7fd34061917d0e1856220c908417f",
+        "unchangedSinceAssemblyCommit": "cdccdc33d709e423e88169cf3f5e51c38d8209ba"
+      }
+    ],
+    "fullExtractionSha256": "sha256:837be287c3034081b0d7a782ab80b5f5925cdb03361dc6780b347ce7305a27e6"
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": "Audited report preserved at pin 2800fc1a…",
+    "editorial": "17 applied repairs at pin 1a8c7153…",
+    "identity": "Blocked until authorship gate passes on approved patch"
+  },
+  "holds": [
+    {
+      "reason": "Per-chunk runId and top-level run.agentId remain null; no sealed run receipts found—do not invent"
+    }
+  ],
+  "independentReviewCompleted": false
+}
