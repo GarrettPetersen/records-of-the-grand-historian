@@ -1,0 +1,189 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-scoped-delta-review",
+  "chapterKey": "jiuwudaishi/043",
+  "reviewerAgentId": "bc-9e2447fc-73bd-4b9a-9739-fcd868f48f00",
+  "ownerAgentId": "bc-7e463767-133a-4f87-aab6-c0f63ebf6684",
+  "ownerRevision": "b87968fb7adb10bc0db7d7801f2bedc596808064",
+  "ownerProposalSha256": "sha256:5faf9abceae6ae0659b8676c404ec1bd2e15498705aaa95b59c1a7b199dc8bf8",
+  "ownerRun": "run-6c20b0ac-dc73-4f2b-b9af-b3d3cbc18a42",
+  "idempotencyKey": "f26a55dc967f9f96632642640423616ab692dd6a0bf4b3fe15ac1ae89f48aa20",
+  "reviewedAt": "2026-11-24T15:30:00.000Z",
+  "scope": {
+    "observedBlocker": "Actual extractor identity required for every chunk",
+    "preservedUnrelatedWork": [
+      "source",
+      "editorial",
+      "identity",
+      "chronology item semantics"
+    ]
+  },
+  "verdict": "approve_owner_authorship_only_patch",
+  "summary": "The sole scoped delta is authorship metadata on the pinned extraction: stamp grokbot-13 on each of six Grok Bot chunks while leaving null run.agentId, run.runId, and per-chunk runId/completedAt untouched. Historical queue bytes at cd4f69aeb52dadb1d0e80c93fa23a08aa1bc7834 show sticky grokbot-13 on jiuwudaishi/043 with chapterFingerprint sha256:b8d5d17a… matching the editorial input pin; native validate-people-extraction passes on current bytes; post-patch simulation clears extractionAuthorAgentIds. All people, mention, claim, and surface semantics are unchanged. Audited date audit and seventeen editorial proposals remain valid evidence at their pins; only the audit header extractionHash will drift until host repin or metadata-only reuse after apply.",
+  "approvedChanges": [
+    {
+      "target": "data/people/extractions/jiuwudaishi/043.json",
+      "kind": "authorship-only",
+      "decision": "accept",
+      "description": "Set chunk 001–006 agentId to grokbot-13; preserve null aggregate run.agentId/run.runId and null per-chunk runId/completedAt",
+      "chunks": [
+        { "chunkId": "001", "startOrder": 0, "endOrderExclusive": 43, "agentId": { "before": null, "after": "grokbot-13" } },
+        { "chunkId": "002", "startOrder": 43, "endOrderExclusive": 69, "agentId": { "before": null, "after": "grokbot-13" } },
+        { "chunkId": "003", "startOrder": 69, "endOrderExclusive": 104, "agentId": { "before": null, "after": "grokbot-13" } },
+        { "chunkId": "004", "startOrder": 104, "endOrderExclusive": 136, "agentId": { "before": null, "after": "grokbot-13" } },
+        { "chunkId": "005", "startOrder": 136, "endOrderExclusive": 180, "agentId": { "before": null, "after": "grokbot-13" } },
+        { "chunkId": "006", "startOrder": 180, "endOrderExclusive": 213, "agentId": { "before": null, "after": "grokbot-13" } }
+      ],
+      "parentGitBlob": "0e83b0b6de61909d8845648c1f52675f314deff8",
+      "proposedContentSha256": "sha256:8a4dff49e2bbac266e7fcdf2999b452f223bf36abd004ec30d64eb8b999063da",
+      "provenanceVerified": {
+        "workQueueClaimCommit": "cd4f69aeb52dadb1d0e80c93fa23a08aa1bc7834",
+        "worker": "grokbot-13",
+        "lane": "grokbot",
+        "chapterFingerprint": "sha256:b8d5d17a8efd1ba6e0fa6e6bc7c1adc1f6a68c33bcbf396cd723b341290a9a30",
+        "checkpointPullRequest": {
+          "number": 3909,
+          "mergeCommit": "537e64b1f9abc73307b4da86cee63070a961bb4f"
+        },
+        "assemblyCommit": "cdccdc33d709e423e88169cf3f5e51c38d8209ba",
+        "chunkClaimHashesMatchOwnerHandoff": true
+      }
+    }
+  ],
+  "heldCases": [
+    {
+      "id": "jiuwudaishi-043-run-receipts-unknown",
+      "gate": "authorship-metadata",
+      "reason": "No sealed run receipts found for top-level run.agentId/run.runId or per-chunk runId/completedAt beyond the queue worker assignment.",
+      "instruction": "Retain null; do not invent SDK or Grok Bot run IDs."
+    },
+    {
+      "id": "jiuwudaishi-043-identity-until-authorship",
+      "gate": "identity",
+      "reason": "Chapter identity review remains blocked until extractionAuthorAgentIds passes on the approved authorship patch.",
+      "instruction": "Host applies authorship patch first; schedule identity on the stamped extraction without reopening accepted source, date, or editorial pins."
+    }
+  ],
+  "pinnedEvidence": {
+    "ownerHandoff": {
+      "path": "research/people/checkpoints/campaign-nov24-retained-blocked/jiuwudaishi-043/owner-handoff.json",
+      "contentSha256": "sha256:5faf9abceae6ae0659b8676c404ec1bd2e15498705aaa95b59c1a7b199dc8bf8"
+    },
+    "inputs": {
+      "source": {
+        "path": "data/jiuwudaishi/043.json",
+        "gitBlob": "85759af9ddc040e52276ada3b3acc5ca02a0aa4c",
+        "contentSha256": "sha256:bea299060cb0ac61ae1f55b957045ff08a6fba11868406e942e685f138e15092"
+      },
+      "extraction": {
+        "path": "data/people/extractions/jiuwudaishi/043.json",
+        "gitBlob": "0e83b0b6de61909d8845648c1f52675f314deff8",
+        "contentSha256": "sha256:837be287c3034081b0d7a782ab80b5f5925cdb03361dc6780b347ce7305a27e6"
+      },
+      "dateAudit": {
+        "path": "data/people/date-audits/jiuwudaishi/043.json",
+        "gitBlob": "2800fc1a13930d9e07c28f79eb46535d2a91fc81",
+        "contentSha256": "sha256:6eeb368eb627f7c59b12e7fc973ba1d68449c25620f6827a906fcf103fed42df",
+        "extractionHash": "sha256:837be287c3034081b0d7a782ab80b5f5925cdb03361dc6780b347ce7305a27e6",
+        "sourceHash": "sha256:325fc1435154950039585224eec67b5c299a9ad4c02d3e22473c9e98e8cb05d1",
+        "status": "audited",
+        "reviewer": {
+          "name": "Independent Jiu Wudaishi 043 initial chronology reviewer",
+          "independentOfExtractor": true,
+          "preserved": true
+        },
+        "reviewedAt": "2026-09-29T16:57:05.980Z"
+      },
+      "editorial": {
+        "path": "data/people/editorial-decisions/jiuwudaishi/043.json",
+        "gitBlob": "1a8c7153ed65d090cfd053635db4748af5a0068f",
+        "contentSha256": "sha256:1d73a3a9bbf49e7ca99105725df0d84025a4ff2d4cd5b025d0205935872cf3b9",
+        "proposalCount": 17,
+        "preservedIndependentReview": true
+      }
+    },
+    "packet": {
+      "sourceHash": "sha256:325fc1435154950039585224eec67b5c299a9ad4c02d3e22473c9e98e8cb05d1",
+      "extractionHash": "sha256:837be287c3034081b0d7a782ab80b5f5925cdb03361dc6780b347ce7305a27e6"
+    }
+  },
+  "affectedNativeDependencies": {
+    "dateAuditStatus": {
+      "currentAtPin": "audited",
+      "afterAuthorshipApply": "stale-header-only",
+      "extractionHashBefore": "sha256:837be287c3034081b0d7a782ab80b5f5925cdb03361dc6780b347ce7305a27e6",
+      "extractionHashAfter": "sha256:8a4dff49e2bbac266e7fcdf2999b452f223bf36abd004ec30d64eb8b999063da",
+      "sourceHashUnchanged": true,
+      "chronologyItemSemanticsChanged": false,
+      "metadataOnlyReuse": {
+        "permitted": true,
+        "rationale": "Simulated patch changes only run.chunks[].agentId; dateAuditItems and all claim/person bytes are identical when authorship fields are stripped.",
+        "hostAction": "Repin audited report extractionHash or record metadata-only authorship restoration without reopening 213 reviewed units or 406 item checks."
+      }
+    },
+    "editorial": {
+      "unchanged": true,
+      "blockedByAuthorshipOnly": false
+    },
+    "identity": {
+      "status": "blocked-pending-authorship-apply",
+      "until": "approved authorship patch lands on data/people/extractions/jiuwudaishi/043.json"
+    },
+    "commandsRun": [
+      "node scripts/validate-people-extraction.mjs data/people/extractions/jiuwudaishi/043.json",
+      "npm run people:dates:verify -- --book jiuwudaishi --chapter 043"
+    ],
+    "commandsNotRun": [
+      "npm run people:validate",
+      "npm run build"
+    ]
+  },
+  "validation": {
+    "gitBlobPins": {
+      "source": true,
+      "extraction": true,
+      "dateAudit": true,
+      "editorial": true
+    },
+    "contentSha256Pins": {
+      "source": true,
+      "extraction": true,
+      "dateAudit": true,
+      "editorial": true
+    },
+    "authorshipGateReproduced": {
+      "gate": "extractionAuthorAgentIds (master scripts/lib/people-extraction-authorship.mjs)",
+      "pinnedExtractionError": "Actual extractor identity required for every chunk"
+    },
+    "postPatchAuthorshipSimulation": {
+      "agentIds": ["grokbot-13"],
+      "passes": true,
+      "proposedContentSha256Matches": true
+    },
+    "extractionValidator": {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/jiuwudaishi/043.json",
+      "passes": true,
+      "counts": {
+        "people": 140,
+        "mentions": 391,
+        "claims": 1336,
+        "candidates": 700
+      }
+    },
+    "dateAuditVerify": {
+      "status": "audited",
+      "findings": 0
+    },
+    "queueClaimBytesVerified": true,
+    "sourceHashUnchangedAfterPatch": true,
+    "semanticExtractionUnchangedExcludingAuthorship": true,
+    "englishCorrectionsInScopedDelta": [],
+    "editorialIndependentEvidenceRewritten": false,
+    "identityScopeTouched": false,
+    "limitations": [
+      "Approves authorship metadata restoration only; not canonical extraction write, publication, identity review, or full people:validate.",
+      "English and claim-revision editorial work at pin 1a8c7153… was not reopened because it is outside the scoped blocker.",
+      "Top-level run.agentId/run.runId and per-chunk run receipts remain explicitly unknown."
+    ]
+  }
+}
