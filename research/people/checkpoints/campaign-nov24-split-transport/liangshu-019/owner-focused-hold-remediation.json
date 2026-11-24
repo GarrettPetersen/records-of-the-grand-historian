@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-focused-hold-remediation",
+  "scope": {
+    "book": "liangshu",
+    "chapter": "019"
+  },
+  "ownerAgentId": "bc-23529211-836c-4588-b3ee-a1d4918b098f",
+  "workerId": "cursor-nov24-partitioned-1",
+  "branch": "cursor/liangshu-019-partitioned-owner-098f",
+  "branchHeadBeforeCommit": "6b6ff967f8c004532173ebd49e816b5b6d2ed282",
+  "independentReviewCommit": "99ce6e8e9617e9a68c02d9080049ea9fde0c6935",
+  "caseId": "sha256:72bbac975e9926f95774040735aad7f4e00b5e1a14f894b46f0d2baa7b748ca2",
+  "localPersonId": "liangshu:019:p036",
+  "canonicalPersonId": "per_251GSD0VRAY4Y23F944Y",
+  "membershipFingerprint": "sha256:f3179cf95d4184ff32d8dd7aecd2c2571eb2e4acb70c45bf7062200b981714c5",
+  "hold": {
+    "verdict": "hold",
+    "reason": "Hold: liangshu:019:p036 is headered 樂藹之母 (Mother of Yue Ai) from a strongly-inferred name claim on s0049, but the current primary sentence 其舅雍州刺史宗愨，嘗陳器物，試諸甥侄。 has no literal 樂藹之母 or other Chinese surface attributable to this individuated record. Native extraction also records sex male on s0049, contradicting the maternal kinship description. s0048 explicitly names 樂藹; s0049 only supplies nephew 甥侄 and uncle 宗愨 context for the maternal line. Without a primary Chinese witness for p036, accepted canonical membership cannot be independently certified; retain per_251GSD0VRAY4Y23F944Y pending kinship attestation repair."
+  },
+  "sourceContext": {
+    "units": [
+      {
+        "unitId": "s0048",
+        "zh": "樂藹字蔚遠，南陽淯陽人，晉尚書令廣之六世孫，世居江陵。",
+        "enLiteral": "Yue Ai, styled Weiyuan, was a native of Yuyang in Nanyang, sixth-generation descendant of Jin's Director of the Masters of Writing Guang, his family long in Jiangling.",
+        "enIdiomatic": "Yue Ai, styled Weiyuan, came from Yuyang in Nanyang, sixth from Jin's Director Guang; his line lived in Jiangling."
+      },
+      {
+        "unitId": "s0049",
+        "zh": "其舅雍州刺史宗愨，嘗陳器物，試諸甥侄。",
+        "enLiteral": "His uncle, Yongzhou inspector Zong Que, once set out vessels and tested his nephews.",
+        "enIdiomatic": "His uncle Zong Que, Yongzhou inspector, once set out vessels to test his nephews."
+      }
+    ],
+    "supportedInferences": [
+      "s0049 其舅 + 試諸甥侄 identifies Yue Ai (antecedent 樂藹 from s0048) as nephew of Zong Que.",
+      "Maternal uncle implies an unnamed mother who was Zong Que’s sister; no sentence names her or uses 母/之母 on s0049."
+    ],
+    "unsupportedOnP036": [
+      "Identity surface 樂藹之母 / Mother of Yue Ai as a quotable Chinese form on s0049",
+      "Explicit sex male on s0049 for this maternal kinship record",
+      "Explicit Song-period attestation on s0049 binding p036 as an individuated actor in the unit"
+    ]
+  },
+  "ownerConclusion": "Accept independent hold. s0049 supports the nephew–maternal-uncle graph only; retain unnamed Mother of Yue Ai as a kinship individuation reached through p003↔p035 (舅 / intermediary p036), not through a fabricated 樂藹之母 quotation. Compare p037 樂藹之父 on s0055 where Chinese 之父 is explicit.",
+  "extractionRepair": {
+    "targetPath": "data/people/extractions/liangshu/019.json",
+    "pinnedExtractionSha256": "sha256:3cede7900e84eaaa57ec0d1d7cc206ae2fa162d887d9495f182208c950b3d1f9",
+    "applyOnHostOnly": true,
+    "operations": [
+      {
+        "op": "revise-person-row",
+        "personId": "p036",
+        "field": "preferredName",
+        "before": ["Mother of Yue Ai", "樂藹之母", null],
+        "after": ["Mother of Yue Ai", null, null],
+        "reason": "Chinese identity header must not assert 樂藹之母 without a primary source surface; English kinship label is descriptive only."
+      },
+      {
+        "op": "revise-person-row",
+        "personId": "p036",
+        "field": "notes",
+        "before": "Individuated maternal line: sister of Zong Que and mother of Yue Ai",
+        "after": "Unnamed mother of Yue Ai; sister of Zong Que inferred only from s0049 舅 and 甥侄; no literal naming surface in chapter.",
+        "reason": "Distinguish legitimate unnamed kin from conjectural Chinese quotation."
+      },
+      {
+        "op": "retract-person-identity-claim",
+        "personId": "p036",
+        "unitId": "s0049",
+        "claim": {
+          "kind": "descriptive-kinship",
+          "en": "Mother of Yue Ai",
+          "zh": "樂藹之母"
+        },
+        "reason": "s0049 contains 宗愨 and 甥侄 only; not 樂藹之母."
+      },
+      {
+        "op": "retract-person-disposition",
+        "personId": "p036",
+        "unitId": "s0049",
+        "disposition": "family-member",
+        "reason": "Remove direct s0049 disposition for p036; kinship remains on p003/p035 relationship claims only."
+      },
+      {
+        "op": "retract-claim",
+        "personId": "p036",
+        "predicate": "sex",
+        "unitIds": ["s0049"],
+        "before": { "sex": "male" },
+        "reason": "Contradicts maternal role; no sex stated for the mother in source."
+      },
+      {
+        "op": "retract-claim",
+        "personId": "p036",
+        "predicate": "attestation",
+        "unitIds": ["s0049"],
+        "before": {
+          "sourceDate": { "text": "宋時" },
+          "westernInterval": {
+            "start": { "era": "AD", "year": 420, "precision": "year" },
+            "end": { "era": "AD", "year": 479, "precision": "year" }
+          }
+        },
+        "reason": "s0049 does not attest this individuated person; dating belongs to the named actors in the sentence (Zong Que / nephews), not a quoted mother."
+      }
+    ],
+    "preservedClaims": [
+      {
+        "personId": "p003",
+        "predicate": "family-relationship",
+        "relation": "kin-of",
+        "objectId": "p035",
+        "unitId": "s0049",
+        "note": "舅 maternal uncle — explicit"
+      },
+      {
+        "personId": "p003",
+        "predicate": "family-relationship",
+        "relation": "child-of",
+        "objectId": "p036",
+        "unitId": "s0049",
+        "note": "母 strongly-inferred via maternal-uncle line"
+      },
+      {
+        "personId": "p035",
+        "predicate": "family-relationship",
+        "relation": "sibling-of",
+        "objectId": "p036",
+        "unitId": "s0049",
+        "note": "sister link inferred; kinshipTerm should remain sibling with sex unset on p036"
+      }
+    ]
+  },
+  "englishRepairs": [],
+  "identityDispositionAfterRepair": {
+    "retainCanonicalPersonId": "per_251GSD0VRAY4Y23F944Y",
+    "unresolvedIdentity": true,
+    "independentCertificationBlockedUntil": "extractionRepair applied and case re-reviewed with primary Chinese witness or explicit unnamed-kinship schema path",
+    "ownerEvidenceCaseUpdate": {
+      "disposition": "hold",
+      "preferredWitnesses": [
+        { "localId": "liangshu:019:p003", "unitId": "s0048", "quote": "樂藹" },
+        { "localId": "liangshu:019:p035", "unitId": "s0049", "quote": "宗愨" },
+        { "localId": "liangshu:019:p003", "unitId": "s0049", "quote": "甥侄" }
+      ]
+    }
+  },
+  "scopedValidationReceipt": {
+    "command": "npm run people:validate -- --book liangshu --chapter 019",
+    "exitCode": 0,
+    "recordedAt": "2026-11-24T09:20:00.000Z",
+    "status": "PASS",
+    "summary": "Scoped person data validation passed for liangshu/019: 1 extraction(s), 53 local people, 264 mentions, 455 claims, 0 proposed repair(s), 16 applied repair(s), 16 editorial decision(s), 0 claim retraction(s), 4 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint.",
+    "interpretation": "Native structural validation passes on pinned extraction; independent identity hold remains valid because p036 still carries unsupported s0049 identity/sex/attestation until host applies extractionRepair."
+  },
+  "dependencyChanges": [
+    "Host applies extractionRepair to data/people/extractions/liangshu/019.json (new extraction fingerprint).",
+    "Owner updates owner-evidence.json case sha256:72bbac… disposition to hold (separate commit after extraction pin).",
+    "Independent reviewer re-runs case after extraction pin; no global build or canonical merge from this artifact alone."
+  ],
+  "notIndependentApproval": true
+}
