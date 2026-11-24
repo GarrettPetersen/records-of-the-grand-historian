@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "011"
+  },
+  "ownerAgentId": "bc-b9d14344-02da-4a1d-90f3-0d2ad7cb26ed",
+  "workerId": "cursor-nov24-retained-staging-w14-o2",
+  "idempotencyKey": "6a1ae710370ce9316ccbd0cffbb3d48550808f645cc26e5204d4b2cc88390a28",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "campaign": "campaign-nov24-retained-staging",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-011-b26ed",
+  "workOrderAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "1aee9ccf49f61529c13695f699cbf49a7a16c04a2823142de4d0924691f3c7c2",
+    "people": 65,
+    "claims": 338,
+    "promptVersion": 7,
+    "extractionBytes": 106069
+  },
+  "inputBlobWitness": {
+    "source": "76dea683a74e0b2634358acc286477ca9dc649a7",
+    "extraction": "ee59492a3a484a458fe19d048669638b781104de",
+    "editorial": "b902bff07d7cabf9589775815d445b9c0175c86c"
+  },
+  "sealedInputs": {
+    "source": "sha256:8c8427a40b9a9f00ab849b9ab35cd761d11af00daaf7519356eed1337ec31517",
+    "extraction": "sha256:1aee9ccf49f61529c13695f699cbf49a7a16c04a2823142de4d0924691f3c7c2",
+    "editorial": "sha256:18ab61e3d97989aff0a3291917a23e7f798538d229d4d76f5552fe16cea5fe7c"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Annals of the Xiaojing Emperor",
+    "chineseUnits": 121,
+    "translatedCount": 121,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "sentenceCount": 121,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 106069
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-011/date-packet.json",
+    "contentSha256": "sha256:f01cb6660a550ebf97d71a76f2ca80e51fced7235cf563b6a03fda3082a364c8",
+    "fileSha256": "sha256:f01cb6660a550ebf97d71a76f2ca80e51fced7235cf563b6a03fda3082a364c8",
+    "dateHintChecks": 231,
+    "people": 65,
+    "sourceUnits": 121,
+    "scanFindings": 0
+  },
+  "extractionAndEditorialReuse": {
+    "extraction": "Retained pinned extraction at witness blob; no re-extraction.",
+    "editorial": "Retained 2 accepted editorial decision(s) at witness blob; no new owner repairs.",
+    "promptVersion": 7
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book shiji --chapter 011",
+    "peopleValidateSummary": "Scoped person data validation passed for shiji/011: 1 extraction(s), 65 local people, 245 mentions, 632 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateExtraction": "data/people/extractions/shiji/011.json: ok (65 people, 245 mentions, 632 claims, 324 candidates)",
+    "datesScan": {
+      "command": "npm run people:dates:scan -- --book shiji --chapter 011",
+      "findings": 0
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 011",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "no-native-date-report",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "editorialDecisionCount": 2,
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Sealed three-part inputs (source, extraction, editorial) witness-verified at pinned git blobs on staging 20b8d0e3. Full chapter read: all 121 Chinese units carry paired literal and idiomatic English. Accepted extraction and editorial repairs align with source citations. Native date packet prepared (231 checks); people:dates:scan reports zero structural findings. No definite English omission, extraction gap, or source contradiction found. Independent native date audit not performed by owner; chapter remains un-audited.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "remainingIndependentProofs": {
+    "dateAudit": {
+      "status": "missing",
+      "gate": "independent-native-date-audit",
+      "artifact": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-011/date-packet.json",
+      "packetSha256": "sha256:f01cb6660a550ebf97d71a76f2ca80e51fced7235cf563b6a03fda3082a364c8",
+      "note": "Owner prepared sealed packet only; people:dates:record requires a separate reviewer."
+    },
+    "identityReview": {
+      "status": "pending-after-date-approval",
+      "gate": "independent-bounded-dossier-identity-review",
+      "note": "Corpus identity resolution remains downstream of chronology approval."
+    }
+  },
+  "nextGate": "independent-native-date-audit",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 011",
+    "validateExtraction": "node scripts/validate-people-extraction.mjs data/people/extractions/shiji/011.json",
+    "datesVerify": "npm run people:dates:verify -- --book shiji --chapter 011",
+    "datesPacket": "npm run people:dates:packet -- --book shiji --chapter 011 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-011/date-packet.json",
+    "datesScan": "npm run people:dates:scan -- --book shiji --chapter 011"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry generation, deploy, or merge."
+}
