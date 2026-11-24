@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "kind": "separate-transport-audited-source-owner-handoff",
+  "scope": {
+    "book": "liangshu",
+    "chapter": "014"
+  },
+  "ownerAgentId": "bc-e207215c-b48a-483e-b53d-c526ad7cb717",
+  "campaignWorker": "cursor-nov24-separate-transport-owner-2",
+  "campaign": "campaign-nov24-separate-transport-audited",
+  "idempotencyKey": "0d61245aa3d964eac616404879394c19718149a948f4251a021639758a884416",
+  "stagingBase": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branchRef": "cursor/nov24-separate-transport-owner-liangshu-014-7cb717",
+  "inputBlobWitness": {
+    "source": "6876c97361108d1809d044704f67da3b3f5a910f",
+    "extraction": "7ada4a8b9dcdf0e9de626ad6fa339158e8027e44",
+    "dateAudit": "1c1d361cfcedd2116850d9ad5700c9018bb9333b",
+    "editorial": "ea1f4237352c328449b2a15f1910bb0820cd8fe5"
+  },
+  "sealedInputs": {
+    "source": "sha256:7df8e403784bd33ac313e203d484f5ab721914688a5e8f9f5388dbd77f495e8d",
+    "extraction": "sha256:94cfe9e2de83c54661a669fcc6fc3a09f399682b48224130f07f1104458b6af5",
+    "dateAudit": "sha256:9ed3875e0eac246272e9e696211006a1685b68d84a00c895e483f7b3551d1e71",
+    "editorial": "sha256:81f5f4522a755504fda3287ded87f05f9ef453d300c8d045e2196ab6c61bcbf1"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book liangshu --chapter 014",
+    "summary": "Scoped person data validation passed for liangshu/014: 1 extraction(s), 123 local people, 450 mentions, 714 claims, 0 proposed repair(s), 19 applied repair(s), 19 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 304,
+      "translatedCount": 304,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "chronologyStatus": "audited",
+    "dateAuditFindings": 0,
+    "editorialDecisionCount": 19,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "peopleDatesVerify": {
+      "status": "audited",
+      "auditVersion": 1,
+      "findings": 0
+    }
+  },
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; full-sentence English/literal+idiomatic coverage scan; npm run people:validate; npm run people:dates:verify; retained independent date and editorial artifacts; no canonical extraction or source edits.",
+    "sourceTitle": "Volume 14: Jiang Yan; Ren Fang",
+    "sourceTitleZh": "卷十四 列傳第八 江淹 任昉",
+    "reviewedAt": "2026-11-24T14:52:51.051Z",
+    "localPeople": 123,
+    "conclusion": "Chapter source, accepted extraction, audited chronology, and applied editorial repairs align at pinned blobs. Full literal and idiomatic English coverage on all 304 Chinese units; extraction coverage flags satisfied; date audit reports zero findings. No new definite English omission, chronology defect, false merge, or unsupported-people hold in owner pass. Identity membership for 119 prepared cases remains for independent bounded dossier review across 7 transport parts."
+  },
+  "substantiveFindings": "Chapter source, accepted extraction, audited chronology, and applied editorial repairs align at pinned blobs. Full literal and idiomatic English coverage on all 304 Chinese units; extraction coverage flags satisfied; date audit reports zero findings. No new definite English omission, chronology defect, false merge, or unsupported-people hold in owner pass. Identity membership for 119 prepared cases remains for independent bounded dossier review across 7 transport parts.",
+  "distinctHolds": [],
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 119,
+    "identityTransportParts": 7,
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "artifactRetention": "GitHub Actions artifact nov24-separate-transport-audited-chapter-packets",
+    "notes": "Native preliminary identity preparation prepares five to seven sealed transport parts off-repo. Owner handoff is not independent identity approval."
+  },
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book liangshu --chapter 014",
+    "validateDates": "npm run people:dates:verify -- --book liangshu --chapter 014"
+  },
+  "notes": "[CF-Pages-Skip] Source-owner pass only; push owner-handoff without altering sealed inputs."
+}
