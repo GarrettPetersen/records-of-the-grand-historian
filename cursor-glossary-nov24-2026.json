@@ -40,7 +40,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Identify the exact Jinshu 115 uncertainty conflicts, then send only those rows back to the original reviewer. Reuse all unaffected decisions.",
+  "nextAction": "Revalidate the exact corrected Jinshu 115 report and the complete 094 report. Diagnose 083 membership bindings and preserve all unaffected review work.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T00:42:31.497Z",
+  "lastCheckedAt": "2026-11-24T00:44:06.675Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -1642,7 +1642,7 @@
       "findings": "70 authentic editorial accepts; checked aliases and merges. Residual claim wording, stale chronology and canonical identity remain."
     },
     "jinshu/094": {
-      "status": "sent",
+      "status": "finished",
       "agentId": "bc-aa913dc1-24e5-4aaf-9dd8-6d1b0651a008",
       "previousRunId": "run-9edefd74-1302-41d6-9a2b-61c3cd7b4902",
       "chapterPR": 5430,
@@ -1661,7 +1661,8 @@
         "swapUsedBytes": "3365205442"
       },
       "runId": "run-dee7d740-2c7a-400f-a88b-c7cf2691c8ba",
-      "sentAt": "2026-11-24T00:37:26.288Z"
+      "sentAt": "2026-11-24T00:37:26.288Z",
+      "resultRevision": "d5ed84e01071a93d8d983a1165670125ed74332c"
     },
     "jinshu/123": {
       "chapterPR": 5439,
@@ -1755,7 +1756,7 @@
       }
     },
     "jinshu/115": {
-      "status": "sent",
+      "status": "finished",
       "agentId": "bc-84536a48-e6d3-4027-a8ff-2478884deaaf",
       "previousRunId": "run-d745e7f2-aa11-4f95-a01a-766a1641856e",
       "chapterPR": 5470,
@@ -1774,7 +1775,10 @@
         "swapUsedBytes": "3365205442"
       },
       "runId": "run-af0250a1-f449-493a-b0b4-e9bf967a54c2",
-      "sentAt": "2026-11-24T00:42:31.495Z"
+      "sentAt": "2026-11-24T00:42:31.495Z",
+      "resultRevision": "c32e583ec12500c4fd44fbfc3b293fddd7f90e54",
+      "authoredParts": 11,
+      "authoredRows": 229
     },
     "jinshu/083": {
       "status": "finished",
@@ -1888,7 +1892,7 @@
       "nextAction": "Preserve proof and diagnose the 178 precise flags after third grouped repair; do not repeat the full audit."
     },
     "jinshu/030": {
-      "status": "sent",
+      "status": "finished",
       "agentId": "bc-ab2acfed-77c9-4601-afc7-18feb78285d3",
       "previousRunId": "run-38c4ae24-901e-4fd6-b9fa-fb93ad5da344",
       "chapterPR": 5479,
@@ -1907,7 +1911,8 @@
         "swapUsedBytes": "3365205442"
       },
       "runId": "run-e5022af2-9a35-4026-8b1d-d0c7792ae908",
-      "sentAt": "2026-11-24T00:37:26.289Z"
+      "sentAt": "2026-11-24T00:37:26.289Z",
+      "resultRevision": "7dc682707be3e32b76cbadb420f74a9261b153ca"
     },
     "jinshu/110": {
       "status": "sent",
@@ -2453,14 +2458,24 @@
                 "runId": "run-d745e7f2-aa11-4f95-a01a-766a1641856e",
                 "agentId": "bc-84536a48-e6d3-4027-a8ff-2478884deaaf",
                 "status": "pending-native-verification"
+              },
+              {
+                "part": 5,
+                "path": "research/people/checkpoints/jinshu115-independent-exact-identity-20261124/authored-native-part-report-005.json",
+                "commit": "c32e583ec12500c4fd44fbfc3b293fddd7f90e54",
+                "agentId": "bc-84536a48-e6d3-4027-a8ff-2478884deaaf",
+                "reportSha256": "d7bfafbc1d4ed8f46e19b5103eb2c590884d98be6126456d76e3ee08a1658f61",
+                "rows": 28,
+                "holds": 0,
+                "runId": "run-af0250a1-f449-493a-b0b4-e9bf967a54c2",
+                "status": "pending-native-verification"
               }
             ],
             "nativeRecording": {
-              "status": "needs-focused-uncertainty-correction",
+              "status": "dispatch-intent",
               "requestedAt": "2026-11-24T00:35:10.552Z",
               "partCount": 11,
-              "reportCommit": "0bb3a6f8b2bacf5fa472cf1013b3d500d69e8b13",
-              "runId": 45298398998,
+              "reportCommit": "c32e583ec12500c4fd44fbfc3b293fddd7f90e54",
               "conclusion": "failure",
               "diagnosticRunId": 45299146835,
               "reason": "Native validation found sealed candidate or overflow ambiguity marked resolved in at least one independently authored row. Exact mismatches are being listed from the immutable packet and authored bytes.",
@@ -2474,7 +2489,8 @@
                   ],
                   "missingBlockingName": true
                 }
-              ]
+              ],
+              "previousRunId": 45298398998
             }
           }
         }
@@ -2821,12 +2837,13 @@
             }
           ],
           "nativeRecording": {
-            "status": "in_progress",
+            "status": "membership-binding-diagnostic",
             "requestedAt": "2026-11-24T00:37:14.467Z",
             "partCount": 10,
             "reportCommit": "48a9970453826f72d43db20170803b074772c204",
             "runId": 45298700799,
-            "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45298700799"
+            "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45298700799",
+            "conclusion": "failure"
           }
         }
       },
@@ -3005,8 +3022,91 @@
               "runId": "run-9edefd74-1302-41d6-9a2b-61c3cd7b4902",
               "agentId": "bc-aa913dc1-24e5-4aaf-9dd8-6d1b0651a008",
               "status": "pending-native-verification"
+            },
+            {
+              "part": 11,
+              "path": "research/people/checkpoints/jinshu094-independent-review-r13-identity-parts11-17-20261124/part-reports/identity-part-011-report.json",
+              "reportSha256": "1819ec674aeb584313bfb2255d73330a2b78e88bbfcc1cf99cb26535a8b84233",
+              "rows": 16,
+              "holds": 0,
+              "commit": "d5ed84e01071a93d8d983a1165670125ed74332c",
+              "runId": "run-dee7d740-2c7a-400f-a88b-c7cf2691c8ba",
+              "agentId": "bc-aa913dc1-24e5-4aaf-9dd8-6d1b0651a008",
+              "status": "pending-native-verification"
+            },
+            {
+              "part": 12,
+              "path": "research/people/checkpoints/jinshu094-independent-review-r13-identity-parts11-17-20261124/part-reports/identity-part-012-report.json",
+              "reportSha256": "16829b43f8dec602edbe144d874a0ee8f660c519617034a5240b1f1b4e556fd8",
+              "rows": 15,
+              "holds": 0,
+              "commit": "d5ed84e01071a93d8d983a1165670125ed74332c",
+              "runId": "run-dee7d740-2c7a-400f-a88b-c7cf2691c8ba",
+              "agentId": "bc-aa913dc1-24e5-4aaf-9dd8-6d1b0651a008",
+              "status": "pending-native-verification"
+            },
+            {
+              "part": 13,
+              "path": "research/people/checkpoints/jinshu094-independent-review-r13-identity-parts11-17-20261124/part-reports/identity-part-013-report.json",
+              "reportSha256": "b256377392f3b4634a26c596fca05352474c0f648830134a92cf1dece0d2984a",
+              "rows": 16,
+              "holds": 0,
+              "commit": "d5ed84e01071a93d8d983a1165670125ed74332c",
+              "runId": "run-dee7d740-2c7a-400f-a88b-c7cf2691c8ba",
+              "agentId": "bc-aa913dc1-24e5-4aaf-9dd8-6d1b0651a008",
+              "status": "pending-native-verification"
+            },
+            {
+              "part": 14,
+              "path": "research/people/checkpoints/jinshu094-independent-review-r13-identity-parts11-17-20261124/part-reports/identity-part-014-report.json",
+              "reportSha256": "dc20957f3b9fd5c22da62f4eb7aecfe56981d7ac90868456d421a9b2d653f706",
+              "rows": 15,
+              "holds": 0,
+              "commit": "d5ed84e01071a93d8d983a1165670125ed74332c",
+              "runId": "run-dee7d740-2c7a-400f-a88b-c7cf2691c8ba",
+              "agentId": "bc-aa913dc1-24e5-4aaf-9dd8-6d1b0651a008",
+              "status": "pending-native-verification"
+            },
+            {
+              "part": 15,
+              "path": "research/people/checkpoints/jinshu094-independent-review-r13-identity-parts11-17-20261124/part-reports/identity-part-015-report.json",
+              "reportSha256": "4cbc71be34b5b49382f0b97af24545c8524992a990c7f28f4ea099a45bd040fa",
+              "rows": 16,
+              "holds": 0,
+              "commit": "d5ed84e01071a93d8d983a1165670125ed74332c",
+              "runId": "run-dee7d740-2c7a-400f-a88b-c7cf2691c8ba",
+              "agentId": "bc-aa913dc1-24e5-4aaf-9dd8-6d1b0651a008",
+              "status": "pending-native-verification"
+            },
+            {
+              "part": 16,
+              "path": "research/people/checkpoints/jinshu094-independent-review-r13-identity-parts11-17-20261124/part-reports/identity-part-016-report.json",
+              "reportSha256": "eaebb8a73b680a39c162078ae4a48caa44b85af503326ecc6a1e8ec40cf118dd",
+              "rows": 16,
+              "holds": 0,
+              "commit": "d5ed84e01071a93d8d983a1165670125ed74332c",
+              "runId": "run-dee7d740-2c7a-400f-a88b-c7cf2691c8ba",
+              "agentId": "bc-aa913dc1-24e5-4aaf-9dd8-6d1b0651a008",
+              "status": "pending-native-verification"
+            },
+            {
+              "part": 17,
+              "path": "research/people/checkpoints/jinshu094-independent-review-r13-identity-parts11-17-20261124/part-reports/identity-part-017-report.json",
+              "reportSha256": "41b4eb2178b6fe70ba4502b088caecb5b8f9d132ddf9d7471df0a66aa105ee0d",
+              "rows": 16,
+              "holds": 0,
+              "commit": "d5ed84e01071a93d8d983a1165670125ed74332c",
+              "runId": "run-dee7d740-2c7a-400f-a88b-c7cf2691c8ba",
+              "agentId": "bc-aa913dc1-24e5-4aaf-9dd8-6d1b0651a008",
+              "status": "pending-native-verification"
             }
-          ]
+          ],
+          "nativeRecording": {
+            "status": "dispatch-intent",
+            "requestedAt": "2026-11-24T00:43:57.042Z",
+            "partCount": 17,
+            "reportCommit": "d5ed84e01071a93d8d983a1165670125ed74332c"
+          }
         }
       }
     },
@@ -3238,6 +3338,138 @@
           "holds": 0,
           "commit": "d661b857869707cac189859f501750427e7de82f",
           "runId": "run-38c4ae24-901e-4fd6-b9fa-fb93ad5da344",
+          "agentId": "bc-ab2acfed-77c9-4601-afc7-18feb78285d3",
+          "status": "pending-native-verification"
+        },
+        {
+          "part": 16,
+          "path": "research/people/checkpoints/jinshu030-native-identity-parts-20261124/transport-part-016-independent-review.json",
+          "reportSha256": "ece438f969f4b541e289a0e2001ba43b4caa334f68f3518ffd46722e33973dbc",
+          "rows": 6,
+          "holds": 0,
+          "commit": "7dc682707be3e32b76cbadb420f74a9261b153ca",
+          "runId": "run-e5022af2-9a35-4026-8b1d-d0c7792ae908",
+          "agentId": "bc-ab2acfed-77c9-4601-afc7-18feb78285d3",
+          "status": "pending-native-verification"
+        },
+        {
+          "part": 17,
+          "path": "research/people/checkpoints/jinshu030-native-identity-parts-20261124/transport-part-017-independent-review.json",
+          "reportSha256": "fb979ef9a91377cd97fee906f2a1b35fe107d672980a4b7200d83785494e9072",
+          "rows": 3,
+          "holds": 0,
+          "commit": "7dc682707be3e32b76cbadb420f74a9261b153ca",
+          "runId": "run-e5022af2-9a35-4026-8b1d-d0c7792ae908",
+          "agentId": "bc-ab2acfed-77c9-4601-afc7-18feb78285d3",
+          "status": "pending-native-verification"
+        },
+        {
+          "part": 18,
+          "path": "research/people/checkpoints/jinshu030-native-identity-parts-20261124/transport-part-018-independent-review.json",
+          "reportSha256": "e41534f9697f40165482d399444bbd53bc9deea9c523674685e03a179f499ed1",
+          "rows": 4,
+          "holds": 0,
+          "commit": "7dc682707be3e32b76cbadb420f74a9261b153ca",
+          "runId": "run-e5022af2-9a35-4026-8b1d-d0c7792ae908",
+          "agentId": "bc-ab2acfed-77c9-4601-afc7-18feb78285d3",
+          "status": "pending-native-verification"
+        },
+        {
+          "part": 19,
+          "path": "research/people/checkpoints/jinshu030-native-identity-parts-20261124/transport-part-019-independent-review.json",
+          "reportSha256": "932d5ab4fed35ea30c2a839f5c7f787f9946f0636c10b9cad68abfa5b76dccdb",
+          "rows": 6,
+          "holds": 0,
+          "commit": "7dc682707be3e32b76cbadb420f74a9261b153ca",
+          "runId": "run-e5022af2-9a35-4026-8b1d-d0c7792ae908",
+          "agentId": "bc-ab2acfed-77c9-4601-afc7-18feb78285d3",
+          "status": "pending-native-verification"
+        },
+        {
+          "part": 20,
+          "path": "research/people/checkpoints/jinshu030-native-identity-parts-20261124/transport-part-020-independent-review.json",
+          "reportSha256": "7c373d0e463ca9d5885724bdb8dab4064d3a9c714f3c013f972f0d640683226f",
+          "rows": 3,
+          "holds": 0,
+          "commit": "7dc682707be3e32b76cbadb420f74a9261b153ca",
+          "runId": "run-e5022af2-9a35-4026-8b1d-d0c7792ae908",
+          "agentId": "bc-ab2acfed-77c9-4601-afc7-18feb78285d3",
+          "status": "pending-native-verification"
+        },
+        {
+          "part": 21,
+          "path": "research/people/checkpoints/jinshu030-native-identity-parts-20261124/transport-part-021-independent-review.json",
+          "reportSha256": "d9214b52ca75c4974ffdbcc891b62ac065f47400058c05bf36d655180d6424fe",
+          "rows": 4,
+          "holds": 0,
+          "commit": "7dc682707be3e32b76cbadb420f74a9261b153ca",
+          "runId": "run-e5022af2-9a35-4026-8b1d-d0c7792ae908",
+          "agentId": "bc-ab2acfed-77c9-4601-afc7-18feb78285d3",
+          "status": "pending-native-verification"
+        },
+        {
+          "part": 22,
+          "path": "research/people/checkpoints/jinshu030-native-identity-parts-20261124/transport-part-022-independent-review.json",
+          "reportSha256": "e9e4913bffac45b7a250f27719aac3332f5e09cac3c4987001a02c79b1e709f6",
+          "rows": 6,
+          "holds": 0,
+          "commit": "7dc682707be3e32b76cbadb420f74a9261b153ca",
+          "runId": "run-e5022af2-9a35-4026-8b1d-d0c7792ae908",
+          "agentId": "bc-ab2acfed-77c9-4601-afc7-18feb78285d3",
+          "status": "pending-native-verification"
+        },
+        {
+          "part": 23,
+          "path": "research/people/checkpoints/jinshu030-native-identity-parts-20261124/transport-part-023-independent-review.json",
+          "reportSha256": "45bcd7ddc203677b6f829d79424a786cf68ee040f7f3ad78a9affbc5229b3e8b",
+          "rows": 7,
+          "holds": 0,
+          "commit": "7dc682707be3e32b76cbadb420f74a9261b153ca",
+          "runId": "run-e5022af2-9a35-4026-8b1d-d0c7792ae908",
+          "agentId": "bc-ab2acfed-77c9-4601-afc7-18feb78285d3",
+          "status": "pending-native-verification"
+        },
+        {
+          "part": 24,
+          "path": "research/people/checkpoints/jinshu030-native-identity-parts-20261124/transport-part-024-independent-review.json",
+          "reportSha256": "f59e6f2a1a06b2a94f1ea075ec8cbc9c120fc49ca6ff37006dfc866e8bb48148",
+          "rows": 3,
+          "holds": 0,
+          "commit": "7dc682707be3e32b76cbadb420f74a9261b153ca",
+          "runId": "run-e5022af2-9a35-4026-8b1d-d0c7792ae908",
+          "agentId": "bc-ab2acfed-77c9-4601-afc7-18feb78285d3",
+          "status": "pending-native-verification"
+        },
+        {
+          "part": 25,
+          "path": "research/people/checkpoints/jinshu030-native-identity-parts-20261124/transport-part-025-independent-review.json",
+          "reportSha256": "4f157d9552ae9ea95f129b1a32515861a48cda8f7ed1b106332d55c0c9f5aadd",
+          "rows": 3,
+          "holds": 0,
+          "commit": "7dc682707be3e32b76cbadb420f74a9261b153ca",
+          "runId": "run-e5022af2-9a35-4026-8b1d-d0c7792ae908",
+          "agentId": "bc-ab2acfed-77c9-4601-afc7-18feb78285d3",
+          "status": "pending-native-verification"
+        },
+        {
+          "part": 26,
+          "path": "research/people/checkpoints/jinshu030-native-identity-parts-20261124/transport-part-026-independent-review.json",
+          "reportSha256": "93edfdf60ad6a266e26ec85f7467c21a3fbb3b0b723013341559fa8ab7055c7f",
+          "rows": 3,
+          "holds": 0,
+          "commit": "7dc682707be3e32b76cbadb420f74a9261b153ca",
+          "runId": "run-e5022af2-9a35-4026-8b1d-d0c7792ae908",
+          "agentId": "bc-ab2acfed-77c9-4601-afc7-18feb78285d3",
+          "status": "pending-native-verification"
+        },
+        {
+          "part": 27,
+          "path": "research/people/checkpoints/jinshu030-native-identity-parts-20261124/transport-part-027-independent-review.json",
+          "reportSha256": "45af649adcd19f9ca13b6dc34bdb45cf1239e675f2b89adbfc1a5a1e1e51017e",
+          "rows": 4,
+          "holds": 0,
+          "commit": "7dc682707be3e32b76cbadb420f74a9261b153ca",
+          "runId": "run-e5022af2-9a35-4026-8b1d-d0c7792ae908",
           "agentId": "bc-ab2acfed-77c9-4601-afc7-18feb78285d3",
           "status": "pending-native-verification"
         }
