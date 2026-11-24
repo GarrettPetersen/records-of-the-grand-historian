@@ -1,0 +1,874 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-scoped-delta-review",
+  "chapterKey": "beiqishu/030",
+  "reviewerAgentId": "bc-4f91b8c1-53d3-42f3-9387-3a62c23b1a5a",
+  "reviewerModel": {
+    "id": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "ownerAgentId": "bc-1cece8a1-2eac-4165-9087-3dea34232f43",
+  "ownerRun": "run-5c9ccc7e-25d7-4137-91d0-e2eec5486424",
+  "ownerRevision": "13b31a02afab22efd1fe10c9ecb725752ba2c4f3",
+  "ownerProposalPath": "research/people/checkpoints/campaign-nov24-separate-transport-audited/beiqishu-030/owner-handoff.json",
+  "ownerProposalSha256": "e946e3fc0be9555d860e632f206d2f17cd4c14ed7c18da3f28f07781c45d03ce",
+  "pullRequest": {
+    "number": 5709,
+    "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5709",
+    "headRef": "cursor/nov24-separate-transport-owner-beiqishu-030-232f43",
+    "headOid": "13b31a02afab22efd1fe10c9ecb725752ba2c4f3",
+    "base": "codex/people-glossary-staging-v2",
+    "stateAtReview": "OPEN"
+  },
+  "dispatch": {
+    "fold": "editorial",
+    "phase": "dispatch_pending",
+    "idempotencyKey": "a0eae3f0ada3f6fc67cfe3896150c56ea641d728a5a12b8797f2b02574a1bef5",
+    "ref": "cursor/nov24-delta-approval-beiqishu-030-1a5a",
+    "stage": "5b7ae31b8011c3f51b7cc4623dd973256d5f0b21"
+  },
+  "originalBlocker": "definite-source-translation-repair",
+  "verdict": "changes-required",
+  "verdictSummary": "The s0081 blocker is real: 贈開府 is a posthumous kaifu grant, not an enfeoffment. The owner patch is approved only with an amended after text, because \"opening the Grand Marshalate\" keeps the original mistranslation of 開府. The owner pass is incomplete. (1) The same 開府 = \"grand marshalate\" error repeats in s0006, s0028 and s0091. (2) Its direct extraction dependency was missed: claim index 164 encodes s0081 as an enfeoffment titled \"Grand marshalate\", and two office labels repeat the error. (3) The literal fields of seven units (s0003, s0026, s0127, s0133, s0178, s0191, s0194) still contain the exact errors the accepted editorial review corrected only in the idiomatic field. (4) Within the clauses being repaired, s0026 renders 尚書令 as \"Minister of Works\" and 太師 as \"Grand Tutor\", and s0133 renders 司空公 as \"Grand Master of Ceremonies\"; the 尚書令 error has propagated into p023's identity surface (\"Works Sima Ziru\") and alias. All fixes are definite and source-grounded, none is an unresolved contradiction, and the dry-run shows zero chronology content change. Return them together to the owner; this reviewer checks the patch and its dependencies.",
+  "approvedChanges": [
+    {
+      "scope": {
+        "book": "beiqishu",
+        "chapter": "030",
+        "unitId": "s0081",
+        "field": "literal"
+      },
+      "decision": "revise",
+      "before": "He was posthumously enfeoffed as grand marshalate.",
+      "ownerAfter": "He was posthumously granted the honor of opening the Grand Marshalate (kaifu).",
+      "approvedAfter": "He was posthumously granted the honor of opening an office (kaifu).",
+      "sourceWitness": {
+        "citation": "s0081",
+        "excerpt": "贈開府。"
+      },
+      "reason": "贈開府 is a posthumous grant of the kaifu privilege (開府, opening one's own office/headquarters), not an enfeoffment (封); 開府 names no \"Grand Marshalate\". Amends the owner's after text, which retained the grand-marshalate gloss; \"opening office\" matches the chapter's existing rendering of 開府 in s0185 and s0211."
+    },
+    {
+      "scope": {
+        "book": "beiqishu",
+        "chapter": "030",
+        "unitId": "s0081",
+        "field": "idiomatic"
+      },
+      "decision": "revise",
+      "before": "He was posthumously enfeoffed as grand marshalate.",
+      "ownerAfter": "He was posthumously granted the honor of opening the Grand Marshalate (kaifu).",
+      "approvedAfter": "He was posthumously granted the honor of opening an office (kaifu).",
+      "sourceWitness": {
+        "citation": "s0081",
+        "excerpt": "贈開府。"
+      },
+      "reason": "贈開府 is a posthumous grant of the kaifu privilege (開府, opening one's own office/headquarters), not an enfeoffment (封); 開府 names no \"Grand Marshalate\". Amends the owner's after text, which retained the grand-marshalate gloss; \"opening office\" matches the chapter's existing rendering of 開府 in s0185 and s0211."
+    }
+  ],
+  "requiredAdditionalFixes": {
+    "note": "Definite defects found in this scoped review: same-term repetitions of the blocker, its direct extraction dependency, parallel literal fields of accepted editorial decisions, and office mistranslations inside the clauses those repairs touch. The owner applies them as one patch through the native editorial applier. This reviewer authored these replacements, so the owner adoption and editorial record must carry that provenance honestly. The accepted rows r0001-r0007 and the original review stay verbatim.",
+    "english": [
+      {
+        "scope": {
+          "book": "beiqishu",
+          "chapter": "030",
+          "unitId": "s0006",
+          "field": "literal"
+        },
+        "kind": "definite-mistranslation",
+        "before": "Duke of Zhao Commandery Chen, defending Dingzhou, engaged him as deliberator of the grand marshalate.",
+        "after": "Duke of Zhao Commandery Chen, defending Dingzhou, engaged him as deliberator of the opening office.",
+        "sourceWitness": {
+          "citation": "s0006",
+          "excerpt": "趙郡公琛鎮定州，辟為開府諮議。",
+          "clauses": [
+            "開府諮議"
+          ]
+        },
+        "reason": "Same-term repetition: 開府諮議 is the deliberator of a kaifu office, not of a grand marshal's office; align with s0185 \"opening office\" and the corrected s0081."
+      },
+      {
+        "scope": {
+          "book": "beiqishu",
+          "chapter": "030",
+          "unitId": "s0006",
+          "field": "idiomatic"
+        },
+        "kind": "definite-mistranslation",
+        "before": "Duke of Zhao Commandery Chen, defending Dingzhou, engaged him as deliberator of the grand marshalate.",
+        "after": "Duke of Zhao Commandery Chen, defending Dingzhou, engaged him as deliberator of the opening office.",
+        "sourceWitness": {
+          "citation": "s0006",
+          "excerpt": "趙郡公琛鎮定州，辟為開府諮議。",
+          "clauses": [
+            "開府諮議"
+          ]
+        },
+        "reason": "Same-term repetition: 開府諮議 is the deliberator of a kaifu office, not of a grand marshal's office; align with s0185 \"opening office\" and the corrected s0081."
+      },
+      {
+        "scope": {
+          "book": "beiqishu",
+          "chapter": "030",
+          "unitId": "s0028",
+          "field": "literal"
+        },
+        "kind": "definite-mistranslation",
+        "before": "Gao Huan wrote to the nobles at Ye: \"Cui Xian once served my younger brother as chief clerk of Dingzhou, later my son's grand marshalate deliberator, and when moved to left vice director and director of the ministry of personnel I did not yet know his ability.",
+        "after": "Gao Huan wrote to the nobles at Ye: \"Cui Xian once served my younger brother as chief clerk of Dingzhou, later deliberator of my son's opening office, and when moved to left vice director and director of the ministry of personnel I did not yet know his ability.",
+        "sourceWitness": {
+          "citation": "s0028",
+          "excerpt": "高祖書與鄴下諸貴曰：「崔暹昔事家弟為定州長史，後吾兒開府諮議，及遷左丞吏部郎，吾未知其能也。",
+          "clauses": [
+            "吾兒開府諮議"
+          ]
+        },
+        "reason": "Same-term repetition: 吾兒開府諮議 is deliberator of my son's kaifu office; 開府 is not a grand marshalate."
+      },
+      {
+        "scope": {
+          "book": "beiqishu",
+          "chapter": "030",
+          "unitId": "s0028",
+          "field": "idiomatic"
+        },
+        "kind": "definite-mistranslation",
+        "before": "Gao Huan wrote to the nobles at Ye, \"Cui Xian once served my younger brother as chief clerk of Dingzhou, later my son's grand marshalate deliberator, and when moved to left vice director and director of the ministry of personnel I did not yet know his ability.",
+        "after": "Gao Huan wrote to the nobles at Ye, \"Cui Xian once served my younger brother as chief clerk of Dingzhou, later deliberator of my son's opening office, and when moved to left vice director and director of the ministry of personnel I did not yet know his ability.",
+        "sourceWitness": {
+          "citation": "s0028",
+          "excerpt": "高祖書與鄴下諸貴曰：「崔暹昔事家弟為定州長史，後吾兒開府諮議，及遷左丞吏部郎，吾未知其能也。",
+          "clauses": [
+            "吾兒開府諮議"
+          ]
+        },
+        "reason": "Same-term repetition: 吾兒開府諮議 is deliberator of my son's kaifu office; 開府 is not a grand marshalate."
+      },
+      {
+        "scope": {
+          "book": "beiqishu",
+          "chapter": "030",
+          "unitId": "s0091",
+          "field": "literal"
+        },
+        "kind": "definite-mistranslation",
+        "before": "Gao Yang brought him in as staff officer to the grand marshalate in charge of records, and was very intimate.",
+        "after": "Gao Yang brought him in as staff officer of the opening office in charge of records, and was very intimate.",
+        "sourceWitness": {
+          "citation": "s0091",
+          "excerpt": "顯祖引為開府參軍，知管記事，甚相親狎。",
+          "clauses": [
+            "開府參軍"
+          ]
+        },
+        "reason": "Same-term repetition: 開府參軍 is a staff officer of a kaifu office; 開府 is not a grand marshalate."
+      },
+      {
+        "scope": {
+          "book": "beiqishu",
+          "chapter": "030",
+          "unitId": "s0091",
+          "field": "idiomatic"
+        },
+        "kind": "definite-mistranslation",
+        "before": "Gao Yang brought him in as staff officer to the grand marshalate in charge of records, and was very intimate.",
+        "after": "Gao Yang brought him in as staff officer of the opening office in charge of records, and was very intimate.",
+        "sourceWitness": {
+          "citation": "s0091",
+          "excerpt": "顯祖引為開府參軍，知管記事，甚相親狎。",
+          "clauses": [
+            "開府參軍"
+          ]
+        },
+        "reason": "Same-term repetition: 開府參軍 is a staff officer of a kaifu office; 開府 is not a grand marshalate."
+      },
+      {
+        "scope": {
+          "book": "beiqishu",
+          "chapter": "030",
+          "unitId": "s0003",
+          "field": "literal"
+        },
+        "kind": "definite-mistranslation",
+        "before": "His father Mu was a commandery clerk.",
+        "after": "His father Mu was a provincial clerk.",
+        "sourceWitness": {
+          "citation": "s0003",
+          "excerpt": "父穆，州主簿。",
+          "clauses": [
+            "州主簿"
+          ]
+        },
+        "reason": "Parallel literal field of accepted editorial decision beiqishu:030:r0001 (revise): 州主簿 is a zhou-level (provincial) office, not a commandery office."
+      },
+      {
+        "scope": {
+          "book": "beiqishu",
+          "chapter": "030",
+          "unitId": "s0026",
+          "field": "literal"
+        },
+        "kind": "definite-mistranslation",
+        "before": "Xian successively memorialized and impeached Minister of Works Sima Ziru and the minister Yuan Xian and Administrator of Yong province Murong Xian, also impeached Grand Tutor Prince of Xianyang Wang Tan and Inspector of Bing province Kezhuhun Daoyuan—the charges written to the utmost; all were removed from office.",
+        "after": "Xian successively memorialized and impeached Director of the Masters of Writing Sima Ziru and the minister Yuan Xian and Administrator of Yong province Murong Xian, also impeached Grand Preceptor Prince of Xianyang Tan and Inspector of Bing province Kezhuhun Daoyuan—the charges written to the utmost; all were removed from office.",
+        "sourceWitness": {
+          "citation": "s0026",
+          "excerpt": "暹前後表彈尚書令司馬子如及尚書元羨、雍州刺史慕容獻，又彈太師咸陽王坦、幷州刺史可朱渾道元，罪狀極筆，並免官。",
+          "clauses": [
+            "尚書令司馬子如",
+            "太師咸陽王坦"
+          ]
+        },
+        "reason": "Parallel literal field of accepted decision beiqishu:030:r0002 (咸陽王坦 is Tan, Prince of Xianyang; no surname Wang). In the same clause 尚書令 is the Director of the Masters of Writing (chapter rendering in s0113), not Minister of Works (司空), and 太師 is Grand Preceptor, distinct from 太傅 Grand Tutor in s0127."
+      },
+      {
+        "scope": {
+          "book": "beiqishu",
+          "chapter": "030",
+          "unitId": "s0026",
+          "field": "idiomatic"
+        },
+        "kind": "definite-mistranslation",
+        "before": "Xian successively memorialized and impeached Minister of Works Sima Ziru, the minister Yuan Xian, and Administrator of Yong province Murong Xian, and also impeached Grand Tutor Prince of Xianyang Tan and inspector of Bing province Kezhuhun Daoyuan—the charges written to the utmost; all were removed from office.",
+        "after": "Xian successively memorialized and impeached Director of the Masters of Writing Sima Ziru, the minister Yuan Xian, and Administrator of Yong province Murong Xian, and also impeached Grand Preceptor Prince of Xianyang Tan and inspector of Bing province Kezhuhun Daoyuan—the charges written to the utmost; all were removed from office.",
+        "sourceWitness": {
+          "citation": "s0026",
+          "excerpt": "暹前後表彈尚書令司馬子如及尚書元羨、雍州刺史慕容獻，又彈太師咸陽王坦、幷州刺史可朱渾道元，罪狀極筆，並免官。",
+          "clauses": [
+            "尚書令司馬子如",
+            "太師咸陽王坦"
+          ]
+        },
+        "reason": "尚書令 is Director of the Masters of Writing (as in s0113), not Minister of Works (司空); 太師 is Grand Preceptor, distinct from 太傅 Grand Tutor (s0127). Preserves accepted r0002 removal of the false surname Wang."
+      },
+      {
+        "scope": {
+          "book": "beiqishu",
+          "chapter": "030",
+          "unitId": "s0127",
+          "field": "literal"
+        },
+        "kind": "definite-mistranslation",
+        "before": "On the sixth day he required Wei Grand Tutor Prince of Xianyang Wang Tan and others to assemble in full, brought them into the Northern Palace, and kept them in the eastern study — after the abdication they were only then released to their residences.",
+        "after": "On the sixth day he required Wei Grand Tutor Prince of Xianyang Tan and others to assemble in full, brought them into the Northern Palace, and kept them in the eastern study — after the abdication they were only then released to their residences.",
+        "sourceWitness": {
+          "citation": "s0127",
+          "excerpt": "六日，要魏太傅咸陽王坦等總集，引人北宮，留于東齋，受禪後，乃放還宅。",
+          "clauses": [
+            "魏太傅咸陽王坦"
+          ]
+        },
+        "reason": "Parallel literal field of accepted decision beiqishu:030:r0003: 王 belongs to the title 咸陽王; the name is 坦."
+      },
+      {
+        "scope": {
+          "book": "beiqishu",
+          "chapter": "030",
+          "unitId": "s0133",
+          "field": "literal"
+        },
+        "kind": "definite-mistranslation",
+        "before": "On the eighth day Yang Yin wrote the central order, sending Wei Prince of Xiangcheng Wang Xu together with Grand Master of Ceremonies Pan Xiangyue, Palace Attendant Zhang Liang, and Yellow Gate Zhao Yanshen to communicate matters at court.",
+        "after": "On the eighth day Yang Yin wrote the central order, sending Wei Prince of Xiangcheng Xu together with Minister of Works Pan Xiangyue, Palace Attendant Zhang Liang, and Yellow Gate Zhao Yanshen to communicate matters at court.",
+        "sourceWitness": {
+          "citation": "s0133",
+          "excerpt": "八日，楊愔書中旨，以魏襄城王旭並司空公潘相樂、侍中張亮、黃門趙彥深入通奏事。",
+          "clauses": [
+            "魏襄城王旭",
+            "司空公潘相樂"
+          ]
+        },
+        "reason": "Parallel literal field of accepted decision beiqishu:030:r0004 (襄城王旭 is Xu, not Wang Xu). In the same clause 司空公 is the Minister of Works, not Grand Master of Ceremonies (太常)."
+      },
+      {
+        "scope": {
+          "book": "beiqishu",
+          "chapter": "030",
+          "unitId": "s0133",
+          "field": "idiomatic"
+        },
+        "kind": "definite-mistranslation",
+        "before": "On the eighth day Yang Yin wrote the central order, sending Wei Prince of Xiangcheng Xu with grand master of ceremonies Pan Xiangyue, palace attendant Zhang Liang, and yellow gate Zhao Yanshen to report at court.",
+        "after": "On the eighth day Yang Yin wrote the central order, sending Wei Prince of Xiangcheng Xu with minister of works Pan Xiangyue, palace attendant Zhang Liang, and yellow gate Zhao Yanshen to report at court.",
+        "sourceWitness": {
+          "citation": "s0133",
+          "excerpt": "八日，楊愔書中旨，以魏襄城王旭並司空公潘相樂、侍中張亮、黃門趙彥深入通奏事。",
+          "clauses": [
+            "司空公潘相樂"
+          ]
+        },
+        "reason": "司空公 is the Minister of Works (Excellency of Works), not grand master of ceremonies (太常). Preserves accepted r0004 text otherwise."
+      },
+      {
+        "scope": {
+          "book": "beiqishu",
+          "chapter": "030",
+          "unitId": "s0178",
+          "field": "literal"
+        },
+        "kind": "definite-mistranslation",
+        "before": "The emperor later regretted it; Dezheng was posthumously given Grand Guardian; his eldest grandson's son Wangchen inherited the title.",
+        "after": "The emperor later regretted it; Dezheng was posthumously given Grand Guardian; his eldest grandson Wangchen inherited the title.",
+        "sourceWitness": {
+          "citation": "s0178",
+          "excerpt": "帝後悔，贈太保，嫡孫王臣襲焉。",
+          "clauses": [
+            "嫡孫王臣"
+          ]
+        },
+        "reason": "Parallel literal field of accepted decision beiqishu:030:r0005: 嫡孫 is the eldest/heir grandson, not a great-grandson; the extraction already encodes generationDistance 2."
+      },
+      {
+        "scope": {
+          "book": "beiqishu",
+          "chapter": "030",
+          "unitId": "s0191",
+          "field": "literal"
+        },
+        "kind": "definite-mistranslation",
+        "before": "The Wei emperor asked Vice Director Cui Xuan, Minister Yang Yin, and others: \"Since antiquity the auspice of sweet dew — in Han and Wei, how many times? You may each tell where it fell in past ages and by what moral transformation it was drawn down.\"",
+        "after": "The Wei emperor asked Vice Director Cui Xian, Minister Yang Yin, and others: \"Since antiquity the auspice of sweet dew — in Han and Wei, how many times? You may each tell where it fell in past ages and by what moral transformation it was drawn down.\"",
+        "sourceWitness": {
+          "citation": "s0191",
+          "excerpt": "魏帝問僕射崔暹、尚書楊愔等曰：「自古甘露之瑞，漢、魏多少，可各言往代所降之處，德化感致所由。」",
+          "clauses": [
+            "僕射崔暹"
+          ]
+        },
+        "reason": "Parallel literal field of accepted decision beiqishu:030:r0006: 崔暹 is Cui Xian."
+      },
+      {
+        "scope": {
+          "book": "beiqishu",
+          "chapter": "030",
+          "unitId": "s0194",
+          "field": "literal"
+        },
+        "kind": "definite-mistranslation",
+        "before": "What I wish is that Your Majesty, though at rest, never cease to rest.\"",
+        "after": "What I wish is that Your Majesty, though blessed with auspicious signs, not rest on them.\"",
+        "sourceWitness": {
+          "citation": "s0194",
+          "excerpt": "所願陛下雖休勿休。」",
+          "clauses": [
+            "雖休勿休"
+          ]
+        },
+        "reason": "Parallel literal field of accepted decision beiqishu:030:r0007: 雖休勿休 warns against complacency over auspicious signs; \"never cease to rest\" inverts the sense of 勿休."
+      }
+    ],
+    "extraction": {
+      "claimRetractions": [
+        {
+          "compactClaimIndex": 164,
+          "expandedClaimId": "beiqishu:030:c0444",
+          "before": [
+            "p001",
+            "enfeoffment",
+            {
+              "title": {
+                "en": "Grand marshalate",
+                "zh": "開府"
+              },
+              "action": "posthumous"
+            },
+            "explicit",
+            [
+              "s0081"
+            ]
+          ],
+          "tiedToRepair": {
+            "unitId": "s0081",
+            "field": "idiomatic"
+          },
+          "sourceWitness": {
+            "citation": "s0081",
+            "excerpt": "贈開府"
+          },
+          "reason": "贈 is a posthumous grant of the kaifu privilege, not an enfeoffment (封); 開府 is not a grand marshalate. The native claimRevision must preserve the predicate, so retract and re-add."
+        }
+      ],
+      "claimAdditions": [
+        {
+          "compact": [
+            "p001",
+            "honor",
+            {
+              "title": {
+                "en": "Opening an office (kaifu)",
+                "zh": "開府"
+              },
+              "action": "posthumous"
+            },
+            "explicit",
+            [
+              "s0081"
+            ]
+          ],
+          "expandedClaimIdInSimulation": "beiqishu:030:c0615",
+          "tiedToRepair": {
+            "unitId": "s0081",
+            "field": "idiomatic"
+          },
+          "sourceWitness": {
+            "citation": "s0081",
+            "excerpt": "贈開府"
+          },
+          "reason": "贈開府 is a posthumous honor grant, encoded like the parallel posthumous 贈太保 grant (claim index 165, predicate honor, s0178); it is not an enfeoffment and 開府 is not a grand marshalate. Undated; not a date-audit item."
+        }
+      ],
+      "claimRevisions": [
+        {
+          "compactClaimIndex": 135,
+          "expandedClaimId": "beiqishu:030:c0415",
+          "before": [
+            "p001",
+            "office",
+            {
+              "label": {
+                "en": "Deliberator of the grand marshalate",
+                "zh": "開府諮議"
+              },
+              "action": "appointed"
+            },
+            "explicit",
+            [
+              "s0006"
+            ]
+          ],
+          "after": [
+            "p001",
+            "office",
+            {
+              "label": {
+                "en": "Deliberator of the opening office",
+                "zh": "開府諮議"
+              },
+              "action": "appointed"
+            },
+            "explicit",
+            [
+              "s0006"
+            ]
+          ],
+          "tiedToRepair": {
+            "unitId": "s0006",
+            "field": "idiomatic"
+          },
+          "sourceWitness": {
+            "citation": "s0006",
+            "excerpt": "開府諮議"
+          },
+          "reason": "English label follows the corrected s0006 rendering of 開府諮議; zh label, action and evidence unchanged."
+        },
+        {
+          "compactClaimIndex": 144,
+          "expandedClaimId": "beiqishu:030:c0424",
+          "before": [
+            "p002",
+            "office",
+            {
+              "label": {
+                "en": "Staff officer to the grand marshalate",
+                "zh": "開府參軍"
+              },
+              "action": "appointed"
+            },
+            "explicit",
+            [
+              "s0091"
+            ]
+          ],
+          "after": [
+            "p002",
+            "office",
+            {
+              "label": {
+                "en": "Staff officer of the opening office",
+                "zh": "開府參軍"
+              },
+              "action": "appointed"
+            },
+            "explicit",
+            [
+              "s0091"
+            ]
+          ],
+          "tiedToRepair": {
+            "unitId": "s0091",
+            "field": "idiomatic"
+          },
+          "sourceWitness": {
+            "citation": "s0091",
+            "excerpt": "開府參軍"
+          },
+          "reason": "English label follows the corrected s0091 rendering of 開府參軍; zh label, action and evidence unchanged."
+        },
+        {
+          "personId": "p026",
+          "expandedClaimId": "beiqishu:030:c0104",
+          "nameClaim": true,
+          "before": [
+            {
+              "kind": "title",
+              "en": "Grand Tutor",
+              "zh": "太師"
+            },
+            "explicit",
+            [
+              "s0026"
+            ]
+          ],
+          "after": [
+            {
+              "kind": "title",
+              "en": "Grand Preceptor",
+              "zh": "太師"
+            },
+            "explicit",
+            [
+              "s0026"
+            ]
+          ],
+          "tiedToRepair": {
+            "unitId": "s0026",
+            "field": "idiomatic"
+          },
+          "sourceWitness": {
+            "citation": "s0026",
+            "excerpt": "太師咸陽王坦"
+          },
+          "reason": "太師 is Grand Preceptor; Grand Tutor is 太傅, which the separate s0127 alias already covers."
+        }
+      ],
+      "spanReconciliation": [
+        {
+          "before": [
+            "p023",
+            "title-reference",
+            "en",
+            "Works Sima Ziru",
+            [
+              [
+                "s0026",
+                [
+                  0
+                ]
+              ]
+            ]
+          ],
+          "after": [
+            "p023",
+            "title-reference",
+            "en",
+            "Director of the Masters of Writing Sima Ziru",
+            [
+              [
+                "s0026",
+                [
+                  0
+                ]
+              ]
+            ]
+          ],
+          "reason": "The span \"Works Sima Ziru\" was a fragment of the 尚書令 mistranslation; rebind the same s0026 title reference to the corrected idiomatic text.",
+          "candidateChanges": {
+            "removed": [
+              {
+                "id": "beiqishu:030:cand_24da68a37fb4ad49",
+                "exact": "Works Sima Ziru",
+                "unit": "s0026"
+              }
+            ],
+            "added": [
+              {
+                "id": "beiqishu:030:cand_88cbc97bfddd3476",
+                "exact": "Masters",
+                "unit": "s0026"
+              },
+              {
+                "id": "beiqishu:030:cand_7acbd1f2a8664904",
+                "exact": "Writing Sima Ziru",
+                "unit": "s0026"
+              }
+            ],
+            "resolution": "Both new candidates fall inside the rebound p023 title-reference span; no new person. This parallels the existing s0113 treatment of \"Director of the Masters of Writing Gao Longzhi\"."
+          }
+        }
+      ],
+      "ownerExtractionCorrections": [
+        {
+          "personId": "p023",
+          "before": [
+            {
+              "kind": "title",
+              "en": "Minister of Works Sima",
+              "zh": "司馬令"
+            },
+            "explicit",
+            [
+              "s0030"
+            ]
+          ],
+          "after": [
+            {
+              "kind": "title",
+              "en": "Minister Sima",
+              "zh": "司馬令"
+            },
+            "explicit",
+            [
+              "s0030"
+            ]
+          ],
+          "sourceWitness": {
+            "citation": "s0030",
+            "excerpt": "司馬令"
+          },
+          "reason": "司馬令 (s0030) abbreviates 尚書令 Sima; s0030 English and its en surface read \"Minister Sima\"; \"of Works\" imported the s0026 error.",
+          "carrier": "No English repair exists at s0030, and an editorial claimRevision must be evidenced in a repaired unit. Record this as an owner-authored extraction correction in the owner re-handoff; this reviewer checks it there. Do not invent an s0030 English repair to carry it."
+        }
+      ]
+    }
+  },
+  "heldCases": [],
+  "heldCasesNote": "No unresolved source contradiction, attribution conflict or false merge was found in scope. Every finding is a definite fix with an exact replacement. Chapter readiness still waits on the owner patch, a current-generation date record and the independent identity review; those are native dependencies, not holds.",
+  "ownerHandoffDiscrepancies": [
+    "substantiveFindings says the 贈/enfeoffment error remains \"in source units\" (plural); both owner patches are the two fields of the single unit s0081.",
+    "The owner after text \"opening the Grand Marshalate (kaifu)\" keeps the grand-marshalate gloss; 開府 means opening one's own office or headquarters (the chapter itself uses \"opening office\" in s0185 and s0211).",
+    "englishCoverage.bothFieldsComplete=true reports only non-empty fields, not accuracy. The literal fields of s0003, s0026, s0127, s0133, s0178, s0191 and s0194 still carry errors that accepted decisions r0001-r0007 fixed only in the idiomatic field, so the claimed full both-field scan missed parallel-field repetitions.",
+    "The handoff makes no extraction change, yet compact claim 164 (p001 enfeoffment \"Grand marshalate\"/開府, s0081) depends directly on the blocker, and claims 135 and 144 repeat the gloss."
+  ],
+  "pinnedEvidence": {
+    "headCommit": "13b31a02afab22efd1fe10c9ecb725752ba2c4f3",
+    "headParent": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+    "headDiffFromParent": [
+      "research/people/checkpoints/campaign-nov24-separate-transport-audited/beiqishu-030/owner-handoff.json (added, 117 lines)"
+    ],
+    "stageCommit": {
+      "oid": "5b7ae31b8011c3f51b7cc4623dd973256d5f0b21",
+      "onStagingTip": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+      "sameInputBlobs": true
+    },
+    "masterRevision": {
+      "oid": "e61eedae77bea163ec10120e88e806cde91315dd",
+      "sameInputBlobs": true,
+      "ancestorOfHead": false
+    },
+    "inputs": [
+      {
+        "path": "data/beiqishu/030.json",
+        "blob": "b5c9d1c16d55cb8fb657a95744f2245c84e71517",
+        "sha256": "56fd0b1b6bc727ff80cf144213ee3ed955b7ca3559e2a119f650a6bfa768c1b5",
+        "matchesOwnerSeal": true
+      },
+      {
+        "path": "data/people/extractions/beiqishu/030.json",
+        "blob": "1bd747d9542305526bcf3af4d8d3734e4a8bac63",
+        "sha256": "ca3437de9077de0858734e7506bc767a892f47d2fb20c7b25451cae90d96623d",
+        "matchesOwnerSeal": true
+      },
+      {
+        "path": "data/people/date-audits/beiqishu/030.json",
+        "blob": "27ac83a42a4b3d90b42e46484d57a2ab5064144c",
+        "sha256": "a32bdb9fa353275e6885e964e21795d795876b5617fa370d050c88be0f6f33b7",
+        "matchesOwnerSeal": true
+      },
+      {
+        "path": "data/people/editorial-decisions/beiqishu/030.json",
+        "blob": "d90d6c9695852a12a3f175bd1a3e0ef3b8528cbb",
+        "sha256": "edf8261d20452574b5ce0c8be8a5f2d36fcd9096ff357b10bb962e4ee24cfc84",
+        "matchesOwnerSeal": true
+      }
+    ],
+    "currentFingerprints": {
+      "extractionChapterFingerprint": "sha256:4a33961091681d6c8083344d21b5ba26494e16a5bf39f82b5256e4139c411133",
+      "chineseFingerprint": "sha256:93a4474269be9e60a531206feee65ca9eb97c8b5a7c1275dd670981bbcd1f7cc",
+      "editorialInputChapterFingerprint": "sha256:fd4cd7b231431fdd6b5119d39c6d83776ab2272b8670e18a595122fe630c196e",
+      "dateAuditSourceHash": "sha256:9ca419660dd83830d8560f103a317c44eeb8ef8db32d24a506a9112386878bc3",
+      "dateAuditExtractionHash": "sha256:c4e9cd742d67b8a179fc9f12c31f3171f66d276b609fb8bdf7d4187d14598583",
+      "dateAuditReportMatchesCurrentPacket": true
+    },
+    "historicalAuthorship": {
+      "s0081English": {
+        "introducedIn": "c8196be77dddf22c318c1c2dc6a0cbaae40c3aba",
+        "committedAt": "2026-05-20T06:15:14Z",
+        "gitAuthor": "Cursor Agent <cursoragent@cursor.com>",
+        "coAuthor": "GarrettPetersen",
+        "parentBytes": "literal and idiomatic empty, translator empty",
+        "recordedMetadata": {
+          "translator": "Garrett M. Petersen (2026)",
+          "model": "Composer 2.5"
+        },
+        "agentId": "unknown",
+        "runId": "unknown",
+        "basis": "reproduced from git show of the commit and its parent"
+      },
+      "extraction": {
+        "artifactRun": {
+          "model": "grok-4.5",
+          "agentId": "bc-1b548403-1b22-4395-999f-c648912e7e52",
+          "runId": "run-1300b4f6-6501-4676-b99d-1b8e6ac49022",
+          "completedAt": "2026-08-13T09:03:15.512Z"
+        },
+        "promotedIn": [
+          "d75171afd0e709f2580a999d820e7d251649856c",
+          "2856dc2a9852628d64daacfbd395e43743582aaf"
+        ],
+        "promotedBy": "GarrettPetersen",
+        "queueCorroboration": "none observed",
+        "basis": "IDs are self-recorded in the artifact bytes only"
+      },
+      "editorial": {
+        "reviewer": {
+          "name": "grok-4.5",
+          "agentId": "bc-971e723f-1975-460f-89dd-3266d9f2d53e",
+          "runId": "run-a7c25419-8c79-407f-94b3-4a054f5bd4b1",
+          "completedAt": "2026-08-13T10:18:23.897Z"
+        },
+        "distinctFromExtractor": true,
+        "promotedIn": "d75171afd0e709f2580a999d820e7d251649856c",
+        "queueCorroboration": "none observed",
+        "basis": "IDs are self-recorded in the artifact bytes only"
+      },
+      "dateAudit": {
+        "reviewerName": "Codex independent Beiqishu 030 chronology auditor",
+        "independentOfExtractor": true,
+        "agentId": "unknown",
+        "runId": "unknown",
+        "reviewedAt": "2026-09-23T02:43:42.391Z",
+        "promotedIn": "83d0c9e7a9ae524c838351c620850659aba88afd",
+        "promotedBy": "GarrettPetersen",
+        "queueCorroboration": "none observed"
+      },
+      "owner": {
+        "handoffCommit": "13b31a02afab22efd1fe10c9ecb725752ba2c4f3",
+        "gitAuthor": "Cursor Agent <cursoragent@cursor.com>",
+        "queueOwnerEntry": {
+          "ref": "origin/codex/people-work-queue@743c6f40ee20e0625ec8276ff19fb58c7642bab1",
+          "jobId": "nov24-separate-transport-beiqishu-030",
+          "worker": "cursor-nov24-separate-transport-owner-1",
+          "agentId": "bc-1cece8a1-2eac-4165-9087-3dea34232f43",
+          "status": "active",
+          "reservedIn": "7ab31b320e46c7b8dd3f7a43dae1fc35541855d8"
+        },
+        "matchesHandoff": true
+      },
+      "queueSearch": "git log -S\"\\\"beiqishu/030\\\"\" over people-work-queue.json at 743c6f40 finds only 7ab31b32 (the 2026-11-24 owner reservation); git log -S\"beiqishu:030\" finds nothing. No historical queue claims for the extraction, editorial review or date audit are observable, so their worker or agent IDs beyond the artifact bytes stay unknown."
+    }
+  },
+  "affectedNativeDependencies": {
+    "source": {
+      "file": "data/beiqishu/030.json",
+      "changedUnits": [
+        "s0003",
+        "s0006",
+        "s0026",
+        "s0028",
+        "s0081",
+        "s0091",
+        "s0127",
+        "s0133",
+        "s0178",
+        "s0191",
+        "s0194"
+      ],
+      "chineseChanged": [],
+      "chineseFingerprintUnchanged": true,
+      "fieldEdits": 17,
+      "newExtractionChapterFingerprintInSimulation": "sha256:2d3e437a88c4de98f533de0715f4d3c92503cf3a94978ff8e0184b110cfcb603"
+    },
+    "extraction": {
+      "file": "data/people/extractions/beiqishu/030.json",
+      "inputRepin": "Required. The chapterFingerprint and the unitDigests of the 11 changed units change; their zh digests do not.",
+      "translationRepairRows": "Append 17 applied rows and keep rows r0001-r0007 verbatim. The s0026 and s0133 idiomatic rows must chain from the after text of r0002 and r0004; the validator rejects any other base (\"applied idiomatic text does not match packet unit\").",
+      "repairIdNote": "Compact repair IDs come from row position, so the new rows become r0008-r0024, and r0008 coincides with the rejected s0019 proposal ID in the original review. Native applied-editorial validation matches by exact contract across reviews, so this passes, but the host should not key on bare repair IDs.",
+      "claimOrdering": "The native applier drops retracted claims and appends additions. Retracting compact claim 164 shifts later claims down one position, and the new honor claim lands at the end.",
+      "people": "85 people unchanged; no person added, removed or merged.",
+      "candidates": "Preflight candidates change from 594 to 595 (one removed, two added, all in s0026), resolved by the rebound p023 span."
+    },
+    "editorial": {
+      "file": "data/people/editorial-decisions/beiqishu/030.json",
+      "composition": "Merge schema 3 into schema 4 with mergeEditorialDecisionReview. The original review (grok-4.5, bc-971e723f, 8 proposals, 8 decisions) stays verbatim as reviews[0], and one new review record is appended for the 17 new proposals.",
+      "requirements": "Each applied row reason must equal its decision reason. Claim retractions, additions and revisions need sourceWitness and must be evidenced in a repaired unit. The reviewer agentId must differ from the extraction run agentId bc-1b548403.",
+      "authorshipNote": "The two s0081 field repairs are owner-authored and are reviewed here (decision revise). The other 15 field edits and the extraction corrections were authored by this reviewer and returned to the owner. Their editorial record must state that provenance honestly and must not present them as owner-originated."
+    },
+    "dateAudit": {
+      "file": "data/people/date-audits/beiqishu/030.json",
+      "staleAfterPatch": true,
+      "newSourceHashInSimulation": "sha256:0112cc5df9841998ca1297b14a93488c73960c57d6fc6ec815ff5cbf4ec136e7",
+      "reason": "The packet sourceHash covers en and literal text, and the extractionHash covers the whole extraction, so the report becomes stale.",
+      "datedContentChanged": false,
+      "itemCount": {
+        "before": 197,
+        "after": 197
+      },
+      "itemContentMultisetIdentical": true,
+      "changedItemIdsWithInPlaceClaimEdit": [],
+      "changedItemIdsWithNativeRetractAppendOrder": {
+        "count": 107,
+        "mapping": "claim-167..claim-335 become claim-166..claim-334; each maps one-to-one by identical person, predicate, value, certainty and evidence"
+      },
+      "peopleChecksUnchanged": true,
+      "unitPeopleUnchanged": true,
+      "itemsCitingChangedUnits": [
+        "claim-268",
+        "claim-272",
+        "claim-284",
+        "claim-285",
+        "claim-286",
+        "claim-287",
+        "claim-288",
+        "claim-315",
+        "claim-316",
+        "claim-323"
+      ],
+      "itemsCitingChangedUnitsAssessment": "Re-checked against the Chinese text. These are attestations: claim-268 p005 s0003; claim-272 p009 s0006 鎮定州 AD 540; claim-284..288 p023-p027 s0026 武定 AD 543; claim-315/316 p059/p060 s0133 禪代 AD 550; claim-323 p070 s0178 AD 559. Their Chinese quotes, values and owners are unchanged, and no repair alters a date or the event owner.",
+      "geometryDiagnostics": 0,
+      "nativeClosure": "validateDateAuditReport requires exact hashes, and the date library has no carry-forward API; PEOPLE_DATE_AUDIT forbids rewriting old approvals. Keep the original report and reviewer verbatim as prior evidence, then record a new current-generation report at the new hashes. Its 197 item verdicts and 85 person verdicts may be reused explicitly through the exact content mapping above, but only under an honestly named reviewer of the new generation. The original auditor must not be relabelled as that reviewer, and no fresh full chronology audit is needed for an English-only delta."
+    },
+    "identity": {
+      "status": "85 prepared cases, independent review not started. Transport parts are retained off-repo and were not observed in this review.",
+      "impact": "Content changes for p001 (claim 164 retracted and re-added as honor; claim 135 label), p002 (claim 144 label), p023 (s0026 surface and s0030 title alias) and p026 (太師 alias). The other 81 people have no content change. Packets pinned to the old extraction hash are stale and must be regenerated from the patched generation before identity dispatch."
+    }
+  },
+  "validation": {
+    "commands": [
+      {
+        "command": "npm run people:disk:check",
+        "result": "passed (227 GiB free, no errors; memory guard not applicable on linux)"
+      },
+      {
+        "command": "node scripts/validate-people-extraction.mjs data/people/extractions/beiqishu/030.json",
+        "result": "data/people/extractions/beiqishu/030.json: ok (85 people, 690 mentions, 614 claims, 594 candidates)"
+      },
+      {
+        "command": "npm run people:dates:verify -- --book beiqishu --chapter 030",
+        "result": "audited (auditVersion 1, reviewedAt 2026-09-23T02:43:42.391Z, findings 0)"
+      },
+      {
+        "command": "npm run people:validate -- --book beiqishu --chapter 030",
+        "result": "Scoped person data validation passed for beiqishu/030: 1 extraction(s), 85 local people, 690 mentions, 614 claims, 0 proposed repair(s), 7 applied repair(s), 8 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+      },
+      {
+        "command": "in-memory dry-run: apply all fixes plus 17 applied repair rows, rebuild packet, validateCompactPeopleExtraction",
+        "result": "ok (85 people, 690 mentions, 614 claims, 595 candidates)"
+      },
+      {
+        "command": "in-memory native order (retract 164, append honor claim) + buildDateAuditPacket diff",
+        "result": "validator ok; 197 = 197 items content-identical; 107 IDs shift by -1; people/unitPeople identical; 0 geometry diagnostics"
+      },
+      {
+        "command": "in-memory editorial composition: editorialDecisionSeed + validateEditorialDecisions + mergeEditorialDecisionReview + validateAppliedEditorialDecisions",
+        "result": "ok; schema 4 with 2 reviews; original review preserved verbatim"
+      }
+    ],
+    "ownerValidationReproduced": true,
+    "noCanonicalEdits": true,
+    "noBuild": true,
+    "noNewWorktree": true,
+    "scratchFiles": "In-memory simulation only; the patched chapter JSON was written to a temporary directory and deleted, and no repository copy was made.",
+    "reviewedAt": "2026-11-24T15:33:52.244Z"
+  }
+}

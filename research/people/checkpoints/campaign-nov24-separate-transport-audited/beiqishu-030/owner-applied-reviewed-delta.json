@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-applied-reviewed-delta",
+  "chapterKey": "beiqishu/030",
+  "scope": { "book": "beiqishu", "chapter": "030" },
+  "campaign": "campaign-nov24-separate-transport-audited",
+  "rule": "editorial",
+  "ownerAgentId": "bc-1cece8a1-2eac-4165-9087-3dea34232f43",
+  "workerId": "cursor-nov24-separate-transport-owner-1",
+  "model": "claude-opus-5-5",
+  "priorRun": "run-5c9ccc7e-25d7-4137-91d0-e2eec5486424",
+  "idempotencyKey": "8ff2a123185c4f00bbf34f69c066a0cbf7a229a032ba4158944d0d59b1f01818",
+  "originalIdempotencyKey": "56afd5735d8f903d18ac8d496e81c7ebc50b6fd3d9b2db85aecad4b6ef0cf4c2",
+  "ownerRevision": "13b31a02afab22efd1fe10c9ecb725752ba2c4f3",
+  "ownerBranch": "cursor/nov24-separate-transport-owner-beiqishu-030-232f43",
+  "ownerPullRequest": 5709,
+  "applyBranch": "cursor/nov24-owner-apply-approved-delta-beiqishu-030",
+  "sourceReviewHead": "26d26aac2365517a016dcc420fe40a0dd9cb553b",
+  "sourceReviewRef": "cursor/nov24-delta-approval-beiqishu-030-1a5a",
+  "independentScopedDeltaReview": {
+    "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/beiqishu-030/independent-scoped-delta-review.json",
+    "sha256": "7c5711267065a4f594e67bc0c1d679d6e08cba759b2285483a4c8c07e4cba1c3",
+    "reviewerAgentId": "bc-4f91b8c1-53d3-42f3-9387-3a62c23b1a5a",
+    "reviewerRunId": "run-2e16e8f4-14c3-48d2-9753-6128c89055c6",
+    "verdict": "changes-required",
+    "byteReuse": "Exact report bytes imported unchanged from sourceReviewRef."
+  },
+  "ownerProposal": {
+    "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/beiqishu-030/owner-handoff.json",
+    "sha256": "e946e3fc0be9555d860e632f206d2f17cd4c14ed7c18da3f28f07781c45d03ce"
+  },
+  "verdictNote": "Applied approved s0081 revise (opening an office, not Grand Marshalate) plus all requiredAdditionalFixes English and extraction rows in one native patch. Review 2 records reviewer-authored replacements; s0081 uses revise with approvedAfter.",
+  "cases": [
+    { "caseId": "owner-s0081-revise", "verdict": "applied-exact", "units": ["s0081"], "fields": ["literal", "idiomatic"] },
+    { "caseId": "reviewer-required-english", "verdict": "applied-exact", "repairCount": 15 },
+    { "caseId": "reviewer-claim-enfeoffment-to-honor", "verdict": "applied-exact", "claim": "beiqishu:030:c0444" },
+    { "caseId": "owner-p023-alias-correction", "verdict": "applied-post-native", "claim": "beiqishu:030:c0094", "note": "Minister Sima per ownerExtractionCorrections; no s0030 English repair per reviewer." }
+  ],
+  "proposedChanges": [],
+  "held": [],
+  "affectedPaths": [
+    {
+      "path": "data/beiqishu/030.json",
+      "role": "substantive-english-repair",
+      "gitBlobBefore": "b5c9d1c16d55cb8fb657a95744f2245c84e71517",
+      "gitBlobAfter": "ca520a53a1ba070e61ebd6a29b09e96eb13f4683",
+      "changeSummary": "17 field edits across 11 units; Chinese unchanged."
+    },
+    {
+      "path": "data/people/extractions/beiqishu/030.json",
+      "role": "native-repair-claims-surfaces",
+      "gitBlobBefore": "1bd747d9542305526bcf3af4d8d3734e4a8bac63",
+      "gitBlobAfter": "31c16418f7891d94fff8c5a08ca47de6de7ca362",
+      "changeSummary": "24 applied translation repairs; enfeoffment c0444→honor; 3 claim revisions; p023 span/candidate assignment; owner c0094 alias."
+    },
+    {
+      "path": "data/people/date-audits/beiqishu/030.json",
+      "role": "chronology-scoped-re-audit",
+      "gitBlobBefore": "27ac83a42a4b3d90b42e46484d57a2ab5064144c",
+      "gitBlobAfter": "2938347aa915f5eb5a20802a7d6939ad7fde71ae",
+      "changeSummary": "Prior audit archived; 197 items re-keyed by claim-hash identity; no dated value change."
+    },
+    {
+      "path": "data/people/editorial-decisions/beiqishu/030.json",
+      "role": "supplemental-editorial-review-merged",
+      "gitBlobBefore": "d90d6c9695852a12a3f175bd1a3e0ef3b8528cbb",
+      "gitBlobAfter": "4d6ec1df6336de07bfdfd16a68c4dd19138e81db",
+      "changeSummary": "schemaVersion 4: grok-4.5 review preserved + supplemental review (17 proposals, 1 retraction, 1 addition, 3 revisions)."
+    }
+  ],
+  "chronologyProof": {
+    "scopedChronologyDelta": "none",
+    "itemCount": 197,
+    "peopleDatesVerifyAfterApply": "audited",
+    "geometryDiagnostics": 0
+  },
+  "editorialProof": {
+    "nativeApplier": "apply-people-translation-repairs.mjs",
+    "candidateAssignment": "beiqishu:030:cand_88cbc97bfddd3476→p023 title-reference",
+    "peopleValidateAfterApply": "PASS"
+  },
+  "validation": {
+    "independentReportSha256VerifiedBeforeApply": true,
+    "ownerProposalSha256VerifiedBeforeApply": true,
+    "predecessorInputBlobsMatchedDispatch": true,
+    "commands": [
+      { "command": "npm run people:validate -- --book beiqishu --chapter 030", "result": "PASS" },
+      { "command": "npm run people:dates:verify -- --book beiqishu --chapter 030", "result": "audited" },
+      { "command": "node scripts/apply-people-translation-repairs.mjs (17 repairs)", "result": "Applied" }
+    ]
+  },
+  "residualGates": {
+    "chapterReady": false,
+    "identityTransport": {
+      "cases": 85,
+      "parts": 5,
+      "note": "Regenerate transport from extraction 31c16418 before identity dispatch; p001/p023/p026 surfaces changed."
+    }
+  },
+  "dependenciesSurfacedNotApplied": [],
+  "notes": "[CF-Pages-Skip]"
+}
