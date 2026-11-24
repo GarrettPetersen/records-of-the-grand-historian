@@ -1,71 +1,109 @@
-name: Master build gate
-
-# Run on the proposed PR merge commit, not just the topic branch. Keep this
-# workflow unfiltered so its required check is always reported for master PRs.
+name: Compose retained Jinshu 047 chronology proofs
+run-name: Validate the exact Jinshu 047 p109 deletion and chronology carry-forward
 on:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
-  merge_group:
-    types: [checks_requested]
-
+  workflow_dispatch:
 permissions:
   contents: read
-
 jobs:
-  master-build:
-    name: master-build
+  compose:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 18
     env:
-      NODE_OPTIONS: --max-old-space-size=6144
+      SOURCE: a5d811010200de85729bccc6b890c3246f31ca2d
+      BEFORE: b19c24324f342737a5eaa948b51d32561e6c1a3d
+      REVIEW: 128bd24284aca0fbb8405e9e8f5ac332dc36a087
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          ref: ${{ env.SOURCE }}
+          fetch-depth: 2
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Test people date-hint normalization
-        run: npm run people:hints:self-test
-
-      - name: Test unresolved people-date holds
-        run: node scripts/test-people-unresolved-hold.mjs
-
-      - name: Test Cursor date-worker recovery
-        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs
-
-      - name: Install ebook publication verification tools
+      - run: npm install --no-audit --no-fund
+      - name: Verify independent delta and retain identical dated item proofs
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
-
-      - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
-
-      - name: Test bounded canonical-person dossiers and chapter proofs
-        run: |
-          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs
-          npm run people:catalog:self-test
-
-      - name: Test certified website people publication
-        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
-
-      - name: Build and validate the full site
-        run: npm run build
-
-      - name: Verify real Jinshu 053 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
-
-      - name: Preserve nonempty chapter acceptance evidence
-        uses: actions/upload-artifact@v4
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          test "$(git rev-parse HEAD^)" = "$BEFORE"
+          out="$RUNNER_TEMP/jinshu047-date-composition"
+          export OUT="$out"
+          mkdir -p "$out/history"
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          import {buildDateAuditPacket,validateDateAuditReport,recordDateAudit,dateAuditReferencesCurrent} from './scripts/lib/people-date-audit.mjs';
+          const {SOURCE,BEFORE,REVIEW,OUT,GITHUB_REPOSITORY}=process.env;
+          const scope=['jinshu','047'];
+          const extractionPath='data/people/extractions/jinshu/047.json';
+          const auditPath='data/people/date-audits/jinshu/047.json';
+          const reviewPath='research/people/jinshu047-independent-final-p109-correction-acceptance-20261124.json';
+          const earlier=(p)=>execFileSync('git',['show',BEFORE+':'+p],{maxBuffer:10e6});
+          const reviewBytes=execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+GITHUB_REPOSITORY+'/contents/'+reviewPath+'?ref='+REVIEW]);
+          const review=JSON.parse(reviewBytes);
+          assert.equal(review.ownerRevision,SOURCE);
+          assert.equal(review.baseOwnerCommitCompared,BEFORE);
+          assert.equal(review.overallAcceptance,true);
+          assert.deepEqual(review.concreteDefects,[]);
+          assert.equal(review.nativeDateCarryForward.auditIsStale,true);
+          const before=buildDateAuditPacket(...scope,{extraction:JSON.parse(earlier(extractionPath))});
+          const after=buildDateAuditPacket(...scope);
+          assert.equal(before.sourceHash,after.sourceHash);
+          assert.equal(before.sourceHash,review.nativeApplierBindings.requireSourceHash);
+          assert.equal(before.extractionHash,review.nativeDateCarryForward.priorAuditExtractionHash);
+          assert.equal(after.extractionHash,review.nativeDateCarryForward.currentExtractionHash);
+          assert.deepEqual(after.units,before.units);
+          assert.deepEqual(after.people,before.people.filter(person=>person.id!=='p109'));
+          assert.deepEqual(after.unitPeople,Object.fromEntries(Object.entries(before.unitPeople).map(([u,ids])=>[u,ids.filter(id=>id!=='p109')])));
+          const originalBytes=fs.readFileSync(auditPath);
+          assert(originalBytes.equals(earlier(auditPath)));
+          const original=JSON.parse(originalBytes);
+          validateDateAuditReport(original,before);
+          assert.equal(original.status,'audited');
+          assert(dateAuditReferencesCurrent(original));
+          const key=item=>item.claimHash??item.id;
+          const oldItems=new Map(before.items.map(item=>[key(item),item]));
+          const newItems=new Map(after.items.map(item=>[key(item),item]));
+          assert.equal(oldItems.size,before.items.length);
+          assert.equal(newItems.size,after.items.length);
+          const removed=[...oldItems].filter(([hash])=>!newItems.has(hash)).map(([hash,item])=>({hash,item}));
+          assert.deepEqual(removed.map(x=>x.hash).sort(),review.nativeApplierBindings.chronology.dropProofsFor.slice().sort());
+          assert(removed.every(x=>x.item.personId==='p109'));
+          const byId=new Map(original.itemChecks.map(check=>[check.id,check]));
+          const bindings=[];
+          const identity=({id,claimIndex,...semantic})=>semantic;
+          const itemChecks=after.items.map(item=>{
+            const orig=oldItems.get(key(item));
+            assert(orig,'A dated item would require new review');
+            assert.deepEqual(identity(item),identity(orig));
+            const proof=byId.get(orig.id);
+            assert(proof&&proof.verdict==='supported');
+            bindings.push({semanticKey:key(item),oldId:orig.id,currentId:item.id});
+            return {...proof,id:item.id};
+          });
+          const result={...original,extractionHash:after.extractionHash,itemChecks,personChecks:original.personChecks.filter(x=>x.id!=='p109'),summary:original.summary+' Retained chronology proofs were composed against the independently accepted p109 deletion. Identical dated records preserve the original review.'};
+          validateDateAuditReport(result,after);
+          const status=recordDateAudit(result);
+          assert.equal(status.status,'audited');
+          assert.equal(status.findings,0);
+          const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const historyName=hash(JSON.stringify(original))+'.json';
+          const history=path.join('data/people/date-audit-history/jinshu/047',historyName);
+          assert.deepEqual(JSON.parse(fs.readFileSync(history)),original);
+          fs.copyFileSync(history,path.join(OUT,'history',historyName));
+          fs.copyFileSync(auditPath,path.join(OUT,'recorded-date-audit.json'));
+          fs.writeFileSync(path.join(OUT,'date-status.json'),JSON.stringify({chapters:[{book:'jinshu',chapter:'047',...status}]})+'\n');
+          fs.writeFileSync(path.join(OUT,'composition-receipt.json'),JSON.stringify({source:SOURCE,before:BEFORE,review:REVIEW,reviewSha256:hash(reviewBytes),originalReportSha256:hash(originalBytes),beforeExtraction:before.extractionHash,afterExtraction:after.extractionHash,removed:removed.map(x=>x.hash),bindings,priorReviewer:original.reviewer,currentIndependentDeltaReviewer:review.reviewer,unchangedChronologyProofs:itemChecks.length},null,2)+'\n');
+          JS
+          npm run people:validate -- --book jinshu --chapter 047 | tee "$out/scoped-validation.txt"
+      - uses: actions/upload-artifact@v4
         with:
-          name: jinshu053-qualified-contribution
-          path: data/people/generated/jinshu053-release-acceptance/
-          retention-days: 30
+          name: jinshu-047-composed-native-date-recording
+          path: ${{ runner.temp }}/jinshu047-date-composition/
+          if-no-files-found: error
+          retention-days: 7
