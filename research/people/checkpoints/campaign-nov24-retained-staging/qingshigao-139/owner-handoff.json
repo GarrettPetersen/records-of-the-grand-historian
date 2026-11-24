@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "139"
+  },
+  "ownerAgentId": "bc-435d82fd-aa5d-4f20-97e5-f4035d15281f",
+  "worker": "cursor-nov24-retained-staging-w10-o6",
+  "idempotencyKey": "5d8883da0b0a6a42d6229ff8d79744466b7c9bf1293775fd0c516d27be03e736",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-qingshigao-139-5281f",
+  "phase": "dispatch_pending",
+  "model": "composer-2.5",
+  "audit": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "dispatchPeopleCount": 29,
+    "dispatchClaimsCount": 157
+  },
+  "inputBlobWitness": {
+    "source": "879878a6523bac46600e656131685feeb9c56602",
+    "extraction": "c6f5f15e9c19fd180d0e69140e4e7ec903037522",
+    "editorial": "9b6660decbddc26ee93cfb2889baab8cf6a87bb8"
+  },
+  "sealedInputs": {
+    "source": "sha256:0811d6baf9387d61dbbf1875f617634c03e8d767ec9a105825e03df067159d3b",
+    "extraction": "sha256:66c3a9758737eebd10a16f6ef85fe9f2bbae1a36f97f3ac3f7bab984d30de32e",
+    "editorial": "sha256:146e5c3d60b8c8aeb2f78b22ff6ceafdc6b13958da45b5fcfb0fdec3bad6e168",
+    "extractionFileSha256": "66c3a9758737eebd10a16f6ef85fe9f2bbae1a36f97f3ac3f7bab984d30de32e"
+  },
+  "sourceCoverage": {
+    "sentenceCount": 246,
+    "metaSentenceCount": 246,
+    "metaTranslatedCount": 246,
+    "incompleteEnglishUnits": 246,
+    "titleEn": "Volume 139 Treatises 114: Military 10, Training",
+    "sourceUrl": "https://zh.wikisource.org/wiki/清史稿/卷139?action=raw",
+    "bothFieldsComplete": false,
+    "extractionPromptVersion": 7,
+    "extractionPeople": 29,
+    "extractionClaims": 157,
+    "nativeExtractionValidation": "ok"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-139/date-packet.json",
+    "contentSha256": "sha256:6fc40b1d3837a9348486100b60847b8b48fb032249719694e60d8f3275f149ab",
+    "semanticSourceHash": "sha256:c5baa837f03276e36e9ff9c5467f65d60839df1ccc870c24dd3e42f46a3fc58d",
+    "semanticExtractionHash": "sha256:99cc65774eaa63dd7f105dc4c8c892629ec3b220809f8dd3083664d62f916211",
+    "dateHintCheckCount": 72,
+    "peopleInPacket": 29
+  },
+  "dateRepairProposals": [],
+  "editorialAndExtractionReuse": {
+    "extractionReextracted": false,
+    "editorialReopened": false,
+    "appliedEditorialDecisionCount": 3,
+    "proposedRepairCount": 0,
+    "ownerDefiniteEnglishRepairs": [],
+    "note": "Retained sealed extraction bytes and accepted editorial decisions; owner issued no new canonical edits."
+  },
+  "changedChronologyFacts": [],
+  "sourceOrEditorialDefects": [],
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book qingshigao --chapter 139",
+      "passed": true,
+      "summary": "Scoped person data validation passed for qingshigao/139: 1 extraction(s), 29 local people, 90 mentions, 264 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s)."
+    },
+    "peopleValidateExtraction": {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/qingshigao/139.json",
+      "passed": true
+    },
+    "peopleDatesPacket": {
+      "command": "npm run people:dates:packet -- --book qingshigao --chapter 139 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-139/date-packet.json",
+      "packetSha256": "sha256:6fc40b1d3837a9348486100b60847b8b48fb032249719694e60d8f3275f149ab"
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 139",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "independentDateApprovalPresent": false
+    }
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": "Fresh independent native date audit required against sealed packet sha256:6fc40b1d3837a9348486100b60847b8b48fb032249719694e60d8f3275f149ab at semantic extractionHash sha256:99cc65774eaa63dd7f105dc4c8c892629ec3b220809f8dd3083664d62f916211; no data/people/date-audits/qingshigao/139.json on staging.",
+    "identity": "Chapter-scoped identity dossier review not started in this owner pass; extraction validates with zero alias-disposition debt.",
+    "editorial": "Pinned editorial decisions remain authoritative until source/extraction hashes change."
+  },
+  "holds": [],
+  "independentReviewCompleted": false,
+  "independentDateApprovalIssued": false,
+  "chapterOwnerComplete": false,
+  "canonicalEdits": false,
+  "substantiveFindings": "Pinned blobs match staging witnesses. Source English coverage complete for all 246 units (meta translatedCount 246). Native people:validate and extraction validator pass on retained extraction. Candidate date packet built; chronology closure awaits independent audit only—not re-extraction or owner self-approval.",
+  "reproduce": {
+    "witnessBlobs": "git rev-parse HEAD:data/qingshigao/139.json HEAD:data/people/extractions/qingshigao/139.json HEAD:data/people/editorial-decisions/qingshigao/139.json",
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 139",
+    "buildDatePacket": "npm run people:dates:packet -- --book qingshigao --chapter 139 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-139/date-packet.json",
+    "verifyDateStatus": "npm run people:dates:verify -- --book qingshigao --chapter 139"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter owner handoff only; no deploy, merge, registry generation, or canonical data edits.",
+  "inputBlobWitnessVerified": true,
+  "candidateValidationCommands": [
+    "npm run people:validate -- --book qingshigao --chapter 139",
+    "node scripts/validate-people-extraction.mjs data/people/extractions/qingshigao/139.json",
+    "npm run people:dates:packet -- --book qingshigao --chapter 139 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-139/date-packet.json",
+    "npm run people:dates:verify -- --book qingshigao --chapter 139"
+  ]
+}

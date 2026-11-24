@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "080"
+  },
+  "ownerAgentId": "bc-435d82fd-aa5d-4f20-97e5-f4035d15281f",
+  "worker": "cursor-nov24-retained-staging-w10-o6",
+  "idempotencyKey": "5d8883da0b0a6a42d6229ff8d79744466b7c9bf1293775fd0c516d27be03e736",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-shiji-080-5281f",
+  "phase": "dispatch_pending",
+  "model": "composer-2.5",
+  "audit": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "dispatchPeopleCount": 46,
+    "dispatchClaimsCount": 193
+  },
+  "inputBlobWitness": {
+    "source": "5ace284b47464c424e179a71c459c9b33becfddb",
+    "extraction": "9e6417ed005b33c70d8391cd53be55da3a8b1787",
+    "editorial": "b800178ce063f6e15c2bd183b754fcc4b27d64cd"
+  },
+  "sealedInputs": {
+    "source": "sha256:02d12841570dbd298683632e6ef13a9375d2499380fab4ef039b94a9273657d3",
+    "extraction": "sha256:03d19a069ae7b283c8ceee2b7315d354ab0a57135deb74d04ced2d65edaabdf5",
+    "editorial": "sha256:bce7871be313feffab151f36c88774739ef7da397e2839240e3e204e763e5088",
+    "extractionFileSha256": "03d19a069ae7b283c8ceee2b7315d354ab0a57135deb74d04ced2d65edaabdf5"
+  },
+  "sourceCoverage": {
+    "sentenceCount": 121,
+    "metaSentenceCount": 121,
+    "metaTranslatedCount": 121,
+    "incompleteEnglishUnits": 121,
+    "titleEn": "Biography of Yue Yi",
+    "sourceUrl": "https://chinesenotes.com/shiji/shiji080.html",
+    "bothFieldsComplete": false,
+    "extractionPromptVersion": 7,
+    "extractionPeople": 46,
+    "extractionClaims": 193,
+    "nativeExtractionValidation": "ok"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-080/date-packet.json",
+    "contentSha256": "sha256:cf3dbaec4661ad99e628427398f4b2b349bab425108fb38d66921e3f92816638",
+    "semanticSourceHash": "sha256:c3be22d447fb3e70a57d0e30dd4d77d68cb80244883151b65f30d23b2b298000",
+    "semanticExtractionHash": "sha256:4197919c5ae1df7ec376ef7b306703963311bc561cb2654fd06f6b1fc73c3dcf",
+    "dateHintCheckCount": 100,
+    "peopleInPacket": 46
+  },
+  "dateRepairProposals": [],
+  "editorialAndExtractionReuse": {
+    "extractionReextracted": false,
+    "editorialReopened": false,
+    "appliedEditorialDecisionCount": 9,
+    "proposedRepairCount": 0,
+    "ownerDefiniteEnglishRepairs": [],
+    "note": "Retained sealed extraction bytes and accepted editorial decisions; owner issued no new canonical edits."
+  },
+  "changedChronologyFacts": [],
+  "sourceOrEditorialDefects": [],
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book shiji --chapter 080",
+      "passed": true,
+      "summary": "Scoped person data validation passed for shiji/080: 1 extraction(s), 46 local people, 349 mentions, 326 claims, 0 proposed repair(s), 9 applied repair(s), 9 editorial decision(s), 0 claim retraction(s), 2 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s)."
+    },
+    "peopleValidateExtraction": {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/shiji/080.json",
+      "passed": true
+    },
+    "peopleDatesPacket": {
+      "command": "npm run people:dates:packet -- --book shiji --chapter 080 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-080/date-packet.json",
+      "packetSha256": "sha256:cf3dbaec4661ad99e628427398f4b2b349bab425108fb38d66921e3f92816638"
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 080",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "independentDateApprovalPresent": false
+    }
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": "Fresh independent native date audit required against sealed packet sha256:cf3dbaec4661ad99e628427398f4b2b349bab425108fb38d66921e3f92816638 at semantic extractionHash sha256:4197919c5ae1df7ec376ef7b306703963311bc561cb2654fd06f6b1fc73c3dcf; no data/people/date-audits/shiji/080.json on staging.",
+    "identity": "Chapter-scoped identity dossier review not started in this owner pass; extraction validates with zero alias-disposition debt.",
+    "editorial": "Pinned editorial decisions remain authoritative until source/extraction hashes change."
+  },
+  "holds": [],
+  "independentReviewCompleted": false,
+  "independentDateApprovalIssued": false,
+  "chapterOwnerComplete": false,
+  "canonicalEdits": false,
+  "substantiveFindings": "Pinned blobs match staging witnesses. Source English coverage complete for all 121 units (meta translatedCount 121). Native people:validate and extraction validator pass on retained extraction. Candidate date packet built; chronology closure awaits independent audit only—not re-extraction or owner self-approval.",
+  "reproduce": {
+    "witnessBlobs": "git rev-parse HEAD:data/shiji/080.json HEAD:data/people/extractions/shiji/080.json HEAD:data/people/editorial-decisions/shiji/080.json",
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 080",
+    "buildDatePacket": "npm run people:dates:packet -- --book shiji --chapter 080 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-080/date-packet.json",
+    "verifyDateStatus": "npm run people:dates:verify -- --book shiji --chapter 080"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter owner handoff only; no deploy, merge, registry generation, or canonical data edits.",
+  "inputBlobWitnessVerified": true,
+  "candidateValidationCommands": [
+    "npm run people:validate -- --book shiji --chapter 080",
+    "node scripts/validate-people-extraction.mjs data/people/extractions/shiji/080.json",
+    "npm run people:dates:packet -- --book shiji --chapter 080 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-080/date-packet.json",
+    "npm run people:dates:verify -- --book shiji --chapter 080"
+  ]
+}

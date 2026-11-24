@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "062"
+  },
+  "ownerAgentId": "bc-435d82fd-aa5d-4f20-97e5-f4035d15281f",
+  "worker": "cursor-nov24-retained-staging-w10-o6",
+  "idempotencyKey": "5d8883da0b0a6a42d6229ff8d79744466b7c9bf1293775fd0c516d27be03e736",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-liaoshi-062-5281f",
+  "phase": "dispatch_pending",
+  "model": "composer-2.5",
+  "audit": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "dispatchPeopleCount": 44,
+    "dispatchClaimsCount": 269
+  },
+  "inputBlobWitness": {
+    "source": "05ded8ecdb16de85be586d7ca725cfb0bd97f720",
+    "extraction": "d2be507a2b71812d7d139fdd534838f07eda37db",
+    "editorial": "7476bbbcc01c2faaf2dd6da5aaba718752c8fa72"
+  },
+  "sealedInputs": {
+    "source": "sha256:10e76dbd50ce509da9dbf8dad27b3d3b521f95830f9ac3513e49b8b774dbf1eb",
+    "extraction": "sha256:aef46b87c16ea0e94e711269240761164a84805c830f17b4de7869c919ab3638",
+    "editorial": "sha256:dc0c8518a48d15f44dd5317910c9d40f323a3eb9eaf439085e205a9f59ef4014",
+    "extractionFileSha256": "aef46b87c16ea0e94e711269240761164a84805c830f17b4de7869c919ab3638"
+  },
+  "sourceCoverage": {
+    "sentenceCount": 105,
+    "metaSentenceCount": 105,
+    "metaTranslatedCount": 105,
+    "incompleteEnglishUnits": 0,
+    "titleEn": "Volume 62 Treatises 32: Punishment and Law 2",
+    "sourceUrl": "https://chinesenotes.com/liaoshi/liaoshi062.html",
+    "bothFieldsComplete": true,
+    "extractionPromptVersion": 7,
+    "extractionPeople": 44,
+    "extractionClaims": 269,
+    "nativeExtractionValidation": "ok"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-062/date-packet.json",
+    "contentSha256": "sha256:ac9606f1eeee7f1e9bd0eff97e3affa8f376d6c439694be5db9dd9160d357f27",
+    "semanticSourceHash": "sha256:27bf02bbbb7a0cb371f46f4367e2257f35596b409ac02fae3aa94a80d98a88ad",
+    "semanticExtractionHash": "sha256:a19964438ed2eec6f1c9e918bdd1d194a0a173250b688735fed43547ff27a664",
+    "dateHintCheckCount": 112,
+    "peopleInPacket": 44
+  },
+  "dateRepairProposals": [],
+  "editorialAndExtractionReuse": {
+    "extractionReextracted": false,
+    "editorialReopened": false,
+    "appliedEditorialDecisionCount": 3,
+    "proposedRepairCount": 0,
+    "ownerDefiniteEnglishRepairs": [],
+    "note": "Retained sealed extraction bytes and accepted editorial decisions; owner issued no new canonical edits."
+  },
+  "changedChronologyFacts": [],
+  "sourceOrEditorialDefects": [],
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book liaoshi --chapter 062",
+      "passed": true,
+      "summary": "Scoped person data validation passed for liaoshi/062: 1 extraction(s), 44 local people, 179 mentions, 400 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s)."
+    },
+    "peopleValidateExtraction": {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/liaoshi/062.json",
+      "passed": true
+    },
+    "peopleDatesPacket": {
+      "command": "npm run people:dates:packet -- --book liaoshi --chapter 062 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-062/date-packet.json",
+      "packetSha256": "sha256:ac9606f1eeee7f1e9bd0eff97e3affa8f376d6c439694be5db9dd9160d357f27"
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book liaoshi --chapter 062",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "independentDateApprovalPresent": false
+    }
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": "Fresh independent native date audit required against sealed packet sha256:ac9606f1eeee7f1e9bd0eff97e3affa8f376d6c439694be5db9dd9160d357f27 at semantic extractionHash sha256:a19964438ed2eec6f1c9e918bdd1d194a0a173250b688735fed43547ff27a664; no data/people/date-audits/liaoshi/062.json on staging.",
+    "identity": "Chapter-scoped identity dossier review not started in this owner pass; extraction validates with zero alias-disposition debt.",
+    "editorial": "Pinned editorial decisions remain authoritative until source/extraction hashes change."
+  },
+  "holds": [],
+  "independentReviewCompleted": false,
+  "independentDateApprovalIssued": false,
+  "chapterOwnerComplete": false,
+  "canonicalEdits": false,
+  "substantiveFindings": "Pinned blobs match staging witnesses. Source English coverage complete for all 105 units (meta translatedCount 105). Native people:validate and extraction validator pass on retained extraction. Candidate date packet built; chronology closure awaits independent audit only—not re-extraction or owner self-approval.",
+  "reproduce": {
+    "witnessBlobs": "git rev-parse HEAD:data/liaoshi/062.json HEAD:data/people/extractions/liaoshi/062.json HEAD:data/people/editorial-decisions/liaoshi/062.json",
+    "validateChapter": "npm run people:validate -- --book liaoshi --chapter 062",
+    "buildDatePacket": "npm run people:dates:packet -- --book liaoshi --chapter 062 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-062/date-packet.json",
+    "verifyDateStatus": "npm run people:dates:verify -- --book liaoshi --chapter 062"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter owner handoff only; no deploy, merge, registry generation, or canonical data edits.",
+  "inputBlobWitnessVerified": true,
+  "candidateValidationCommands": [
+    "npm run people:validate -- --book liaoshi --chapter 062",
+    "node scripts/validate-people-extraction.mjs data/people/extractions/liaoshi/062.json",
+    "npm run people:dates:packet -- --book liaoshi --chapter 062 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-062/date-packet.json",
+    "npm run people:dates:verify -- --book liaoshi --chapter 062"
+  ]
+}
