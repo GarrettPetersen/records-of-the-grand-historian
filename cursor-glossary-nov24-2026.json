@@ -176,7 +176,7 @@
    "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
   }
  ],
- "lastCheckedAt": "2026-11-24T09:06:29.758Z",
+ "lastCheckedAt": "2026-11-24T09:07:02.537Z",
  "lookup": {
   "authenticatedManifestVerified": true,
   "access": "read-only",
@@ -27207,11 +27207,84 @@
          "sha": "0e38e62f7a54b5b1c2db153d19bf8c0342075902"
         }
        ],
-       "status": "in_progress",
+       "status": "completed",
        "artifact": "jinshu028-composed-current-staging",
        "runId": 45360884338,
        "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45360884338",
-       "conclusion": null
+       "conclusion": "failure",
+       "diagnostic": "Staging has the production chronology code but lacks the extra deduplicateCompactMentionOccurrences test dependency from master. Master already passed its own existing tests plus the two exact new fixtures.",
+       "retry": {
+        "source": "b1e4738acea03e44c962c6a40ff2c7aa82adf6d3",
+        "workflowRevision": "75f504b1bc79c3224915a69967886d131fae58d8",
+        "ref": "codex/cursor-glossary-nov24-2026-jinshu028-current-staging-native-tests",
+        "stage": "79ae4c4de6c6739c3dc12f011c3b789dba50e3c1",
+        "expected": [
+         {
+          "key": "jinshu/028",
+          "hash": "0985f1593e207484422d34e492765e137ca3f3583dfccf392e275c59135ce9b6",
+          "cases": 389
+         }
+        ],
+        "treeEntries": [
+         {
+          "path": "data/jinshu/028.json",
+          "mode": "100644",
+          "type": "blob",
+          "sha": "d016e36e977d10c108c85aa571aa0e810a179ba7"
+         },
+         {
+          "path": "data/people/date-audit-history/jinshu/028/3db590fa18785110ae8c543f12782d45a44dd302dfc86359d9415f3d387b66e9.json",
+          "mode": "100644",
+          "type": "blob",
+          "sha": "0924f1cd37a2cf55120e5d15e442bb4d6f9925fa"
+         },
+         {
+          "path": "data/people/date-audit-history/jinshu/028/688f9b916ec01a27394e207fb3a9b850c5ff026eea172252bc7eb863e44c30ca.json",
+          "mode": "100644",
+          "type": "blob",
+          "sha": "971048c2e2eff134fa31d7461e792f5432e7c3e0"
+         },
+         {
+          "path": "data/people/date-audits/jinshu/028.json",
+          "mode": "100644",
+          "type": "blob",
+          "sha": "7e7bdb705b5b195d3574cbeea5ecf2cccb195adb"
+         },
+         {
+          "path": "data/people/editorial-decisions/jinshu/028.json",
+          "mode": "100644",
+          "type": "blob",
+          "sha": "1f276ea0a3c7dcfb45b352844a3400c539e1b2a2"
+         },
+         {
+          "path": "data/people/extractions/jinshu/028.json",
+          "mode": "100644",
+          "type": "blob",
+          "sha": "8501af2d53fed215bea8334595cd5082498e00d8"
+         },
+         {
+          "path": "scripts/validate-people-extraction.mjs",
+          "mode": "100644",
+          "type": "blob",
+          "sha": "6f5bd44790d81383c0801a5dc8a1309f9575d7ef"
+         },
+         {
+          "path": "scripts/test-people-source-only-chronology.mjs",
+          "mode": "100644",
+          "type": "blob",
+          "sha": "3b15fdeefb2f84ebd146ff99cf038ab915843c6e"
+         },
+         {
+          "path": "data/people/identity-reviews/jinshu/028.json",
+          "mode": "100644",
+          "type": "blob",
+          "sha": "0e38e62f7a54b5b1c2db153d19bf8c0342075902"
+         }
+        ],
+        "productionTestBlob": "3d4ec7b4645808b5c759a8850c5a0cfea7c8702a",
+        "status": "dispatch-planned",
+        "artifact": "jinshu028-composed-current-staging-native-tests"
+       }
       }
      },
      "stagingTransfer": {
