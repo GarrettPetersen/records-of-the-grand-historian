@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "houhanshu",
+    "chapter": "108"
+  },
+  "ownerAgentId": "bc-171befa0-4583-4074-a86f-8c58c468382d",
+  "workerId": "cursor-nov24-retained-staging-w3-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "3c98aee976a8cc637024225ec4b35a052744f7cbbaa8f36295381f0baef1adb2",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-houhanshu-108-8382d",
+  "inputBlobWitness": {
+    "source": "8da744bf61cfd3a324587f6f8a681e76c7b8932f",
+    "extraction": "f410e0ff921d2e085bce32aa318b8e6e5186ec28",
+    "dateAudit": "527d53a7d82ad5fd5a8aacca92f37806a3c88e14",
+    "editorial": "7219925d8b080916059930019b7a55040387af52"
+  },
+  "sealedInputs": {
+    "source": "sha256:3bf95d85ed8e1212c5aa227926d95c154fb5bf90da08d4185486bfcfb4323cdc",
+    "extraction": "sha256:ed8b66fc754e5b4ae15654ea319601ed657f0bd0fe9e0ecf5221887c4952e0c1",
+    "dateAudit": "sha256:fba195e611d1f8a2cf73c7f17602b0dbbfdb30a73b0f71ebc0ba0f08bbb49a4b",
+    "editorial": "sha256:2128e5357ecc544527fb7bcf0578917687f4c1040576f276ae82479b63574111"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 97: Rituals and Worship Part One",
+    "chineseUnits": 147,
+    "translatedCount": 147,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "editorialRepairsReflectedInSource": true
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book houhanshu --chapter 108",
+    "summary": "Scoped person data validation passed for houhanshu/108: 1 extraction(s), 23 local people, 126 mentions, 197 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s).",
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "chronologyStatus": "research-blocked",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book houhanshu --chapter 108",
+      "status": "research-blocked",
+      "findings": 1
+    },
+    "editorialDecisionCount": 2
+  },
+  "substantiveFindings": "All input blobs match dispatch witness. Chinese, dual English fields, 23 people, mentions, evidence, and revised Peilin speech (s0100) were reviewed against sealed extraction; no new definite English omission or concrete extraction defect. Independent date audit is a deliberate complete-scope initial receipt withholding approval until each chronology item is source-verified; that scope is preserved, not a host repair gap.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "gate": "date-research-blocked",
+      "summary": "Initial independent chronology receipt for 147 units / 266 temporal items / 23 people withholds approval pending bounded source-critical verification.",
+      "items": ["chapter-wide itemChecks", "findings[0]"]
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book houhanshu --chapter 108",
+    "verifyDates": "npm run people:dates:verify -- --book houhanshu --chapter 108"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; sealed staging inputs unchanged."
+}
