@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "101"
+  },
+  "ownerAgentId": "bc-0abe5935-7744-4bfc-8c0c-354ee13dcbf4",
+  "worker": "cursor-nov24-retained-staging-w11-o7",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "4e86349206fe7f8c1665e66fb186836ff7c078dc76e6ebcaad1db2142be0e4d1",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-shiji-101-dcbf4",
+  "phase": "owner_completed",
+  "model": "composer-2.5",
+  "dispatchAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "209202c2151ac7c182b7bc8c46fb176cd1c931dc40a2c9494eabc7fd0a503421",
+    "people": 48,
+    "claims": 198,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "887703ad5084e06da76ce35b1d8367ea0c96aa1f",
+    "extraction": "2ccfa4b23df1712005e10ac37b0eff5b5448f039",
+    "editorial": "46125753a8aee946f63962fe7f0708acdd9a2138"
+  },
+  "sealedInputs": {
+    "source": "sha256:71fcfc61b683f6433fd80035e5120c109f2535f52dfc6c57bd68c7e04e263c03",
+    "extraction": "sha256:209202c2151ac7c182b7bc8c46fb176cd1c931dc40a2c9494eabc7fd0a503421",
+    "editorial": "sha256:6a70d05eaca6fb1ae6d98f5ad062c56d9eb488627810e4c565ccd9f3c3f5afa5"
+  },
+  "blobWitnessVerified": true,
+  "extractionAndEditorialReuse": {
+    "extractionReextracted": false,
+    "editorialReopened": false,
+    "acceptedEditorialAppliedInSource": true,
+    "ownerExtractionEdits": [],
+    "ownerEditorialEdits": [],
+    "reason": "Pinned prompt-v7 extraction and accepted editorial decisions validated unchanged; owner pass re-read Chinese and English fields without altering sealed inputs."
+  },
+  "sourceCoverage": {
+    "sentenceCount": 204,
+    "translatedCount": 204,
+    "bothFieldsComplete": true,
+    "missingUnits": [],
+    "title": {
+      "zh": "袁盎鼂錯列傳",
+      "en": "Biographies of Yuan Ang and Chao Cuo",
+      "raw": "《袁盎鼂錯列傳》 Biographies of Yuan Ang and Chao Cuo"
+    }
+  },
+  "extractionCoverage": {
+    "allUnitsVisited": true,
+    "preflightCandidatesAccountedFor": true,
+    "allNamedPeopleAndMentionsCaptured": true,
+    "allDurableFactsCaptured": true,
+    "allChronologyCaptured": true,
+    "allPersonEventsCaptured": true,
+    "allClaimProvenanceCaptured": true,
+    "allFamilyRelationshipsCaptured": true,
+    "editorialPassCompleted": true,
+    "unresolvedReferences": [],
+    "danglingEvidenceUnits": 0,
+    "editorialsReflectedInSource": true
+  },
+  "candidateChronologyClosure": {
+    "datePacketPath": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-101/date-packet.json",
+    "datePacketContentSha256": "sha256:076413a6a8bc3cc4993886940f0bb82efaed4867655251daa31c92b819435ced",
+    "packetSourceHash": "sha256:8972900e4900d234694df4b8f9607aaa9ed2f2e0f7ae4ce7662b6727f60fec07",
+    "packetExtractionHash": "sha256:8d22c1f184235de4e5602ea524c48029aaf335f3bc1411e39ab78b32872bdb93",
+    "dateHintChecks": 113,
+    "preparedAt": "2026-11-24T17:11:11.791Z",
+    "status": "candidate_ready_for_independent_audit"
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "chronologyStatus": "un-audited",
+  "dateAuditPath": null,
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book shiji --chapter 101",
+      "passed": true,
+      "summary": "Scoped person data validation passed for shiji/101: 1 extraction(s), 48 local people, 569 mentions, 353 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesPacket": {
+      "command": "npm run people:dates:packet -- --book shiji --chapter 101 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-101/date-packet.json",
+      "contentSha256": "sha256:076413a6a8bc3cc4993886940f0bb82efaed4867655251daa31c92b819435ced",
+      "dateHintChecks": 113
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 101",
+      "status": "un-audited",
+      "findings": null,
+      "note": "No data/people/date-audits record exists; verify correctly reports un-audited."
+    }
+  },
+  "substantiveFindings": "Pinned source, extraction, and accepted editorial blobs verified by git hash-object. Full literal and idiomatic English on all Chinese units per meta.sentenceCount. Scoped validation passed with zero dangling evidence and zero temporal/alias debt. Date packet built from current sealed inputs; owner did not self-approve chronology. Accepted editorial repairs (including revised final forms) are reflected in source; no new definite English omission or source–extraction contradiction in owner pass. Undated attestations retained where source supports them.",
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "gate": "independent-native-date-audit-via-people-dates-record",
+      "packetSha256": "sha256:076413a6a8bc3cc4993886940f0bb82efaed4867655251daa31c92b819435ced",
+      "notes": "Fresh native independent date review must cover full date packet; owner handoff is not date approval."
+    },
+    "chapterIdentityReview": {
+      "required": true,
+      "status": "pending",
+      "gate": "independent-chapter-and-canonical-identity-review",
+      "notes": "Corpus identity scheduling remains; no owner canonical merge/split edits."
+    },
+    "independentReviewCompleted": false
+  },
+  "authorEvidence": {
+    "method": "Git blob witness on three sealed inputs; Chinese/English sentence scan via chapter meta and spot-checked editorial units; npm run people:validate; npm run people:dates:packet to checkpoint path; npm run people:dates:verify; no extraction/source edits; no registry; [CF-Pages-Skip].",
+    "completedAt": "2026-11-24T17:11:11.791Z"
+  },
+  "canonicalEdits": false,
+  "chapterReady": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 101",
+    "buildDatePacket": "npm run people:dates:packet -- --book shiji --chapter 101 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-101/date-packet.json",
+    "validateDates": "npm run people:dates:verify -- --book shiji --chapter 101"
+  },
+  "notes": "[CF-Pages-Skip] Owner evidence only; sealed inputs unchanged; chapter not complete until independent date and identity gates pass."
+}

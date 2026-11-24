@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "053"
+  },
+  "ownerAgentId": "bc-0abe5935-7744-4bfc-8c0c-354ee13dcbf4",
+  "worker": "cursor-nov24-retained-staging-w11-o7",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "4e86349206fe7f8c1665e66fb186836ff7c078dc76e6ebcaad1db2142be0e4d1",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-xinwudaishi-053-dcbf4",
+  "phase": "owner_completed",
+  "model": "composer-2.5",
+  "dispatchAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "9bb7a146cd8c64dd62929784714ca86dfac014cb271a2b7104fdd42e308f8597",
+    "people": 51,
+    "claims": 217,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "e3be1b7131de006ec9162cdcfe2e027199e8237f",
+    "extraction": "e452fabad103ec12273ab7179d048601f4915359",
+    "editorial": "24cb0767835164e3969ff999190a31de2b160282"
+  },
+  "sealedInputs": {
+    "source": "sha256:b3ead9108496ad751340105e8a9e28dc260a8250b398b672ebe53ba75d4cb456",
+    "extraction": "sha256:9bb7a146cd8c64dd62929784714ca86dfac014cb271a2b7104fdd42e308f8597",
+    "editorial": "sha256:e37e902c5f182c1e9ead641e204cad948f43e6516f11792fd7ed19559d641a77"
+  },
+  "blobWitnessVerified": true,
+  "extractionAndEditorialReuse": {
+    "extractionReextracted": false,
+    "editorialReopened": false,
+    "acceptedEditorialAppliedInSource": true,
+    "ownerExtractionEdits": [],
+    "ownerEditorialEdits": [],
+    "reason": "Pinned prompt-v7 extraction and accepted editorial decisions validated unchanged; owner pass re-read Chinese and English fields without altering sealed inputs."
+  },
+  "sourceCoverage": {
+    "sentenceCount": 120,
+    "translatedCount": 120,
+    "bothFieldsComplete": true,
+    "missingUnits": [],
+    "title": {
+      "zh": "卷五十三 雜傳第四十一: 王景崇 趙思綰 慕容彥超",
+      "en": "Volume 53 Miscellaneous Biographies 33: Wang Jinchong, Zhao Suwan, Murong Yanchao",
+      "raw": "卷五十三 雜傳第四十一: 王景崇 趙思綰 慕容彥超 Volume 53 Miscellaneous Biographies 33: Wang Jinchong, Zhao Suwan, Murong Yanchao"
+    }
+  },
+  "extractionCoverage": {
+    "allUnitsVisited": true,
+    "preflightCandidatesAccountedFor": true,
+    "allNamedPeopleAndMentionsCaptured": true,
+    "allDurableFactsCaptured": true,
+    "allChronologyCaptured": true,
+    "allPersonEventsCaptured": true,
+    "allClaimProvenanceCaptured": true,
+    "allFamilyRelationshipsCaptured": true,
+    "editorialPassCompleted": true,
+    "unresolvedReferences": [],
+    "danglingEvidenceUnits": 0,
+    "editorialsReflectedInSource": true
+  },
+  "candidateChronologyClosure": {
+    "datePacketPath": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-053/date-packet.json",
+    "datePacketContentSha256": "sha256:40945f1e59306fe5caecc9e9920655c89cd9f69528db33b6d1b986a00e3b1ba3",
+    "packetSourceHash": "sha256:2b6991f8935dc4041d49234b42f52526a9af1734065583361a547c13f5e1c969",
+    "packetExtractionHash": "sha256:c3b5393c4340c59d50c5636d0b992d40471c3f888a97b2eceda3e6fffa82087c",
+    "dateHintChecks": 123,
+    "preparedAt": "2026-11-24T17:11:11.793Z",
+    "status": "candidate_ready_for_independent_audit"
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "chronologyStatus": "un-audited",
+  "dateAuditPath": null,
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book xinwudaishi --chapter 053",
+      "passed": true,
+      "summary": "Scoped person data validation passed for xinwudaishi/053: 1 extraction(s), 51 local people, 598 mentions, 396 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesPacket": {
+      "command": "npm run people:dates:packet -- --book xinwudaishi --chapter 053 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-053/date-packet.json",
+      "contentSha256": "sha256:40945f1e59306fe5caecc9e9920655c89cd9f69528db33b6d1b986a00e3b1ba3",
+      "dateHintChecks": 123
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book xinwudaishi --chapter 053",
+      "status": "un-audited",
+      "findings": null,
+      "note": "No data/people/date-audits record exists; verify correctly reports un-audited."
+    }
+  },
+  "substantiveFindings": "Pinned source, extraction, and accepted editorial blobs verified by git hash-object. Full literal and idiomatic English on all Chinese units per meta.sentenceCount. Scoped validation passed with zero dangling evidence and zero temporal/alias debt. Date packet built from current sealed inputs; owner did not self-approve chronology. Accepted editorial repairs (including revised final forms) are reflected in source; no new definite English omission or source–extraction contradiction in owner pass. Undated attestations retained where source supports them.",
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "gate": "independent-native-date-audit-via-people-dates-record",
+      "packetSha256": "sha256:40945f1e59306fe5caecc9e9920655c89cd9f69528db33b6d1b986a00e3b1ba3",
+      "notes": "Fresh native independent date review must cover full date packet; owner handoff is not date approval."
+    },
+    "chapterIdentityReview": {
+      "required": true,
+      "status": "pending",
+      "gate": "independent-chapter-and-canonical-identity-review",
+      "notes": "Corpus identity scheduling remains; no owner canonical merge/split edits."
+    },
+    "independentReviewCompleted": false
+  },
+  "authorEvidence": {
+    "method": "Git blob witness on three sealed inputs; Chinese/English sentence scan via chapter meta and spot-checked editorial units; npm run people:validate; npm run people:dates:packet to checkpoint path; npm run people:dates:verify; no extraction/source edits; no registry; [CF-Pages-Skip].",
+    "completedAt": "2026-11-24T17:11:11.793Z"
+  },
+  "canonicalEdits": false,
+  "chapterReady": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 053",
+    "buildDatePacket": "npm run people:dates:packet -- --book xinwudaishi --chapter 053 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-053/date-packet.json",
+    "validateDates": "npm run people:dates:verify -- --book xinwudaishi --chapter 053"
+  },
+  "notes": "[CF-Pages-Skip] Owner evidence only; sealed inputs unchanged; chapter not complete until independent date and identity gates pass."
+}
