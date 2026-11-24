@@ -6,13 +6,13 @@ on:
       chapter:
         required: true
         type: choice
-        options: ['030', '031', '031-release-dependencies', '028-scoped-check', '063-scoped-check', '081-scoped-check', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '063-retain', '081-retain', '094-retain', '030-compose', '030-stage', '030-residual', '030-delta-certify', '063-new-identity', '078-new-identity', '081-new-identity', '085-new-identity', '094-new-identity', '123-new-identity', '063-certify', '078-certify', '081-certify', '085-certify', '123-certify', '063-stage', '078-stage', '081-stage', '085-stage', '123-stage']
+        options: ['catalog-build-benchmark', '030', '031', '031-release-dependencies', '028-scoped-check', '063-scoped-check', '081-scoped-check', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '063-retain', '081-retain', '094-retain', '030-compose', '030-stage', '030-residual', '030-delta-certify', '063-new-identity', '078-new-identity', '081-new-identity', '085-new-identity', '094-new-identity', '123-new-identity', '063-certify', '078-certify', '081-certify', '085-certify', '123-certify', '063-stage', '078-stage', '081-stage', '085-stage', '123-stage']
 permissions:
   contents: read
   actions: read
 jobs:
   prepare:
-    if: endsWith(inputs.chapter, '-scoped-check') == false && inputs.chapter != '031-release-dependencies' && inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && inputs.chapter != '083-stage' && inputs.chapter != '115-stage' && inputs.chapter != '094-stage' && endsWith(inputs.chapter, '-retain') == false && inputs.chapter != '030-compose' && inputs.chapter != '030-stage' && inputs.chapter != '030-residual' && inputs.chapter != '063-stage' && inputs.chapter != '078-stage' && inputs.chapter != '081-stage' && inputs.chapter != '085-stage' && inputs.chapter != '123-stage' && endsWith(inputs.chapter, '-certify') == false && endsWith(inputs.chapter, '-review-check') == false && endsWith(inputs.chapter, '-new-identity') == false
+    if: inputs.chapter != 'catalog-build-benchmark' && endsWith(inputs.chapter, '-scoped-check') == false && inputs.chapter != '031-release-dependencies' && inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && inputs.chapter != '083-stage' && inputs.chapter != '115-stage' && inputs.chapter != '094-stage' && endsWith(inputs.chapter, '-retain') == false && inputs.chapter != '030-compose' && inputs.chapter != '030-stage' && inputs.chapter != '030-residual' && inputs.chapter != '063-stage' && inputs.chapter != '078-stage' && inputs.chapter != '081-stage' && inputs.chapter != '085-stage' && inputs.chapter != '123-stage' && endsWith(inputs.chapter, '-certify') == false && endsWith(inputs.chapter, '-review-check') == false && endsWith(inputs.chapter, '-new-identity') == false
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
@@ -1137,3 +1137,50 @@ jobs:
           path: ${{ runner.temp }}/chapter-date-packet.json
           if-no-files-found: error
           retention-days: 7
+
+  catalog-build-benchmark:
+    if: inputs.chapter == 'catalog-build-benchmark'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - id: pins
+        name: Pin unchanged release data and the exact compiler experiment
+        run: |
+          node <<'JS'
+          const assert=require('node:assert/strict');
+          const fs=require('node:fs');
+          const {execFileSync}=require('node:child_process');
+          const root='repos/'+process.env.GITHUB_REPOSITORY;
+          const get=(path,raw=false)=>JSON.parse(execFileSync('gh',['api',root+path,...(raw?['-H','Accept: application/vnd.github.raw+json']:[])],{encoding:'utf8',maxBuffer:10e6}));
+          const journal=get('/contents/cursor-glossary-nov24-2026.json?ref='+process.env.GITHUB_SHA,true);
+          const {buildPerformanceCandidate: candidate,safeCandidate}=journal.releaseAudit;
+          assert.equal(candidate.parent,safeCandidate.revision);
+          assert.equal(get('/git/ref/heads/'+candidate.ref).object.sha,candidate.revision);
+          const diff=get('/compare/'+candidate.parent+'...'+candidate.revision);
+          assert.deepEqual(diff.files.map(f=>f.filename),['scripts/compile-people-catalog.mjs']);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT,'revision='+candidate.revision+'\n');
+          JS
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.pins.outputs.revision }}
+          fetch-depth: 1
+          persist-credentials: false
+          sparse-checkout: |
+            data
+            scripts
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - run: npm install --no-audit --no-fund
+      - name: Check existing compiler fixtures
+        run: node scripts/compile-people-catalog.mjs --self-test
+      - name: Measure native full-corpus catalog generation
+        env:
+          REVISION: ${{ steps.pins.outputs.revision }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$REVISION"
+          time node --max-old-space-size=3072 scripts/compile-people-catalog.mjs
