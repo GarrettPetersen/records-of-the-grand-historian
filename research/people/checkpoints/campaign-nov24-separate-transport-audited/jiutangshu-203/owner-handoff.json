@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "kind": "separate-transport-audited-source-owner-handoff",
+  "scope": {
+    "book": "jiutangshu",
+    "chapter": "203"
+  },
+  "ownerAgentId": "bc-54ef0ff8-01f5-4d4d-8b50-9835f376f5c9",
+  "workerId": "cursor-nov24-additional-separate-transport-owner-1",
+  "campaign": "campaign-nov24-separate-transport-audited",
+  "idempotencyKey": "d2cb697dc171af2a5de722f7e836a82bc79479a9dcea853f22bd284b49bf5cf6",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-separate-transport-owner-jiutangshu-203-76f5c9",
+  "inputBlobWitness": {
+    "source": "0e17f57846a86875181d0cbbdac9c097ed410196",
+    "extraction": "f9eb37e05c25654209219adfc5b39ea011b625a5",
+    "dateAudit": "0ae836c39215e7c3cc3d5e762c9d6da714b58881",
+    "editorial": "ab24dd5944e8c40283860ebfd78894d796f40897"
+  },
+  "sealedInputs": {
+    "source": "sha256:18a6e830cff1d67dabcfe8ddd6077727c52d8329a3dab9014a4f3017708b29c1",
+    "extraction": "sha256:daa3e8f4becdfdaa51d8d7660aac5d8460cdcc183936419f8da8234982a8e9ca",
+    "dateAudit": "sha256:5ef8a93b3bfacdc4cdbb39fc38fb460a3fb8a83b3c4887af2080bef73f6672cd",
+    "editorial": "sha256:ab4b174a9327901adc4819d9f9d06f1157d93e6aae00b3c8f35fcd6827794dee"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jiutangshu --chapter 203",
+    "summary": "Scoped person data validation passed for jiutangshu/203: 1 extraction(s), 162 local people, 774 mentions, 1745 claims, 0 proposed repair(s), 15 applied repair(s), 15 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 337,
+      "translatedCount": 337,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": [],
+      "danglingEvidenceUnits": 0,
+      "editorialRepairsReflectedInSource": true
+    },
+    "chronologyStatus": "audited",
+    "dateAuditSummary": "Reviewed 337 units, 510 checks, and 162 people.",
+    "editorialDecisionCount": 15,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book jiutangshu --chapter 203",
+      "status": "audited",
+      "findings": 0
+    }
+  },
+  "substantiveFindings": "Chapter source, accepted extraction, audited chronology, and applied editorial repairs align at pinned blobs. Full literal and idiomatic English coverage on all 337 Chinese units; scoped validation passed; date audit reports zero findings. Accepted editorial decision text (including revised final forms) is present in source; claim retractions and revisions are reflected in extraction. Local person rows, evidence units, and name/person references match primary citations on spot-check; no dangling evidence, unsupported chronology, false-merge signal, or new definite English omission in this source-owner pass. Identity membership for 159 prepared cases remains for independent bounded dossier review across 6 transport parts.",
+  "distinctHolds": [],
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 159,
+    "identityTransportParts": 6,
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "artifactRetention": "GitHub Actions artifact nov24-separate-transport-audited-chapter-packets",
+    "notes": "159 prepared identity review case(s) in 6 sealed transport part(s); owner handoff is not independent identity approval."
+  },
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; full-sentence English/literal+idiomatic coverage scan; npm run people:validate and people:dates:verify; editorial source reflection check against accepted and revised decision forms; chapter-local person and evidence spot-check; no canonical extraction or source edits; no local corpus registry generation.",
+    "sourceTitle": "Volume 193 Biographies 143: Exemplary Women",
+    "sourceTitleZh": "卷一百九十三 列傳第一百四十三: 列女",
+    "completedAt": "2026-11-24T15:49:12.219Z",
+    "localPeople": 162,
+    "peopleLookupNote": "Bounded corpus dossier lookup deferred to CI-sealed registry generation; chapter-scoped validation and evidence inspection completed without local catalog rebuild per LOCAL_DISK_STRATEGY."
+  },
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jiutangshu --chapter 203",
+    "validateDates": "npm run people:dates:verify -- --book jiutangshu --chapter 203"
+  },
+  "notes": "[CF-Pages-Skip] Source-owner pass only; push owner-handoff without altering sealed inputs."
+}
