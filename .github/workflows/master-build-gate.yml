@@ -6,7 +6,7 @@ on:
       chapter:
         required: true
         type: choice
-        options: ['catalog-build-benchmark', '030', '031', '031-release-dependencies', '028-scoped-check', '063-scoped-check', '081-scoped-check', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '063-retain', '081-retain', '094-retain', '030-compose', '030-stage', '030-residual', '030-delta-certify', '063-new-identity', '078-new-identity', '081-new-identity', '085-new-identity', '094-new-identity', '123-new-identity', '063-certify', '078-certify', '081-certify', '085-certify', '123-certify', '063-stage', '078-stage', '081-stage', '085-stage', '123-stage']
+        options: ['catalog-build-benchmark', '030', '031', '031-release-dependencies', '028-scoped-check', '063-scoped-check', '081-scoped-check', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '053-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '063-retain', '081-retain', '094-retain', '030-compose', '030-stage', '030-residual', '030-delta-certify', '063-new-identity', '078-new-identity', '081-new-identity', '085-new-identity', '094-new-identity', '123-new-identity', '063-certify', '078-certify', '081-certify', '085-certify', '123-certify', '063-stage', '078-stage', '081-stage', '085-stage', '123-stage']
 permissions:
   contents: read
   actions: read
@@ -436,7 +436,7 @@ jobs:
           const delta=process.env.CHAPTER_INPUT==='030-delta-certify';
           const holdId=chapter==='030'?'sha256:e7143bd675d8cd2098830c427913cd1670198bc92eb936ab62adec96d8ee494a':null;
           const repo = process.env.GITHUB_REPOSITORY;
-          assert(['030','063','078','081','083','085','094','115','123'].includes(chapter));
+          assert(['030','053','063','078','081','083','085','094','115','123'].includes(chapter));
           const read = (path, raw) => JSON.parse(execFileSync('gh', ['api', 'repos/'+repo+'/'+path, ...(raw?['-H','Accept: application/vnd.github.raw+json']:[])], {encoding:'utf8',maxBuffer:10e6}));
           const state = read('contents/cursor-glossary-nov24-2026.json?ref='+process.env.GITHUB_SHA,true);
           const chapters = state.identityRegistryBuild;
@@ -470,7 +470,7 @@ jobs:
           assert(parts.length && parts.every((r,i)=>r.part===i+1 && (supported.includes(r.status)||(retain&&retainedHolds.some(x=>x.part===r.part)&&r.status==='chapter-hold'))), 'Authored parts incomplete or held for correction');
           assert(parts.every(r=>Number.isSafeInteger(r.rows) && r.rows>0 && r.holds===retainedHolds.filter(x=>x.part===r.part).length), 'Unexpected held decisions');
           const scope = {book:'jinshu',chapter};
-          const actualAgentId=state.rechecks['jinshu/'+chapter].agentId;
+          const actualAgentId=chapter==='053'?state.cloudScale.protectedNativeWave.dispatches['jinshu/053'].agentId:state.rechecks['jinshu/'+chapter].agentId;
           for(const r of parts){
             assert.equal(r.agentId,actualAgentId);
             assert.match(r.commit,/^[a-f0-9]{40}$/);
@@ -624,11 +624,17 @@ jobs:
             (cd "$RUNNER_TEMP/recorded" && sha256sum retained-identity-components.json > SHA256SUMS)
             exit 0
           fi
+          previous=()
+          if [[ "$CHAPTER" == '053' ]]; then
+            old=$(sha256sum data/people/identity-reviews/jinshu/053.json | cut -d ' ' -f 1)
+            test "$old" = c383de1150e62689561a051dea8710266dcd4aa550d850e799fe130bdedb333e
+            previous=(--previous-sha256 "$old")
+          fi
           node scripts/record-people-chapter-identity-worker.mjs \
             --packet "$RUNNER_TEMP/native-identity/source-review-packet.json" \
             --report "$RUNNER_TEMP/native-identity/recording-report.json" \
             --job "$RUNNER_TEMP/native-identity/recording-job.json" \
-            --registry "$RUNNER_TEMP/identity-registry/$REGISTRY_REVISION" | tee "$RUNNER_TEMP/recorded/recording-receipt.json"
+            --registry "$RUNNER_TEMP/identity-registry/$REGISTRY_REVISION" "${previous[@]}" | tee "$RUNNER_TEMP/recorded/recording-receipt.json"
           jq -e --arg revision "$REVISION" '.nativeIdentityProofAccepted and .sourceRevision == $revision' "$RUNNER_TEMP/recorded/recording-receipt.json"
           npm run people:validate -- --book jinshu --chapter "$CHAPTER" | tee "$RUNNER_TEMP/recorded/scoped-validation.txt"
           cp "data/people/identity-reviews/jinshu/$CHAPTER.json" "$RUNNER_TEMP/recorded/identity-proof.json"
