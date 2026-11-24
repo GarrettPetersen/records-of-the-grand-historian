@@ -1,0 +1,200 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-native-chronology-repair",
+  "scope": {
+    "book": "jinshi",
+    "chapter": "053"
+  },
+  "ownerAgentId": "bc-753d3cd0-3f52-443f-90cd-27cbf4b14574",
+  "workerId": "cursor-nov24-retained-staging-w2-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "5f7193705602ad14a294d2ef22f121ccec9124396b1be39918c7deb8ed5411c5",
+  "scopeRef": "cursor/nov24-retained-owner-native-date-jinshi-053-14574",
+  "priorOwnerRevision": "7fa9a0bfb7c9c1e73e55d96b214b2e5e2ce61ac6",
+  "ownerHandoffSha256": "1bca3ec109cc0a7593598946fb6a37afd12017daebc0f292dd80affc2f5d8a19",
+  "stagingPin": null,
+  "pinnedDateAudit": {
+    "path": "data/people/date-audits/jinshi/053.json",
+    "sha256": "sha256:dee034034cc8de7c5d7325dc7ecbf2d4605885cfff16bf3f00ab0d5bbe54a04e",
+    "status": "research-blocked",
+    "reviewedAt": "2026-09-23T20:00:00Z",
+    "bytePreserved": true,
+    "hashPreserved": true
+  },
+  "inputBlobsUntouched": true,
+  "intactApprovals": {
+    "supportedItemChecks": [
+      "claim-12",
+      "claim-16",
+      "claim-17",
+      "claim-18",
+      "claim-19",
+      "claim-25",
+      "claim-26",
+      "claim-27",
+      "claim-32",
+      "claim-40",
+      "hints-p002",
+      "hints-p003",
+      "hints-p004",
+      "hints-p005",
+      "hints-p006"
+    ],
+    "supportedPersonChecks": [
+      "p002",
+      "p003",
+      "p004",
+      "p005",
+      "p006"
+    ],
+    "editorialDecisionsUntouched": true,
+    "sourceChapterUntouched": true
+  },
+  "verifiedFindings": [
+    {
+      "items": [
+        "claim-8",
+        "hints-p001",
+        "p001"
+      ],
+      "problem": "The source's relative wording 海陵初 does not identify a numbered calendar year or independently substantiate the full AD 1149–1161 hint. Treating it as a point event in AD 1149 overstates the evidence.",
+      "action": "Retain a source-linked research hold. Consult a source that establishes the intended event's date; then remove the point claim or replace it with a justified bounded/contextual chronology without guessing."
+    },
+    {
+      "items": [
+        "claim-37",
+        "hints-p007",
+        "p007"
+      ],
+      "problem": "The only Xianzong evidence says that an office name was later changed to avoid his taboo. It does not date that renaming, establish a personal event in AD 1185, or independently verify the extracted point hint.",
+      "action": "Retain a source-linked research hold. Verify the taboo chronology and the date of the institutional renaming from a suitable Jin historical witness before narrowing, reclassifying, or removing the point chronology."
+    }
+  ],
+  "claimProposals": [
+    {
+      "auditItemId": "claim-8",
+      "personId": "p001",
+      "predicate": "attestation",
+      "auditVerdict": "research-blocked",
+      "unit": "s0052",
+      "sourceQuote": "海陵初",
+      "action": "replace-claim-value",
+      "reason": "The source uses only relative wording (海陵初) without a numbered calendar year in this chapter; the prior Western point year is removed and retained as an explicit unresolved hold.",
+      "before": {
+        "sourceDate": {
+          "text": "海陵初"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 1149,
+          "precision": "year"
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "海陵初"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The source uses only relative wording (海陵初) without a numbered calendar year in this chapter; the prior Western point year is removed and retained as an explicit unresolved hold.",
+        "event": "Regulation or renaming context at 海陵初, exactly as stated in the source."
+      }
+    },
+    {
+      "auditItemId": "claim-37",
+      "personId": "p007",
+      "predicate": "attestation",
+      "auditVerdict": "research-blocked",
+      "unit": "s0188",
+      "sourceQuote": "後以避顯宗諱，複更今名",
+      "action": "replace-claim-value",
+      "reason": "The source uses only relative wording (避顯宗諱) without a numbered calendar year in this chapter; the prior Western point year is removed and retained as an explicit unresolved hold.",
+      "before": {
+        "sourceDate": {
+          "text": "避顯宗諱"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 1185,
+          "precision": "year"
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "避顯宗諱"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The source uses only relative wording (避顯宗諱) without a numbered calendar year in this chapter; the prior Western point year is removed and retained as an explicit unresolved hold.",
+        "event": "Regulation or renaming context at 避顯宗諱, exactly as stated in the source."
+      }
+    }
+  ],
+  "hintProposals": [
+    {
+      "auditItemId": "hints-p001",
+      "personId": "p001",
+      "unit": "s0052",
+      "sourceQuote": "海陵初",
+      "action": "replace-active-date-hints",
+      "reason": "The chapter has only the relative label 海陵初 for this extracted person. It does not independently establish every endpoint of the AD 1149–1161 hint or an event in its first year.",
+      "before": [
+        "AD 1149-1161"
+      ],
+      "after": []
+    },
+    {
+      "auditItemId": "hints-p007",
+      "personId": "p007",
+      "unit": "s0188",
+      "sourceQuote": "避顯宗諱",
+      "action": "replace-active-date-hints",
+      "reason": "The sole reference is a later office-name change to avoid Xianzong's taboo. It does not state his life dates or date that institutional change, so the AD 1185 point hint requires source-critical confirmation.",
+      "before": [
+        "AD 1185"
+      ],
+      "after": []
+    }
+  ],
+  "explicitNoEdit": [],
+  "definiteTranslationRepairs": [],
+  "candidateExtractionHash": {
+    "before": "sha256:9f37fa32cf355bef47ae0a4650e72a8c8ff8fcad6af8f335216c7ec51ae0a1a4",
+    "after": "sha256:14f1ee8acda8b2a536f68be30292d38bef895a354c90f58cde471a118de23a45"
+  },
+  "nativeValidation": {
+    "extractionValidation": {
+      "ok": true,
+      "people": 7
+    },
+    "geometryErrors": [],
+    "passed": true,
+    "dateAuditFileMutated": false
+  },
+  "residualHolds": [
+    {
+      "id": "finding-1",
+      "problem": "The source's relative wording 海陵初 does not identify a numbered calendar year or independently substantiate the full AD 1149–1161 hint. Treating it as a point event in AD 1149 overstates the evidence.",
+      "action": "Retain a source-linked research hold. Consult a source that establishes the intended event's date; then remove the point claim or replace it with a justified bounded/contextual chronology without guessing.",
+      "items": [
+        "claim-8",
+        "hints-p001",
+        "p001"
+      ],
+      "preservedAuditBytes": "sha256:dee034034cc8de7c5d7325dc7ecbf2d4605885cfff16bf3f00ab0d5bbe54a04e",
+      "note": "Original independent date-audit file unchanged; holds remain until a fresh audit after host-approved extraction edits."
+    },
+    {
+      "id": "finding-2",
+      "problem": "The only Xianzong evidence says that an office name was later changed to avoid his taboo. It does not date that renaming, establish a personal event in AD 1185, or independently verify the extracted point hint.",
+      "action": "Retain a source-linked research hold. Verify the taboo chronology and the date of the institutional renaming from a suitable Jin historical witness before narrowing, reclassifying, or removing the point chronology.",
+      "items": [
+        "claim-37",
+        "hints-p007",
+        "p007"
+      ],
+      "preservedAuditBytes": "sha256:dee034034cc8de7c5d7325dc7ecbf2d4605885cfff16bf3f00ab0d5bbe54a04e",
+      "note": "Original independent date-audit file unchanged; holds remain until a fresh audit after host-approved extraction edits."
+    }
+  ],
+  "notes": "[CF-Pages-Skip] Proposal-only; host assembles, applies, and re-runs independent review.",
+  "completedAt": "2026-11-24T16:20:45.499Z"
+}
