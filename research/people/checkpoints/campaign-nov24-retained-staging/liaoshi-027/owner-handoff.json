@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "027"
+  },
+  "ownerAgentId": "bc-8c17892b-f189-4fbe-b68a-5ad0945d79a9",
+  "workerId": "cursor-nov24-retained-staging-w16-o8",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "2ab75c2b7528292dc2dc432a0bcbece3c300ce27d47393323c9130a2048228f0",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-liaoshi-027-d79a9",
+  "phase": "dispatch_pending",
+  "extractionBytes": 160865,
+  "inputBlobWitness": {
+    "source": "b9b82ca8f257925c81b03cd2b1cbfeb7beef9a5a",
+    "extraction": "87af14bc758187fdeeba47d95461d318290b30d6",
+    "editorial": "4237a2ed0ea66c9cd1f8d26e7f0a9f30fc1ca2cd",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:6c63aa6dfcd5b258306b4655d9f346d9456e7e86804827378562a8049181ea61",
+    "extraction": "sha256:f27d6263ac3ed967562e989082a2653bcecf1803dd5e024363a1e1216347eca5",
+    "editorial": "sha256:3815864dd7bc467d2510ed5e66484f0847d9fd6efefa6fd7e18ff8f7e3f463c5",
+    "dateAudit": null
+  },
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "workOrderPeople": 98,
+    "workOrderClaims": 479
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 27 Annals 27: Emperor Tianzuo 1",
+    "sourceTitleZh": "卷二十七 本紀第二十七: 天祚皇帝一",
+    "sentenceCount": 252,
+    "translatedCount": 252,
+    "chineseUnits": 252,
+    "missingIdiomatic": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-027/date-packet.json",
+    "contentSha256": "sha256:51697fefdf8531cca2377611af6ea5bc94f502edfd139267f9c3a8568dbe9c53",
+    "command": "npm run people:dates:packet -- --book liaoshi --chapter 027 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-027/date-packet.json",
+    "itemCount": 275,
+    "peopleCount": 98,
+    "unitCount": 252,
+    "extractionHash": "sha256:ba8e3b2e8b5a63526708387f0d0b0d37072a6442961857fe61c99786374b9cb1",
+    "sourceHash": "sha256:339f8d2fe066561c2cad86211ecce9c3195d33691ac03405484dbb127c89999a"
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "path": "data/people/extractions/liaoshi/027.json",
+    "fileContentSha256": "sha256:f27d6263ac3ed967562e989082a2653bcecf1803dd5e024363a1e1216347eca5",
+    "promptVersion": 7,
+    "reExtracted": false
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "path": "data/people/editorial-decisions/liaoshi/027.json",
+    "proposalCount": 16,
+    "status": "reviewed-with-applied-proposals",
+    "canonicalSourceReflection": true
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book liaoshi --chapter 027",
+    "peopleValidateSummary": "Scoped person data validation passed for liaoshi/027: 1 extraction(s), 98 local people, 362 mentions, 829 claims, 0 proposed repair(s), 16 applied repair(s), 16 editorial decision(s), 1 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesScan": {
+      "command": "npm run people:dates:scan -- --book liaoshi --chapter 027",
+      "findings": 0,
+      "extractedChapters": 1
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book liaoshi --chapter 027",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "independentApprovalIssued": false
+    },
+    "chronologyStatus": "no-native-date-report",
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "substantiveFindings": "Retained staging owner pass on sealed three-part inputs (source, accepted extraction, accepted editorial); no data/people/date-audits/liaoshi/027.json exists. Full chapter read confirms literal and idiomatic English on every Chinese unit; native people:validate passed; people:dates:scan reports zero pre-audit diagnostics; sealed native date packet prepared at pinned extraction bytes for independent review. No definite English omission, concrete chronology contradiction, or source contradiction found requiring owner repair in this pass.",
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-027/date-packet.json",
+      "packetContentSha256": "sha256:51697fefdf8531cca2377611af6ea5bc94f502edfd139267f9c3a8568dbe9c53",
+      "nextGate": "independent-native-date-audit",
+      "recordCommand": "npm run people:dates:record -- --report <independent-audit-report.json>",
+      "notes": "Owner prepared candidate chronology packet only; must not self-approve via people:dates:record."
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending",
+      "nextGate": "independent-bounded-dossier-identity-review",
+      "notes": "Canonical identity evidence remains for a separate reviewer after date approval."
+    },
+    "independentReviewCompleted": false
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book liaoshi --chapter 027",
+    "datesVerify": "npm run people:dates:verify -- --book liaoshi --chapter 027",
+    "datesPacket": "npm run people:dates:packet -- --book liaoshi --chapter 027 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-027/date-packet.json",
+    "datesScan": "npm run people:dates:scan -- --book liaoshi --chapter 027"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry generation, deploy, or merge."
+}

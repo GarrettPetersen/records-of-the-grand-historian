@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "weishu",
+    "chapter": "028"
+  },
+  "ownerAgentId": "bc-8c17892b-f189-4fbe-b68a-5ad0945d79a9",
+  "workerId": "cursor-nov24-retained-staging-w16-o8",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "2ab75c2b7528292dc2dc432a0bcbece3c300ce27d47393323c9130a2048228f0",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-weishu-028-d79a9",
+  "phase": "dispatch_pending",
+  "extractionBytes": 159758,
+  "inputBlobWitness": {
+    "source": "0e30e4955f0e40c6fdd151f7bff530fc00d6c429",
+    "extraction": "2c627b96d8564ff587caef7979b8a3bc67c6e6b1",
+    "editorial": "7ba1ea0c171483b5287070574f78c9b6cf8edb0d",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:3ed84ac47d46937c1185728d5de41d160066ce125e89ebe9a24eb6a8db805c9b",
+    "extraction": "sha256:9341fd16a154eeeb68e2fc545e74fadb5a81374e0a6dd2242cbf1b551af0a740",
+    "editorial": "sha256:ae21137c80227f7dce18d3f7fdbbb37f4c882652ae740e64d167161e1cd59aae",
+    "dateAudit": null
+  },
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "workOrderPeople": 100,
+    "workOrderClaims": 453
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 23: Wei Cao, Mo Han, Liu Kuren",
+    "sourceTitleZh": "卷23 衛操 莫含 劉庫仁",
+    "sentenceCount": 283,
+    "translatedCount": 283,
+    "chineseUnits": 283,
+    "missingIdiomatic": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/weishu-028/date-packet.json",
+    "contentSha256": "sha256:a4f44d07b25a52e418b4c638f71631d77a8a59e557da344bce58d914ca232b26",
+    "command": "npm run people:dates:packet -- --book weishu --chapter 028 --out research/people/checkpoints/campaign-nov24-retained-staging/weishu-028/date-packet.json",
+    "itemCount": 247,
+    "peopleCount": 100,
+    "unitCount": 283,
+    "extractionHash": "sha256:3c1c4b668f4c5371bc2ca2b02018e1ef004917cca8378b81da5a5cd0ce2d9800",
+    "sourceHash": "sha256:9ea236f2b5bf42602e01716c1a99f23dbdf873498ca0308d71cbfdbe3edc778b"
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "path": "data/people/extractions/weishu/028.json",
+    "fileContentSha256": "sha256:9341fd16a154eeeb68e2fc545e74fadb5a81374e0a6dd2242cbf1b551af0a740",
+    "promptVersion": 7,
+    "reExtracted": false
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "path": "data/people/editorial-decisions/weishu/028.json",
+    "proposalCount": 7,
+    "status": "reviewed-with-applied-proposals",
+    "canonicalSourceReflection": true
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book weishu --chapter 028",
+    "peopleValidateSummary": "Scoped person data validation passed for weishu/028: 1 extraction(s), 100 local people, 593 mentions, 735 claims, 0 proposed repair(s), 6 applied repair(s), 7 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesScan": {
+      "command": "npm run people:dates:scan -- --book weishu --chapter 028",
+      "findings": 0,
+      "extractedChapters": 1
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book weishu --chapter 028",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "independentApprovalIssued": false
+    },
+    "chronologyStatus": "no-native-date-report",
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "substantiveFindings": "Retained staging owner pass on sealed three-part inputs (source, accepted extraction, accepted editorial); no data/people/date-audits/weishu/028.json exists. Full chapter read confirms literal and idiomatic English on every Chinese unit; native people:validate passed; people:dates:scan reports zero pre-audit diagnostics; sealed native date packet prepared at pinned extraction bytes for independent review. No definite English omission, concrete chronology contradiction, or source contradiction found requiring owner repair in this pass.",
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/weishu-028/date-packet.json",
+      "packetContentSha256": "sha256:a4f44d07b25a52e418b4c638f71631d77a8a59e557da344bce58d914ca232b26",
+      "nextGate": "independent-native-date-audit",
+      "recordCommand": "npm run people:dates:record -- --report <independent-audit-report.json>",
+      "notes": "Owner prepared candidate chronology packet only; must not self-approve via people:dates:record."
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending",
+      "nextGate": "independent-bounded-dossier-identity-review",
+      "notes": "Canonical identity evidence remains for a separate reviewer after date approval."
+    },
+    "independentReviewCompleted": false
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book weishu --chapter 028",
+    "datesVerify": "npm run people:dates:verify -- --book weishu --chapter 028",
+    "datesPacket": "npm run people:dates:packet -- --book weishu --chapter 028 --out research/people/checkpoints/campaign-nov24-retained-staging/weishu-028/date-packet.json",
+    "datesScan": "npm run people:dates:scan -- --book weishu --chapter 028"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry generation, deploy, or merge."
+}
