@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "kind": "jinshu-028-independent-chronology-delta",
+  "scope": {
+    "book": "jinshu",
+    "chapter": "028"
+  },
+  "reviewer": {
+    "name": "Jinshu 028 independent completion review",
+    "agentId": "bc-0dff1b5a-cee1-497c-a682-50af5e1e208b",
+    "independentOfExtractor": true
+  },
+  "source": {
+    "repairSourceCommit": "242c8f7ebdae4a022e6e6eebe97fe107e9130dd2",
+    "ownerPin": "288a641a9929f5c6bdfdb0254b026f865d1060ff",
+    "transportCommit": "b308ec3cd2c72d47fd2f828cf6cd388de9db0f0b",
+    "exactChronologyDeltaSha256": "sha256:20ea4c154b0dca63251891e8d029e99b222a2b99aedec262fb7e9d8a72e95052"
+  },
+  "sourceHash": "sha256:a5dc8b0f4394a4c894c5ad16a6bba51409aa189abc00c00f615e184001454c11",
+  "previousExtractionHash": "sha256:09c22c43b4e02c03f52efe856d085769956757d8b92c44d67575acc1f3344a17",
+  "currentExtractionHash": "sha256:b79c7db1ee43c3333ab98dee1e1d4f8edab83ca8f07c07d7cee08d230406729d",
+  "status": "approved",
+  "reviewedAt": "2026-11-24T07:35:00.000Z",
+  "reviewedUnits": [
+    "s0182",
+    "s0341"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-402",
+      "verdict": "supported",
+      "event": "At the Shitou affair the six armies routed; soldiers plundered the capital, reaching both palaces.",
+      "reason": "Current primary Chinese at s0341 states the Shitou episode, army rout, capital looting, and harm to both palaces without a reign-year clause on this unit. undatedSourceAttestation on p100 correctly mirrors that narrative instead of prior claim-403's unsupported 'Wang Dun's Shitou incident' wording that lacked 王敦 in this sentence.",
+      "evidence": [
+        {
+          "unit": "s0341",
+          "quote": "及石頭之事，六軍大潰，兵人抄掠京邑，爰及二宮。"
+        }
+      ]
+    }
+  ],
+  "personChecks": [
+    {
+      "id": "p100",
+      "verdict": "supported",
+      "event": "Delta person review for Wang Dun (p100): retain canonical chronology surface after removing erroneous duplicate p165 and re-homing the s0341 attestation.",
+      "reason": "p100 is the retained Wang Dun record (王敦) with explicit name evidence elsewhere in the chapter. Removing p165 eliminates a duplicate actor keyed to the same name without a Chinese personal-name witness on s0341. The new undated attestation on p100 matches the literal Chinese event; narrative identification of the 石頭之事 with Wang Dun is contextually supplied at s0182 but is not asserted in the s0341 attestation text.",
+      "evidence": [
+        {
+          "unit": "s0182",
+          "quote": "是年三月，王敦有石頭之變，二宮陵辱，大臣誅死，僭逾無上，故旱尤甚也。"
+        },
+        {
+          "unit": "s0341",
+          "quote": "及石頭之事，六軍大潰，兵人抄掠京邑，爰及二宮。"
+        }
+      ]
+    }
+  ],
+  "acceptedRemoved": {
+    "itemIds": [
+      "claim-403",
+      "hints-p165"
+    ],
+    "personIds": [
+      "p165"
+    ],
+    "unitAttributionRemovals": [
+      {
+        "unit": "s0341",
+        "personIds": [
+          "p165"
+        ]
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "delta-s0341-narrative",
+      "severity": "informational",
+      "summary": "s0341 primary Chinese is omen-interpretation prose, not a dated reign sentence.",
+      "evidence": [
+        {
+          "unit": "s0341",
+          "quote": "及石頭之事，六軍大潰，兵人抄掠京邑，爰及二宮。"
+        }
+      ]
+    },
+    {
+      "id": "delta-p100-p165-consolidation",
+      "severity": "informational",
+      "summary": "Unit s0341 dropped duplicate actor p165; the removed Wang Dun wording had been carried on p165 via claim-403 rather than a p100 unit tag. claim-402 on retained p100 re-homes an undated event that matches the Chinese without naming 王敦 in s0341.",
+      "evidence": [
+        {
+          "unit": "s0341",
+          "quote": "及石頭之事"
+        }
+      ]
+    },
+    {
+      "id": "delta-uncertainty-wang-dun-shitou",
+      "severity": "uncertainty",
+      "summary": "Cross-chapter identity for Wang Dun remains covered by separate native identity review; this delta only certifies that the undated s0341 attestation must not name Wang Dun where the sentence omits 王敦.",
+      "evidence": [
+        {
+          "unit": "s0182",
+          "quote": "王敦有石頭之變"
+        }
+      ]
+    }
+  ],
+  "priorAuditedReportPreserved": true,
+  "note": "Single delta witness only; does not rewrite data/people/date-audits/jinshu/028.json or alter prior audited report hashes."
+}
