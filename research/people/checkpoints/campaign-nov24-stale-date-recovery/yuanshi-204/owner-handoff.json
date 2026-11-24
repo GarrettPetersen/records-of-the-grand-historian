@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "kind": "stale-date-recovery-owner-handoff",
+  "scope": {
+    "book": "yuanshi",
+    "chapter": "204"
+  },
+  "ownerAgentId": "bc-8490c614-fab6-4384-8868-077febf76dfc",
+  "sourceRevision": "a8b5bf79f39c400f8adb2360f03d6aa6fa2f20d9",
+  "stagingBase": "3d546f4260e36d7982b921c8a25f613f66484100",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "sealedInputs": {
+    "gitBlobs": {
+      "source": "28f624903f59cafe69a18a0279f167790d71a786",
+      "extraction": "747451bb602b8da83d8048dde5acde031d9bad32",
+      "editorial": "67521a5a836e58bfc035559269b2e9aef7681268",
+      "dateAudit": "8fe8383c24bcee06529a908fe0ee41da2a56d273"
+    },
+    "semantic": {
+      "source": "sha256:5af8cc216db420748e9152adc5cd971945fd8661cab29f9577691356577aa92d",
+      "currentExtraction": "sha256:ab0429b34ea540222d5f0eb9a1ea831ba43da0ad26184dfb8b157a58c278b82b",
+      "sealedExtractionInReport": "sha256:c4f069576e4e3740474f66074cb7701ec7f59e9b77d860348827d38c8b88df57",
+      "editorial": "sha256:c180864f911ca7551c95d4e72fdcfa22ad0e663df5138b73ec7b6c35ac4864a6",
+      "dateAuditFile": "sha256:84892de9324cb103b9ca56fbd089d7ccf6488bf7a5e86f764d05805cd3e57f5e"
+    }
+  },
+  "historicalDateProof": {
+    "preservedPath": "data/people/date-audits/yuanshi/204.json",
+    "originalStatus": "audited",
+    "originalReviewedAt": "2026-09-29T04:03:52.153Z",
+    "sealedExtractionRecovery": {
+      "status": "sealed-extraction-recovered",
+      "commit": "c2bba84bd5db62f833253422f1813b8bb52af0ea",
+      "reportMatchesSealedExtractionHash": true,
+      "validateDateAuditReportOnSealedPacket": false,
+      "validateError": "Date approval retains invalid temporal geometry or reception ownership",
+      "note": "Historical proof bytes match recovered sealed extraction, but current validateDateAuditReport rejects the stored approvals under present reception/temporal-geometry rules. Do not rewrite report hashes; independent reviewer reconciles validator drift vs substantive defects."
+    }
+  },
+  "packetComparison": {
+    "sourceUnchanged": true,
+    "extractionChanged": true,
+    "counts": {
+      "sealed": {
+        "items": 107,
+        "people": 39,
+        "units": 99
+      },
+      "current": {
+        "items": 107,
+        "people": 39,
+        "units": 99
+      }
+    },
+    "unchangedItemCount": 106,
+    "addedItems": [],
+    "droppedItems": [],
+    "changedFactCount": 1,
+    "affectedItems": [
+      {
+        "itemId": "claim-161",
+        "personId": "p015",
+        "evidenceUnits": [
+          "s0030"
+        ],
+        "changeSummary": "Reception taxonomy only: posthumous-commemoration → retrospective-reference; western/sourceDate unchanged",
+        "before": {
+          "predicate": "event-participation",
+          "kind": "posthumous-commemoration",
+          "role": "honoree",
+          "action": "received a libation sacrifice from the National Academy",
+          "sourceDate": "仁宗即位…釋奠",
+          "westernYear": {
+            "era": "AD",
+            "year": 1311,
+            "precision": "year"
+          },
+          "westernInterval": null,
+          "westernBounds": null
+        },
+        "after": {
+          "predicate": "event-participation",
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "action": "received a libation sacrifice from the National Academy",
+          "sourceDate": "仁宗即位…釋奠",
+          "westernYear": {
+            "era": "AD",
+            "year": 1311,
+            "precision": "year"
+          },
+          "westernInterval": null,
+          "westernBounds": null
+        }
+      }
+    ]
+  },
+  "sourceOrEditorialDefects": [],
+  "unchangedProofReuseCandidate": {
+    "eligible": false,
+    "reason": "1 changed date/hint facts"
+  },
+  "identityAndEditorialContinuation": {
+    "reuseHistoricalEditorial": true,
+    "reuseHistoricalExtractionRecord": true,
+    "canonicalDataMutationInThisPass": "none",
+    "minimumIndependentDateContinuation": {
+      "gate": "focused-independent-date-reaudit",
+      "itemIds": [
+        "claim-161"
+      ],
+      "personIds": [
+        "p015"
+      ],
+      "instruction": "Re-read primary evidence for listed items only unless reviewer finds concrete contradiction elsewhere. Western conversions and sourceDate text are unchanged on all listed deltas; confirm reception reclassification does not alter chronology conclusions."
+    }
+  },
+  "scopedValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book yuanshi --chapter 204",
+      "status": "passed"
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book yuanshi --chapter 204",
+      "status": "stale-expected",
+      "note": "Exit code 1 confirms stale report fingerprint vs current extraction; historical report preserved."
+    },
+    "peopleDatesPacketRebuild": {
+      "command": "node scripts/people-date-audit.mjs packet --book yuanshi --chapter 204",
+      "status": "available"
+    }
+  },
+  "independentReviewCompleted": false,
+  "independentApprovalIssuedByOwner": false,
+  "substantiveFindings": "Extraction fingerprint stale after corpus reception repair; 1 date-packet items changed (posthumous-commemoration → retrospective-reference) with unchanged sourceDate/westernYear on every listed item. 106 items bitwise-identical in packet comparison.",
+  "nextGate": "independent-date-audit-reseal",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book yuanshi --chapter 204",
+    "verifyDatesStale": "npm run people:dates:verify -- --book yuanshi --chapter 204",
+    "recoverSealedExtraction": "git show c2bba84bd5db62f833253422f1813b8bb52af0ea:data/people/extractions/yuanshi/204.json"
+  }
+}
