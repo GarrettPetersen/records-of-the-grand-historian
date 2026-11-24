@@ -1,0 +1,261 @@
+{
+  "schemaVersion": 1,
+  "kind": "jinshu020-owner-identity-holds-handoff",
+  "generatedAt": "2026-11-24T08:20:00Z",
+  "pr": 5488,
+  "branch": "codex/cursor-glossary-nov24-2026-jinshu020",
+  "baseHead": "18a3879f80152439c2dfee5b411f8ea53aca1288",
+  "tip": null,
+  "independentReviewer": "bc-ca56fb16-d4fd-4ced-a2fb-3640376ab1df",
+  "planFingerprint": "sha256:bab94742b782991ae226bd516a959cdc67e19bb1199776a56348727d87a7ae5a",
+  "untouched": {
+    "extractionSha256": "da9a52f1bcd20bf9c87995b44705f50085e8bebd6065c19acdc9d0ee354b4b46",
+    "editorialDecisionsSha256": "bf110209c162bcb0f5a1ba7105a944ed9a73c730546256cf335cc6ab5413c635",
+    "extractionModified": false,
+    "sealedIndependentReviewPartsCopied": false
+  },
+  "caseCount": 4,
+  "cases": [
+    {
+      "caseId": "sha256:f545b4e2b1fd90c47e54df91b5be5ae4427530e02717e4af60f1ab20ca5d4d50",
+      "packetPart": "004",
+      "independentReviewSha256": "bc51b084f17c5b955fe0280314bdc6c698ddc1be72eb3b606d895405600d7624",
+      "independentReviewCommit": "420f71af231effe11cf8731c3ba61a43fb0fbd87",
+      "localPersonId": "jinshu:020:p279",
+      "canonicalPersonId": "per_0XX4WB91BHY0JBAX4GZB",
+      "membershipFingerprint": "sha256:965e964fe7d3a2f5c132473f6ffd990185c477844e9c371642b235c2edfc04a1",
+      "ownerOutcome": "exact-hold-confirmed",
+      "independentReason": "missingBlockingName; generic 李氏 without individuating Chinese on owned mentions.",
+      "primaryUnitsRead": [
+        "s0619",
+        "s0623",
+        "s0630",
+        "s0634",
+        "s0638",
+        "s0646"
+      ],
+      "inputWitnesses": [
+        {
+          "unitId": "s0619",
+          "quote": "李繁姊",
+          "zh": "咸康二年，零陵李繁姊先適南平郡陳詵為妻，產四子而遭賊。",
+          "role": "Distinct kinship label; not blocking 李氏 personal name on this line."
+        },
+        {
+          "unitId": "s0623",
+          "quote": "李亡",
+          "zh": "及李亡，詵疑制服，以事言征西大將軍庾亮府平議，時議亦往往異同。",
+          "role": "Mononym 李 in Chen Shen mourning debate; no 李氏."
+        },
+        {
+          "unitId": "s0634",
+          "quote": "李",
+          "zh": "李雖沒賊，尚有生冀，詵尋求之理不盡，而便娶妻，誠詵之短也。",
+          "role": "Same narrative thread; mononym only."
+        },
+        {
+          "unitId": "s0638",
+          "quote": "李鄙野人",
+          "zh": "李鄙野人，而能臨危請活姑命，險不忘順，可謂孝婦矣。",
+          "role": "Evaluative epithet; not a personal name form."
+        },
+        {
+          "unitId": "s0191",
+          "quote": "太皇太后李氏",
+          "zh": "隆安四年，孝武太皇太后李氏崩，疑所服。",
+          "role": "Different Li woman in chapter; must not supply blocking name for p279."
+        },
+        {
+          "unitId": "s0664",
+          "quote": "溫嶠前妻李氏",
+          "zh": "驃騎將軍溫嶠前妻李氏，在嶠微時便卒。",
+          "role": "Different Li woman in chapter; must not supply blocking name for p279."
+        }
+      ],
+      "issuesResolvedInProposedPatch": [
+        "Document per-unit Chinese tokens (李繁姊 / 李 / 李鄙野人) instead of blanket identity zh 李氏.",
+        "Clear empty zh personal-name mention rows until each owned surface quotes owned Chinese.",
+        "Flag possible multi-woman conflation inside p279 cluster for coordinator split review (no split applied)."
+      ],
+      "proposedPatch": {
+        "apply": false,
+        "kind": "exact-hold-with-witness-scaffold",
+        "preserveCanonicalMembership": true,
+        "extractionTargets": {
+          "personId": "p279",
+          "fields": {
+            "identityZh": {
+              "before": "李氏",
+              "after": null,
+              "note": "Remove blocking zh until unit-specific primary tokens are owned."
+            },
+            "mentions": "Add zh surfaces only where quoted: s0619 李繁姊; s0623/s0634 李."
+          }
+        }
+      },
+      "ambiguityForCoordinator": "Whether s0619 李繁姊 and s0623 及李亡 name one woman is narrative context only; do not resolve via catalog identity in this wave."
+    },
+    {
+      "caseId": "sha256:17f01c9154d2a8b9ad41fc063cf9bfa3ead28f06e9f18d78c13ff004f3fa58de",
+      "packetPart": "007",
+      "independentReviewSha256": "7edf253aff9889a3e0ac6c13980bd5eca99e544750ddc613408948ce84d36dbf",
+      "independentReviewCommit": "a115a2ac0583c1abd4ec9746d6647ce4601bf014",
+      "localPersonId": "jinshu:020:p018",
+      "canonicalPersonId": "per_40VAANFRPNFP2R3HAEKJ",
+      "membershipFingerprint": "sha256:2625559b4f6563e2f99854b18697bc987e547e50a6905c38b57d9c9730a05140",
+      "ownerOutcome": "exact-hold-confirmed",
+      "independentReason": "Owned units cite only 皇太后/太后 without 王元姬.",
+      "primaryUnitsRead": [
+        "s0030",
+        "s0038"
+      ],
+      "inputWitnesses": [
+        {
+          "unitId": "s0030",
+          "quote": "皇太后",
+          "zh": "惟陛下察納愚款，以慰皇太后之心。」",
+          "role": "Title only in Jin Wu mourning memorial exchange (s0015–s0038)."
+        },
+        {
+          "unitId": "s0038",
+          "quote": "太后",
+          "zh": "後居太后之喪亦如之。",
+          "role": "Generic title for later empress-dowager mourning rule; no personal name."
+        }
+      ],
+      "issuesResolvedInProposedPatch": [
+        "Stop treating 王元姬 as blocking zh identity until a cited owned line contains 王元姬.",
+        "Optional mention fix: prefer zh surface 皇太后 on s0030 (full title) rather than substring 太后 only."
+      ],
+      "proposedPatch": {
+        "apply": false,
+        "kind": "exact-hold",
+        "preserveCanonicalMembership": true,
+        "extractionTargets": {
+          "personId": "p018",
+          "fields": {
+            "identityZh": {
+              "before": "王元姬",
+              "after": null
+            },
+            "identityEn": {
+              "note": "Retain descriptive English only if tied to owned title tokens."
+            }
+          }
+        }
+      },
+      "ambiguityForCoordinator": "Historical identification as Wang Yuanji is plausible from chapter framing but is not primary-name evidence on owned lines."
+    },
+    {
+      "caseId": "sha256:0cff39c10e6b3ace77ec0d33b9bd479989e81bb681c0b83cdeea153b5c78dddd",
+      "packetPart": "010",
+      "independentReviewSha256": "5743bac3bafc21f9b2aa574fb8195652da0e5740bfe4439a59e70a37aade4f1d",
+      "independentReviewCommit": "f08574d862cabd2fa1cd7eaf42c730cf4b9afde8",
+      "localPersonId": "jinshu:020:p180",
+      "canonicalPersonId": "per_7D6R0DV2KN1VPGRDCAQZ",
+      "membershipFingerprint": "sha256:93d842c0eba8bac4b4b8d2feea2ac01e6bbdebb1d750ca0ff96b40b6a3c2ade2",
+      "ownerOutcome": "exact-hold-confirmed",
+      "independentReason": "Owned unit has paired reign shorthand 元、明 without 司馬紹.",
+      "primaryUnitsRead": [
+        "s0406"
+      ],
+      "inputWitnesses": [
+        {
+          "unitId": "s0406",
+          "quote": "元、明",
+          "zh": "江左初，元、明崇儉，且百度草創，山陵奉終，省約備矣。",
+          "role": "Paired reign shorthand; 明 is not a personal-name token for Sima Shao on this line."
+        }
+      ],
+      "relatedLocalRow": "jinshu:020:p179",
+      "relatedNote": "p179 (Sima Rui / 司馬睿) shares s0406 with the same 元 shorthand pattern; same hold class.",
+      "issuesResolvedInProposedPatch": [
+        "Remove unsupported zh 司馬紹 and English Sima Shao explicit personal-name claim from s0406.",
+        "Add zh surface 明 (reign shorthand) on s0406; retain undated attestation already on owned Chinese."
+      ],
+      "proposedPatch": {
+        "apply": false,
+        "kind": "exact-hold-with-title-repair-option",
+        "preserveCanonicalMembership": true,
+        "extractionTargets": {
+          "personId": "p180",
+          "fields": {
+            "identityZh": {
+              "before": "司馬紹",
+              "after": null
+            },
+            "surfaces": {
+              "addZh": {
+                "unitId": "s0406",
+                "exact": "明",
+                "note": "Shorthand in 元、明崇儉"
+              }
+            },
+            "removeClaims": [
+              "explicit en personal name Sima Shao from translation inference"
+            ]
+          }
+        }
+      },
+      "ambiguityForCoordinator": "Canonical Sima Shao assignment retained; primary-name proof must not be inferred from English translation or posthumous titles off-line."
+    },
+    {
+      "caseId": "sha256:1272c7bc591f2038443c058b057f950be3216969d88de407046013ba63a4a9ae",
+      "packetPart": "011",
+      "independentReviewSha256": "177ebaf1b0e1a7952e5a9d6d140aa53c26880adb169e04ba137ed90428b9efca",
+      "independentReviewCommit": "f08574d862cabd2fa1cd7eaf42c730cf4b9afde8",
+      "localPersonId": "jinshu:020:p103",
+      "canonicalPersonId": "per_885YPEAWNBZRXSMPDJYZ",
+      "membershipFingerprint": "sha256:5af2255185f21d8fd0036d421aba54fd7967fd7ec57d9fdd4218631e106c63da",
+      "ownerOutcome": "exact-hold-confirmed",
+      "independentReason": "Owned line cites 章皇太妃 without 周貴人.",
+      "primaryUnitsRead": [
+        "s0176"
+      ],
+      "inputWitnesses": [
+        {
+          "unitId": "s0176",
+          "quote": "章皇太妃",
+          "zh": "興寧元年，哀帝章皇太妃薨，帝欲服重。",
+          "role": "Primary title on owned line; explicit 興寧元年 calendar anchor (chronology separate from identity)."
+        }
+      ],
+      "issuesResolvedInProposedPatch": [
+        "Replace blocking identity zh 周貴人 with owned title 章皇太妃 on s0176.",
+        "Replace English surface keyed to substring “Emperor Ai’s” with zh 章皇太妃 witness.",
+        "Do not alter Xingning 1 / AD 363 attestation on s0176 in identity wave (chronology untouched here).",
+        "Keep unresolved whether 章皇太妃 equals Consort Dowager Zhou until 周貴人 appears on a cited line."
+      ],
+      "proposedPatch": {
+        "apply": false,
+        "kind": "partial-title-repair-hold-zhou-link",
+        "preserveCanonicalMembership": true,
+        "extractionTargets": {
+          "personId": "p103",
+          "fields": {
+            "identityZh": {
+              "before": "周貴人",
+              "after": "章皇太妃",
+              "note": "Source-backed title on s0176 only."
+            },
+            "identityEn": {
+              "before": "Consort Dowager Zhou",
+              "after": "Honored Imperial Consort Zhang (章皇太妃)"
+            },
+            "chronologyClaims": {
+              "action": "unchanged"
+            }
+          }
+        }
+      },
+      "ambiguityForCoordinator": "Likely mis-attribution to Zhou remains open; title repair does not prove Zhou identity."
+    }
+  ],
+  "summary": {
+    "exactHoldsConfirmed": 4,
+    "patchesApplied": 0,
+    "patchesProposed": 4,
+    "canonicalMembershipInvented": false,
+    "independentDecisionsRewritten": false
+  }
+}
