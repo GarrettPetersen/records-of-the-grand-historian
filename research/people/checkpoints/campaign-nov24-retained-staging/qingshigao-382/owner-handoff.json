@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "382"
+  },
+  "ownerAgentId": "bc-b9d14344-02da-4a1d-90f3-0d2ad7cb26ed",
+  "workerId": "cursor-nov24-retained-staging-w14-o2",
+  "idempotencyKey": "6a1ae710370ce9316ccbd0cffbb3d48550808f645cc26e5204d4b2cc88390a28",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "campaign": "campaign-nov24-retained-staging",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-382-b26ed",
+  "workOrderAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "01e94bf0d928ea73140edcba383ca2beb17c899f9b1fbf2999e2fc033bcdc87d",
+    "people": 51,
+    "claims": 420,
+    "promptVersion": 7,
+    "extractionBytes": 105838
+  },
+  "inputBlobWitness": {
+    "source": "9e823e4fe92ec3402dfe9772c53b1e02b199a6ca",
+    "extraction": "d4dd38b8eae189c907cef2545ad3a47209b87bd7",
+    "editorial": "f451ba79890e9204e16aa3975bfc35a20d024c3d"
+  },
+  "sealedInputs": {
+    "source": "sha256:b27baedf2025ea57ef42c81b074b8518a3747eb3feaf11fe79b3832d6acb64e5",
+    "extraction": "sha256:01e94bf0d928ea73140edcba383ca2beb17c899f9b1fbf2999e2fc033bcdc87d",
+    "editorial": "sha256:3f379da81b1ed5176246cc9acdd4e70779eea159a26a0df7506471d0b691b8f7"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 382 Biographies 169: Hu Song E, Bu Yan Tai, Sa Ying A",
+    "chineseUnits": 138,
+    "translatedCount": 138,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "sentenceCount": 138,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 105838
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-382/date-packet.json",
+    "contentSha256": "sha256:9223cde4ba57a440f6a95de0580a2230692e61a239f9c83481a2a86cab7fa5cf",
+    "fileSha256": "sha256:9223cde4ba57a440f6a95de0580a2230692e61a239f9c83481a2a86cab7fa5cf",
+    "dateHintChecks": 164,
+    "people": 51,
+    "sourceUnits": 138,
+    "scanFindings": 0
+  },
+  "extractionAndEditorialReuse": {
+    "extraction": "Retained pinned extraction at witness blob; no re-extraction.",
+    "editorial": "Retained 2 accepted editorial decision(s) at witness blob; no new owner repairs.",
+    "promptVersion": 7
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 382",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/382: 1 extraction(s), 51 local people, 234 mentions, 623 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateExtraction": "data/people/extractions/qingshigao/382.json: ok (51 people, 234 mentions, 623 claims, 376 candidates)",
+    "datesScan": {
+      "command": "npm run people:dates:scan -- --book qingshigao --chapter 382",
+      "findings": 0
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 382",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "no-native-date-report",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "editorialDecisionCount": 2,
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Sealed three-part inputs (source, extraction, editorial) witness-verified at pinned git blobs on staging 20b8d0e3. Full chapter read: all 138 Chinese units carry paired literal and idiomatic English. Accepted extraction and editorial repairs align with source citations. Native date packet prepared (164 checks); people:dates:scan reports zero structural findings. No definite English omission, extraction gap, or source contradiction found. Independent native date audit not performed by owner; chapter remains un-audited.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "remainingIndependentProofs": {
+    "dateAudit": {
+      "status": "missing",
+      "gate": "independent-native-date-audit",
+      "artifact": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-382/date-packet.json",
+      "packetSha256": "sha256:9223cde4ba57a440f6a95de0580a2230692e61a239f9c83481a2a86cab7fa5cf",
+      "note": "Owner prepared sealed packet only; people:dates:record requires a separate reviewer."
+    },
+    "identityReview": {
+      "status": "pending-after-date-approval",
+      "gate": "independent-bounded-dossier-identity-review",
+      "note": "Corpus identity resolution remains downstream of chronology approval."
+    }
+  },
+  "nextGate": "independent-native-date-audit",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 382",
+    "validateExtraction": "node scripts/validate-people-extraction.mjs data/people/extractions/qingshigao/382.json",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 382",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 382 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-382/date-packet.json",
+    "datesScan": "npm run people:dates:scan -- --book qingshigao --chapter 382"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry generation, deploy, or merge."
+}
