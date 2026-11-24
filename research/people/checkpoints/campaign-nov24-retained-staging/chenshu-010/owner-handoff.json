@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "chenshu",
+    "chapter": "010"
+  },
+  "ownerAgentId": "bc-bbaefc50-2f40-4364-aece-e97754880133",
+  "workerId": "cursor-nov24-retained-staging-w5-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "39dc761601a40cbb24700ca121def2ef3c7181f2724be3ed793248577ef9f7ee",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-chenshu-010-80133",
+  "inputBlobWitness": {
+    "source": "6189819967e5a7fed417e11fc5d2d1d6f4dd55b1",
+    "extraction": "abaeb2343ce2299bf6dd965e2914109c1ec6b74f",
+    "dateAudit": "403d5c7f9b4da1d2723df8e7cb4b3218bae2ffa0",
+    "editorial": "e41aad4c23a148c47aff772b651137086573f2c1"
+  },
+  "sealedInputs": {
+    "source": "sha256:9247d7cb65389139b0d81e0faa47ec8884c26aa61fc46f9b78a8a01d3af32e80",
+    "extraction": "sha256:890b81977dbaacc752583ce53b6e3653c30c4e8c863e4b6124d6600dee811ce2",
+    "dateAudit": "sha256:d368ed8ac93b099628a23bed185d5c6af8d0d69c539390cab48f5f1952f333ff",
+    "editorial": "sha256:6020bdf6a5146693cedb55a6721ef7f86eb5e5d653f45f6adaf698b28d467af0"
+  },
+  "sourceCoverage": {
+    "sentenceCount": 146,
+    "translatedCount": 146,
+    "bothFieldsComplete": true,
+    "missingUnits": []
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book chenshu --chapter 010",
+    "summary": "Scoped person data validation passed for chenshu/010: 1 extraction(s), 49 local people, 448 mentions, 423 claims, 0 proposed repair(s), 12 applied repair(s), 12 editorial decision(s).",
+    "extractionValidate": "data/people/extractions/chenshu/010.json: ok (49 people, 448 mentions, 423 claims, 525 candidates)",
+    "chronologyStatus": "research-blocked",
+    "dateAuditSummary": "Post-curation source review confirms both dated honors are explicit posthumous receptions and do not assert life activity. Cheng Wenji retains evidence through AD 576–579 and his explicit AD 579 prison death; AD 583 is absent. The genuine reception holds prevent date approval.",
+    "dateAuditFileSha256": "sha256:d368ed8ac93b099628a23bed185d5c6af8d0d69c539390cab48f5f1952f333ff",
+    "datesVerify": "research-blocked",
+    "datesVerifyExitCode": 0,
+    "extractionFingerprintMatchesAudit": true,
+    "currentExtractionHash": "sha256:ba43bf822844d9a12db0f06edbcdbed4c5ec4effaf496646aab8e80fcfa2bcaf",
+    "auditedExtractionHash": "sha256:ba43bf822844d9a12db0f06edbcdbed4c5ec4effaf496646aab8e80fcfa2bcaf",
+    "sourceFingerprintMatchesAudit": true
+  },
+  "substantiveFindings": "Post-curation source review confirms explicit posthumous receptions for p001 and p003; Cheng Wenji life evidence through AD 579 prison death is supported. Two genuine reception holds block audited status without inventing life endpoints.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "itemIds": [
+        "claim-64",
+        "p001"
+      ],
+      "taxonomy": "posthumous reception (not life chronology)",
+      "problem": "天嘉五年 imperial edict is posthumous reception without resolved life-date endpoint for p001.",
+      "nativeAction": "Retain source-specific posthumous hold.",
+      "evidenceUnits": [
+        "s0031"
+      ],
+      "clauseCitations": [
+        "天嘉五年，世祖又詔曰："
+      ]
+    },
+    {
+      "itemIds": [
+        "claim-81",
+        "p003"
+      ],
+      "taxonomy": "posthumous reception (not life chronology)",
+      "problem": "至德元年追贈 is posthumous reception; life chronology correctly ends AD 579 death.",
+      "nativeAction": "Retain source-specific posthumous hold.",
+      "evidenceUnits": [
+        "s0129"
+      ],
+      "clauseCitations": [
+        "至德元年，後主始知之，追贈散騎常侍。"
+      ]
+    }
+  ],
+  "chapterReady": false,
+  "preservedDateAuditBytes": true,
+  "independentReviewRepeated": false,
+  "canonicalEdits": false,
+  "authorEvidence": {
+    "method": "Verified staging git blobs; full source English scan; scoped people:validate and validate-people-extraction; people:dates:verify; retained native date-audit and editorial bytes without hash substitution.",
+    "completedAt": "2026-11-24T16:29:28.238Z"
+  },
+  "reproduce": {
+    "datesVerify": "npm run people:dates:verify -- --book chenshu --chapter 010",
+    "validateChapter": "npm run people:validate -- --book chenshu --chapter 010"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; no sealed input mutation, publication, or global registry."
+}
