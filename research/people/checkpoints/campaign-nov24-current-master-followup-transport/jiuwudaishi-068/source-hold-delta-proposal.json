@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "kind": "source-hold-delta-proposal",
+  "chapterKey": "jiuwudaishi/068",
+  "ownerAgentId": "bc-903d3892-ff92-4352-9793-5f42d1111401",
+  "provenance": {
+    "ownerBranch": "cursor/jiuwudaishi-068-followup-owner-1401",
+    "ownerHead": "2893b8e7556a2b62cc6da1278a2d238da9245d2c",
+    "reviewHead": "8e93f17a49ac7729d6b5269aa7addd42264515f3",
+    "reviewerAgentId": "bc-e05440ad-a0f9-4f16-b4e8-8e6197c3c9f1",
+    "pullRequest": 5614,
+    "independentReviewParts": [
+      "research/people/checkpoints/campaign-nov24-current-master-followup-transport/jiuwudaishi-068/independent-identity-report-part-002.json"
+    ]
+  },
+  "sealedInputs": {
+    "source": {
+      "path": "data/jiuwudaishi/068.json",
+      "sha256": "sha256:034dc0cf34d3690d805421a2a4534a094d8fcc4decc011a77ee926de30f24db7",
+      "gitBlob": "fe0f26c9a87dc7b459563bcdd94bfecc382d5c4c"
+    },
+    "extraction": {
+      "path": "data/people/extractions/jiuwudaishi/068.json",
+      "sha256": "sha256:a005f9567b1f730e9f12636b605e20ebb085698d2a5974a6e474da2df4d36803",
+      "gitBlob": "401dd7d9560118917450fc60eda94b489d59c11b"
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/jiuwudaishi/068.json",
+      "sha256": "sha256:5905602503078e77ef562f2cdac0b114b1c3f641f365a279a9a020eaaf01c80a",
+      "gitBlob": "8c29df9b708fa74c3b857f76a88e60aad4b71b74"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/jiuwudaishi/068.json",
+      "sha256": "sha256:f9cce499de021cf47ec4383e2482d1bfd00ccce2d7496aafc4521d8111fbdc2a",
+      "gitBlob": "a1b00e6e98a92d70fb46542f78aad51daf36d751"
+    }
+  },
+  "holdDeltas": [
+    {
+      "caseId": "sha256:369f50d5bbbe49da9b58ac38e3057c1e404bc87644f788d8e821922da7848b91",
+      "independentVerdict": "hold",
+      "canonicalPersonId": "per_48WNXH3B0D2CJDTKB9FP",
+      "localId": "jiuwudaishi:068:p003",
+      "diagnosis": "Local person p003 Emperor Yizong is grounded only in an English title-reference on s0002. Primary Chinese is 父逢，咸通中為秘書監，以才名著於時: it names father Feng and reign period 咸通中, not 懿宗 or any Han sovereign title. The idiomatic English translation inserts “under Emperor Yizong,” which editorializes reign context into a certifiable ruler record. Anchor 懿宗 elsewhere does not justify a chapter-local Chinese witness for this attributed membership.",
+      "sourceWitness": {
+        "book": "jiuwudaishi",
+        "chapter": "068",
+        "unitId": "s0002",
+        "zh": "父逢，咸通中為秘書監，以才名著於時。",
+        "enLiteral": "His father Feng, during the Xiantong reign period served as Director of the Palace Library, and was renowned in his time for literary talent.",
+        "enIdiomaticBefore": "His father Feng served as Director of the Palace Library under Emperor Yizong and was widely celebrated for his gifts as a writer."
+      },
+      "ownerDispositionError": "Owner retain-proposal treated English-only title-reference as sufficient for chapter-local Emperor Yizong attribution.",
+      "operations": [
+        {
+          "op": "remove-person",
+          "id": "p003",
+          "beforeName": [
+            "Emperor Yizong",
+            null,
+            null
+          ],
+          "reason": "No quotable Chinese identity surface for Emperor Yizong in this chapter; English title-reference alone must not mint a local person."
+        },
+        {
+          "op": "remove-claim-subject",
+          "subject": "p003",
+          "predicate": "name",
+          "before": {
+            "kind": "title",
+            "en": "Emperor Yizong"
+          },
+          "certainty": "explicit",
+          "evidence": [
+            "s0002"
+          ]
+        },
+        {
+          "op": "remove-claim-subject",
+          "subject": "p003",
+          "predicate": "title-reference",
+          "field": "en",
+          "surface": "Emperor Yizong",
+          "mentionUnit": "s0002"
+        },
+        {
+          "op": "remove-claim-subject",
+          "subject": "p003",
+          "predicate": "sex",
+          "evidence": [
+            "s0002"
+          ]
+        },
+        {
+          "op": "remove-claim-subject",
+          "subject": "p003",
+          "predicate": "attestation",
+          "beforeSourceDateText": "咸通中",
+          "certainty": "explicit-event-contextual-date",
+          "evidence": [
+            "s0002"
+          ],
+          "reason": "Reign interval belongs to father Feng’s service context, not an attestation naming Yizong as a person in this unit."
+        },
+        {
+          "op": "remove-claim-subject",
+          "subject": "p003",
+          "predicate": "role",
+          "roleId": "ruler",
+          "evidence": [
+            "s0002"
+          ]
+        }
+      ],
+      "translationRepairs": [
+        {
+          "book": "jiuwudaishi",
+          "chapter": "068",
+          "unitId": "s0002",
+          "field": "idiomatic",
+          "before": "His father Feng served as Director of the Palace Library under Emperor Yizong and was widely celebrated for his gifts as a writer.",
+          "after": "His father Feng, during the Xiantong reign period served as Director of the Palace Library, and was widely celebrated in his time for his gifts as a writer.",
+          "reason": "咸通中 is reign-period context in the Chinese; it does not name 懿宗. English must not supply a sovereign not present in the primary text."
+        }
+      ],
+      "identityDependencies": {
+        "preserveLocalIds": [
+          "jiuwudaishi:068:p001",
+          "jiuwudaishi:068:p002"
+        ],
+        "preserveCanonicalRecords": "Do not merge or split accepted Yizong dossiers anchored in other chapters; only remove this chapter’s unsupported local p003.",
+        "unaffectedCaseIds": "All other transport review cases and owner retain-proposals unchanged."
+      },
+      "chronologyImpact": "Sealed date-audit rows for p003 and hints-p003 become stale after extraction apply; 咸通中 chronology on father Feng (p002) remains on s0002 without attributing a ruler person.",
+      "holdRequiredUntilApply": true,
+      "holdRequiredAfterApply": false,
+      "rationaleAfterApply": "After removing p003 and aligning English with Chinese, no chapter-local record certifies Emperor Yizong from s0002; reign context stays non-person elliptic. Independent review can release the concrete over-attribution hold without a positive merge to anchor dossiers."
+    }
+  ],
+  "unaffectedRecords": "No canonical data mutation on this commit; checkpoint proposal only.",
+  "validation": {
+    "preApplyCommand": "npm run people:validate -- --book jiuwudaishi --chapter 068",
+    "preApplyPassed": true,
+    "preApplySummary": "Scoped person data validation passed on pinned extraction (79 local people); proposal artifact only.",
+    "postApplyNote": "Host must re-run scoped validation and identity review after independent application of operations and translation repair."
+  }
+}
