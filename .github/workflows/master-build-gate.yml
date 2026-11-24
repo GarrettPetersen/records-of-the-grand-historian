@@ -6,7 +6,7 @@ on:
       chapter:
         required: true
         type: choice
-        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '081-retain', '030-compose', '030-stage', '030-residual', '030-delta-certify', '063-new-identity', '081-new-identity', '085-new-identity', '123-new-identity', '063-certify', '081-certify', '085-certify', '123-certify', '063-stage', '081-stage', '085-stage', '123-stage']
+        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '081-retain', '094-retain', '030-compose', '030-stage', '030-residual', '030-delta-certify', '063-new-identity', '081-new-identity', '085-new-identity', '094-new-identity', '123-new-identity', '063-certify', '081-certify', '085-certify', '123-certify', '063-stage', '081-stage', '085-stage', '123-stage']
 permissions:
   contents: read
   actions: read
@@ -461,6 +461,7 @@ jobs:
           const latest = new Map(packet.authoredPartReceipts.map(r=>[r.part,r]));
           const parts = [...latest.values()].sort((a,b)=>a.part-b.part);
           const supported = ['pending-native-verification','native-verified'];
+          const retainedCases=chapter==='030'?207:packet.cases;
           assert(parts.length && parts.every((r,i)=>r.part===i+1 && (supported.includes(r.status)||(retain&&holdId&&r.part===11&&r.status==='chapter-hold'))), 'Authored parts incomplete or held for correction');
           assert(parts.every(r=>Number.isSafeInteger(r.rows) && r.rows>0 && r.holds===(retain&&holdId&&r.part===11?1:0)), 'Unexpected held decisions');
           const scope = {book:'jinshu',chapter};
@@ -473,7 +474,7 @@ jobs:
             assert.match(r.path,/^research\/people\/[a-zA-Z0-9][a-zA-Z0-9/.\-_]*\.json$/);
             assert(!r.path.split('/').includes('..'));
           }
-          fs.writeFileSync(process.env.RUNNER_TEMP+'/campaign-pins.json',JSON.stringify({scope,revision,actualAgentId,parts,retain,holdId,delta,packetRun:packet.runId,packetArtifactId:packet.artifactId,registryArtifactId:registryId}),{flag:'wx'});
+          fs.writeFileSync(process.env.RUNNER_TEMP+'/campaign-pins.json',JSON.stringify({scope,revision,actualAgentId,parts,retain,holdId,retainedCases,delta,packetRun:packet.runId,packetArtifactId:packet.artifactId,registryArtifactId:registryId}),{flag:'wx'});
           fs.appendFileSync(process.env.GITHUB_OUTPUT,Object.entries({revision,registry_revision:registryRevision,packet_run:packet.runId,packet_name:packetName,registry_run:registryRun,registry_name:registryName,chapter}).map(([k,v])=>k+'='+v+'\n').join(''));
           JS
       - uses: actions/download-artifact@v4
@@ -606,8 +607,8 @@ jobs:
           fs.writeFileSync(path.join(base,'recording-job.json'),JSON.stringify(job)+'\n',{flag:'wx'});
           if (pins.retain) {
             const components=parts.map(part=>captureIdentityProofComponent(source,fs.readFileSync(part.reportFile),fs.readFileSync(part.transportFile),part,receipt.transportPolicy,job).component);
-            assert.equal(components.length,pins.scope.chapter==='030'?42:65);
-            assert.equal(aggregate.reviews.length,pins.scope.chapter==='030'?207:397);
+            assert.equal(components.length,receipt.reviewParts.length);
+            assert.equal(aggregate.reviews.length,pins.retainedCases);
             assert.deepEqual(aggregate.reviews.filter(row=>row.verdict==='hold').map(row=>row.caseId),pins.holdId?[pins.holdId]:[]);
             const proof={schemaVersion:1,kind:'jinshu'+pins.scope.chapter+'-retained-identity-components',scope:pins.scope,sourceRevision:pins.revision,sourcePlan:packet.plan,components,holdId:pins.holdId,coverage:aggregate.reviews.length};
             fs.writeFileSync(path.join(temp,'recorded','retained-identity-components.json'),JSON.stringify(proof)+'\n',{flag:'wx'});
@@ -906,6 +907,18 @@ jobs:
           assert.equal(date.status,'audited');
           assert.equal(date.reviewer.agentId,entry.reviewerId);
           assert.equal(date.findings.length,0);
+          const retained=entry.retainedCapture;
+          if(retained){
+            const artifact=get('/actions/artifacts/'+retained.artifactId);
+            const run=get('/actions/runs/'+retained.runId);
+            assert.equal(artifact.name,'jinshu-'+chapter+'-retained-identity-components');
+            assert.equal(artifact.workflow_run.id,retained.runId);
+            assert.equal(artifact.expired,false);
+            assert.equal(run.conclusion,'success');
+            assert.equal(run.head_branch,'codex/cursor-glossary-nov24-2026');
+            assert.equal(artifact.digest,retained.artifactDigest);
+            fs.appendFileSync(process.env.GITHUB_OUTPUT,'retained_run='+retained.runId+'\nretained_name='+artifact.name+'\nretained_revision='+retained.sourceRevision+'\n');
+          }
           fs.appendFileSync(process.env.GITHUB_OUTPUT,'chapter='+chapter+'\nrevision='+entry.sourceRevision+'\n');
           JS
       - uses: actions/checkout@v4
@@ -917,10 +930,18 @@ jobs:
         with:
           node-version-file: .node-version
       - run: npm install --no-audit --no-fund
+      - uses: actions/download-artifact@v4
+        if: steps.pins.outputs.retained_run != ''
+        with:
+          name: ${{ steps.pins.outputs.retained_name }}
+          run-id: ${{ steps.pins.outputs.retained_run }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/retained
       - name: Build the source-pinned shared registry and native review transport
         env:
           REVISION: ${{ steps.pins.outputs.revision }}
           CHAPTER: ${{ steps.pins.outputs.chapter }}
+          RETAINED_REVISION: ${{ steps.pins.outputs.retained_revision }}
         shell: bash
         run: |
           set -euo pipefail
@@ -928,8 +949,20 @@ jobs:
           root="$GITHUB_WORKSPACE/data/people/generated/identity-dossiers"
           mkdir -p "$root" "$RUNNER_TEMP/registry-export"
           node scripts/people-identity-registry-worker.mjs --out "$root/$REVISION" --revision "$REVISION"
+          options=()
+          if [[ -n "$RETAINED_REVISION" ]]; then
+            (
+              cd "$RUNNER_TEMP/retained"
+              sha256sum -c SHA256SUMS
+              jq -e --arg rev "$RETAINED_REVISION" --arg chapter "$CHAPTER" \
+                '.sourceRevision == $rev and .scope == {book:"jinshu",chapter:$chapter}' retained-identity-components.json >/dev/null
+              jq '{schemaVersion:1,kind:"chapter-identity-review-composition",scope,plan:.sourcePlan,sourcePlans:[],components,selections:[]}' \
+                retained-identity-components.json > "$RUNNER_TEMP/retained-composition.json"
+            )
+            options+=(--retained-composition "$RUNNER_TEMP/retained-composition.json")
+          fi
           node scripts/prepare-people-chapter-identity.mjs --book jinshu --chapter "$CHAPTER" \
-            --source-revision "$REVISION" --registry "$root/$REVISION" --out "$RUNNER_TEMP/native-identity"
+            --source-revision "$REVISION" --registry "$root/$REVISION" --out "$RUNNER_TEMP/native-identity" "${options[@]}"
           cp "$root/$REVISION/manifest.json" "$RUNNER_TEMP/registry-export/manifest.json"
           tar -czf "$RUNNER_TEMP/registry-export/registry.tar.gz" -C "$root" "$REVISION"
           (cd "$RUNNER_TEMP/registry-export" && sha256sum registry.tar.gz manifest.json > SHA256SUMS)
