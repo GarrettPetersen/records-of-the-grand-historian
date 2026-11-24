@@ -1,0 +1,1903 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "hanshu",
+    "chapter": "001"
+  },
+  "ownerAgentId": "bc-0d0266f1-68e3-43d1-a588-b82c7850d884",
+  "worker": "cursor-nov24-retained-staging-w9-o2",
+  "idempotencyKey": "f7a291d673a43eac11f503874ab73f81468a43b3a83114a9af2298b9d0018c1a",
+  "stagingBase": "563c2b169c6545c78973ea44659fae65e4020601",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-hanshu-001-0d884",
+  "inputBlobWitness": {
+    "source": "b05b13a99fc301577da2e9564b753a2f33a65d19",
+    "extraction": "2c035e083c9f619b93343d9a3ee522c96073dc8b",
+    "dateAudit": "1edeb8c956fcf0d1d2a88f58d711f37e832b47ae",
+    "editorial": "c5a71c0fc445eb0bd09bbd326f90828e28040edc"
+  },
+  "sealedContentSha256": {
+    "source": "sha256:3ffac146590c899fbb2bc266af9d59cfaa8b92c5e922c18ebbbc774ef20da4aa",
+    "extraction": "sha256:9cb6ca5beb1cb1d8844f91532ed5546af239ee8d95247403e8d273d08d74e82d",
+    "dateAudit": "sha256:7769f4615969fe785cac6431c5c878419c36a73fb74ca71474e0787d5150e366",
+    "editorial": "sha256:eac07199474f6b3da9e674c15e70f9f32ff1d0f3185e7580eaaeb3e27829841f"
+  },
+  "dateAuditWitness": {
+    "state": "needs-revision",
+    "contentSha256": "7769f4615969fe785cac6431c5c878419c36a73fb74ca71474e0787d5150e366",
+    "findingGroups": 49,
+    "actionableItems": 49,
+    "reviewedAt": "2026-09-23T05:36:24.552Z",
+    "preservedIndependentReport": true,
+    "extractionHashAtAudit": "sha256:77fe6b2fce5017bdad9d716e82c626987e0bc95b4ebf9c91e1245e32069c9982",
+    "currentExtractionHash": "sha256:77fe6b2fce5017bdad9d716e82c626987e0bc95b4ebf9c91e1245e32069c9982"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 553,
+    "missingTranslation": 0,
+    "emptyEnglishField": 0,
+    "bothFieldsPresent": true,
+    "missingUnits": []
+  },
+  "validation": {
+    "peopleValidate": {
+      "passed": true,
+      "exitCode": 0,
+      "summary": "Scoped person data validation passed for hanshu/001: 1 extraction(s), 119 local people, 1606 mentions, 681 claims, 0 proposed repair(s), 4 applied repair(s), 6 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 115 person record(s) without an attestation, 85 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "extractionValidate": {
+      "command": "node scripts/validate-people-extraction.mjs /agent/repos/records-of-the-grand-historian/data/people/extractions/hanshu/001.json",
+      "summary": "data/people/extractions/hanshu/001.json: ok (119 people, 1606 mentions, 681 claims, 2086 candidates)"
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book hanshu --chapter 001",
+      "exitCode": 1,
+      "audited": false,
+      "status": "needs-revision",
+      "payload": {
+        "total": 1,
+        "counts": {
+          "needs-revision": 1
+        },
+        "chapters": [
+          {
+            "book": "hanshu",
+            "chapter": "001",
+            "status": "needs-revision",
+            "auditVersion": 1,
+            "reviewedAt": "2026-09-23T05:36:24.552Z",
+            "findings": 49
+          }
+        ]
+      }
+    },
+    "localPeople": 119
+  },
+  "substantiveFindings": "Full Chinese read (553 units); literal and idiomatic English complete on all units. Scoped extraction validate ok; people:validate passed. Date audit status needs-revision; native summary: Complete independent audit of all 553 Chinese units, 129 temporal or active-hint items, and 119 people. The ten existing date claims use defensible source precision, but the annals contain 99 person-unit omissions across 49 people: many explicit Qin and Han year/month events have No definite English omission or mistranslation identified in this owner pass. Retained independent date report bytes unchanged; scoped chronology proposals follow native finding actions only.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [
+    {
+      "findingIndex": 1,
+      "problem": "Chronologically explicit Hanshu annal entries name Qin Ershi but current date claims/hints omit their event chronology: s0527, s0205.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p016"
+      ],
+      "proposals": [
+        {
+          "itemId": "p016",
+          "personId": "p016",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 2 chronologically explicit source unit(s) naming Qin Ershi without corresponding temporal capture: s0527, s0205. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0527",
+              "quote": "秦二世元年秋七月，陳涉起蘄，至陳，自立為楚王，遣武臣、張耳、陳餘略趙地。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Qin Ershi",
+              "秦二世",
+              "Qín Èrshì"
+            ],
+            "activeHints": [
+              "first regnal year"
+            ]
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 2,
+      "problem": "Chronologically explicit Hanshu annal entries name Chen She but current date claims/hints omit their event chronology: s0527.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p014"
+      ],
+      "proposals": [
+        {
+          "itemId": "p014",
+          "personId": "p014",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Chen She without corresponding temporal capture: s0527. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0527",
+              "quote": "秦二世元年秋七月，陳涉起蘄，至陳，自立為楚王，遣武臣、張耳、陳餘略趙地。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Chen She",
+              "陳涉",
+              "Chén Shè"
+            ],
+            "activeHints": [
+              "first year of Qin Ershi"
+            ]
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 3,
+      "problem": "Chronologically explicit Hanshu annal entries name Wu Chen but current date claims/hints omit their event chronology: s0527, s0528.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p017"
+      ],
+      "proposals": [
+        {
+          "itemId": "p017",
+          "personId": "p017",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 2 chronologically explicit source unit(s) naming Wu Chen without corresponding temporal capture: s0527, s0528. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0527",
+              "quote": "秦二世元年秋七月，陳涉起蘄，至陳，自立為楚王，遣武臣、張耳、陳餘略趙地。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Wu Chen",
+              "武臣",
+              "Wǔ Chén"
+            ],
+            "activeHints": [
+              "first year of Qin Ershi"
+            ]
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 4,
+      "problem": "Chronologically explicit Hanshu annal entries name Zhang Er but current date claims/hints omit their event chronology: s0527, s0107.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p018"
+      ],
+      "proposals": [
+        {
+          "itemId": "p018",
+          "personId": "p018",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 2 chronologically explicit source unit(s) naming Zhang Er without corresponding temporal capture: s0527, s0107. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0527",
+              "quote": "秦二世元年秋七月，陳涉起蘄，至陳，自立為楚王，遣武臣、張耳、陳餘略趙地。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Zhang Er",
+              "張耳",
+              "Zhāng Ěr"
+            ],
+            "activeHints": [
+              "first year of Qin Ershi",
+              "gathers troops in Zhao"
+            ]
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 5,
+      "problem": "Chronologically explicit Hanshu annal entries name Chen Yu but current date claims/hints omit their event chronology: s0527.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p015"
+      ],
+      "proposals": [
+        {
+          "itemId": "p015",
+          "personId": "p015",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Chen Yu without corresponding temporal capture: s0527. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0527",
+              "quote": "秦二世元年秋七月，陳涉起蘄，至陳，自立為楚王，遣武臣、張耳、陳餘略趙地。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Chen Yu",
+              "陳餘",
+              "Chén Yú"
+            ],
+            "activeHints": [
+              "first year of Qin Ershi"
+            ]
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 6,
+      "problem": "Chronologically explicit Hanshu annal entries name Emperor Gaozu but current date claims/hints omit their event chronology: s0096, s0116, s0122, s0161, s0164, s0203, s0302, s0322, s0337, s0373, s0379, s0388, s0419, s0427, s0436.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p001"
+      ],
+      "proposals": [
+        {
+          "itemId": "p001",
+          "personId": "p001",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 15 chronologically explicit source unit(s) naming Emperor Gaozu without corresponding temporal capture: s0096, s0116, s0122, s0161, s0164, s0203, s0302, s0322, s0337, s0373, s0379, s0388, s0419, s0427, s0436. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0096",
+              "quote": "十一月，沛公引兵之薛。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Emperor Gaozu",
+              "高祖",
+              "Gāozǔ"
+            ],
+            "activeHints": [
+              "commands Han forces"
+            ]
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 7,
+      "problem": "Chronologically explicit Hanshu annal entries name Zhao Xie but current date claims/hints omit their event chronology: s0107.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p037"
+      ],
+      "proposals": [
+        {
+          "itemId": "p037",
+          "personId": "p037",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Zhao Xie without corresponding temporal capture: s0107. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0107",
+              "quote": "正月，張耳等立趙後趙歇為趙王。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Zhao Xie",
+              "趙歇",
+              "Zhào Xiē"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 8,
+      "problem": "Chronologically explicit Hanshu annal entries name Xiang Liang but current date claims/hints omit their event chronology: s0116, s0122.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p023"
+      ],
+      "proposals": [
+        {
+          "itemId": "p023",
+          "personId": "p023",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 2 chronologically explicit source unit(s) naming Xiang Liang without corresponding temporal capture: s0116, s0122. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0116",
+              "quote": "四月，項梁擊殺景駒、秦嘉，止薛，沛公往見之。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Xiang Liang",
+              "項梁",
+              "Xiàng Liáng"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 9,
+      "problem": "Chronologically explicit Hanshu annal entries name Qin Jia but current date claims/hints omit their event chronology: s0116.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p040"
+      ],
+      "proposals": [
+        {
+          "itemId": "p040",
+          "personId": "p040",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Qin Jia without corresponding temporal capture: s0116. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0116",
+              "quote": "四月，項梁擊殺景駒、秦嘉，止薛，沛公往見之。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Qin Jia",
+              "秦嘉",
+              "Qín Jiā"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 10,
+      "problem": "Chronologically explicit Hanshu annal entries name Jing Ju but current date claims/hints omit their event chronology: s0116.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p038"
+      ],
+      "proposals": [
+        {
+          "itemId": "p038",
+          "personId": "p038",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Jing Ju without corresponding temporal capture: s0116. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0116",
+              "quote": "四月，項梁擊殺景駒、秦嘉，止薛，沛公往見之。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Jing Ju",
+              "景駒",
+              "Jǐng Jū"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 11,
+      "problem": "Chronologically explicit Hanshu annal entries name Xiang Yu but current date claims/hints omit their event chronology: s0120, s0143, s0158, s0160, s0218, s0268, s0269, s0324, s0516, s0419, s0446, s0459.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p024"
+      ],
+      "proposals": [
+        {
+          "itemId": "p024",
+          "personId": "p024",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 12 chronologically explicit source unit(s) naming Xiang Yu without corresponding temporal capture: s0120, s0143, s0158, s0160, s0218, s0268, s0269, s0324, s0516, s0419, s0446, s0459. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0120",
+              "quote": "五月，項羽拔襄城還。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Xiang Yu",
+              "項羽",
+              "Xiàng Yǔ"
+            ],
+            "activeHints": [
+              "commands Chu forces"
+            ]
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 12,
+      "problem": "Chronologically explicit Hanshu annal entries name King Huai of Chu (Xiong Huai) but current date claims/hints omit their event chronology: s0122, s0143, s0268, s0324.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p043"
+      ],
+      "proposals": [
+        {
+          "itemId": "p043",
+          "personId": "p043",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 4 chronologically explicit source unit(s) naming King Huai of Chu (Xiong Huai) without corresponding temporal capture: s0122, s0143, s0268, s0324. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0122",
+              "quote": "六月，沛公如薛，與項梁共立楚懷王孫心為楚懷王。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "King Huai of Chu (Xiong Huai)",
+              "楚懷王熊槐",
+              "Chǔ Huáiwáng Xióng Huái"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 13,
+      "problem": "Chronologically explicit Hanshu annal entries name Tian Dan but current date claims/hints omit their event chronology: s0132.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p025"
+      ],
+      "proposals": [
+        {
+          "itemId": "p025",
+          "personId": "p025",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Tian Dan without corresponding temporal capture: s0132. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0132",
+              "quote": "八月，田榮立田儋子市為齊王。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Tian Dan",
+              "田儋",
+              "Tián Dān"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 14,
+      "problem": "Chronologically explicit Hanshu annal entries name Tian Rong but current date claims/hints omit their event chronology: s0132, s0158, s0309, s0516, s0353.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p027"
+      ],
+      "proposals": [
+        {
+          "itemId": "p027",
+          "personId": "p027",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 5 chronologically explicit source unit(s) naming Tian Rong without corresponding temporal capture: s0132, s0158, s0309, s0516, s0353. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0132",
+              "quote": "八月，田榮立田儋子市為齊王。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Tian Rong",
+              "田榮",
+              "Tián Róng"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 15,
+      "problem": "Chronologically explicit Hanshu annal entries name Tian Shi but current date claims/hints omit their event chronology: s0132, s0309.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p044"
+      ],
+      "proposals": [
+        {
+          "itemId": "p044",
+          "personId": "p044",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 2 chronologically explicit source unit(s) naming Tian Shi without corresponding temporal capture: s0132, s0309. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0132",
+              "quote": "八月，田榮立田儋子市為齊王。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Tian Shi",
+              "田市",
+              "Tián Shì"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 16,
+      "problem": "Chronologically explicit Hanshu annal entries name Lü Chen but current date claims/hints omit their event chronology: s0143.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p047"
+      ],
+      "proposals": [
+        {
+          "itemId": "p047",
+          "personId": "p047",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Lü Chen without corresponding temporal capture: s0143. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0143",
+              "quote": "後九月，懷王并呂臣、項羽軍自將之。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Lü Chen",
+              "呂臣",
+              "Lǚ Chén"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 17,
+      "problem": "Chronologically explicit Hanshu annal entries name Tian Du but current date claims/hints omit their event chronology: s0158.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p052"
+      ],
+      "proposals": [
+        {
+          "itemId": "p052",
+          "personId": "p052",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Tian Du without corresponding temporal capture: s0158. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0158",
+              "quote": "秦三年十月，齊將田都畔田榮，將兵助項羽救趙。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Tian Du",
+              "田都",
+              "Tián Dū"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 18,
+      "problem": "Chronologically explicit Hanshu annal entries name Song Yi but current date claims/hints omit their event chronology: s0160.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p046"
+      ],
+      "proposals": [
+        {
+          "itemId": "p046",
+          "personId": "p046",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Song Yi without corresponding temporal capture: s0160. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0160",
+              "quote": "十一月，項羽殺宋義，并其兵渡河，自立為上將軍，諸將黥布等皆屬。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Song Yi",
+              "宋義",
+              "Sòng Yì"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 19,
+      "problem": "Chronologically explicit Hanshu annal entries name Ying Bu but current date claims/hints omit their event chronology: s0160, s0324, s0411, s0503.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p053"
+      ],
+      "proposals": [
+        {
+          "itemId": "p053",
+          "personId": "p053",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 4 chronologically explicit source unit(s) naming Ying Bu without corresponding temporal capture: s0160, s0324, s0411, s0503. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0160",
+              "quote": "十一月，項羽殺宋義，并其兵渡河，自立為上將軍，諸將黥布等皆屬。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Ying Bu",
+              "英布",
+              "Yīng Bù"
+            ],
+            "activeHints": [
+              "gathers troops"
+            ]
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 20,
+      "problem": "Chronologically explicit Hanshu annal entries name Marquis of Gangwu but current date claims/hints omit their event chronology: s0161.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p054"
+      ],
+      "proposals": [
+        {
+          "itemId": "p054",
+          "personId": "p054",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Marquis of Gangwu without corresponding temporal capture: s0161. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0161",
+              "quote": "十二月，沛公引兵至栗，遇剛武侯，奪其軍四千餘人，并之，與魏將皇欣、武滿軍合，攻秦軍，破之。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Marquis of Gangwu",
+              "剛武侯",
+              "Gāngwǔ Hóu"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 21,
+      "problem": "Chronologically explicit Hanshu annal entries name Huang Xin but current date claims/hints omit their event chronology: s0161.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p055"
+      ],
+      "proposals": [
+        {
+          "itemId": "p055",
+          "personId": "p055",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Huang Xin without corresponding temporal capture: s0161. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0161",
+              "quote": "十二月，沛公引兵至栗，遇剛武侯，奪其軍四千餘人，并之，與魏將皇欣、武滿軍合，攻秦軍，破之。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Huang Xin",
+              "皇欣",
+              "Huáng Xīn"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 22,
+      "problem": "Chronologically explicit Hanshu annal entries name Wu Man but current date claims/hints omit their event chronology: s0161.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p056"
+      ],
+      "proposals": [
+        {
+          "itemId": "p056",
+          "personId": "p056",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Wu Man without corresponding temporal capture: s0161. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0161",
+              "quote": "十二月，沛公引兵至栗，遇剛武侯，奪其軍四千餘人，并之，與魏將皇欣、武滿軍合，攻秦軍，破之。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Wu Man",
+              "武滿",
+              "Wǔ Mǎn"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 23,
+      "problem": "Chronologically explicit Hanshu annal entries name Peng Yue but current date claims/hints omit their event chronology: s0164, s0446.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p059"
+      ],
+      "proposals": [
+        {
+          "itemId": "p059",
+          "personId": "p059",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 2 chronologically explicit source unit(s) naming Peng Yue without corresponding temporal capture: s0164, s0446. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0164",
+              "quote": "二月，沛公從碭北攻昌邑，遇彭越。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Peng Yue",
+              "彭越",
+              "Péng Yuè"
+            ],
+            "activeHints": [
+              "fights Chu"
+            ]
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 24,
+      "problem": "Chronologically explicit Hanshu annal entries name Yi but current date claims/hints omit their event chronology: s0180, s0195.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p064"
+      ],
+      "proposals": [
+        {
+          "itemId": "p064",
+          "personId": "p064",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 2 chronologically explicit source unit(s) naming Yi without corresponding temporal capture: s0180, s0195. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0180",
+              "quote": "六月，與南陽守齮戰犨東，大破之。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Yi",
+              "齮",
+              "Yǐ"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 25,
+      "problem": "Chronologically explicit Hanshu annal entries name Chen Hui but current date claims/hints omit their event chronology: s0195.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p065"
+      ],
+      "proposals": [
+        {
+          "itemId": "p065",
+          "personId": "p065",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Chen Hui without corresponding temporal capture: s0195. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0195",
+              "quote": "七月，南陽守齮降，封為殷侯，封陳恢千戶。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Chen Hui",
+              "陳恢",
+              "Chén Huī"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 26,
+      "problem": "Chronologically explicit Hanshu annal entries name Zhao Gao but current date claims/hints omit their event chronology: s0205.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p072"
+      ],
+      "proposals": [
+        {
+          "itemId": "p072",
+          "personId": "p072",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Zhao Gao without corresponding temporal capture: s0205. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0205",
+              "quote": "九月，趙高立二世兄子子嬰為秦王。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Zhao Gao",
+              "趙高",
+              "Zhào Gāo"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 27,
+      "problem": "Chronologically explicit Hanshu annal entries name Ziying but current date claims/hints omit their event chronology: s0205.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p073"
+      ],
+      "proposals": [
+        {
+          "itemId": "p073",
+          "personId": "p073",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Ziying without corresponding temporal capture: s0205. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0205",
+              "quote": "九月，趙高立二世兄子子嬰為秦王。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Ziying",
+              "子嬰",
+              "Zǐyīng"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 28,
+      "problem": "Chronologically explicit Hanshu annal entries name Han Guang but current date claims/hints omit their event chronology: s0314.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p028"
+      ],
+      "proposals": [
+        {
+          "itemId": "p028",
+          "personId": "p028",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Han Guang without corresponding temporal capture: s0314. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0314",
+              "quote": "秋八月，臧荼殺韓廣，并其地。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Han Guang",
+              "韓廣",
+              "Hán Guǎng"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 29,
+      "problem": "Chronologically explicit Hanshu annal entries name Zang Tu but current date claims/hints omit their event chronology: s0314.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p085"
+      ],
+      "proposals": [
+        {
+          "itemId": "p085",
+          "personId": "p085",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Zang Tu without corresponding temporal capture: s0314. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0314",
+              "quote": "秋八月，臧荼殺韓廣，并其地。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Zang Tu",
+              "臧荼",
+              "Zāng Tú"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 30,
+      "problem": "Chronologically explicit Hanshu annal entries name Empress Lü but current date claims/hints omit their event chronology: s0322, s0511.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p009"
+      ],
+      "proposals": [
+        {
+          "itemId": "p009",
+          "personId": "p009",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 2 chronologically explicit source unit(s) naming Empress Lü without corresponding temporal capture: s0322, s0511. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0322",
+              "quote": "九月，漢王遣將軍薛歐、王吸出武關，因王陵兵，從南陽迎太公、呂后於沛。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Empress Lü",
+              "呂后",
+              "Lǚ Zhì"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 31,
+      "problem": "Chronologically explicit Hanshu annal entries name Xue Ou but current date claims/hints omit their event chronology: s0322.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p090"
+      ],
+      "proposals": [
+        {
+          "itemId": "p090",
+          "personId": "p090",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Xue Ou without corresponding temporal capture: s0322. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0322",
+              "quote": "九月，漢王遣將軍薛歐、王吸出武關，因王陵兵，從南陽迎太公、呂后於沛。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Xue Ou",
+              "薛歐",
+              "Xuē Ōu"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 32,
+      "problem": "Chronologically explicit Hanshu annal entries name Wang Xi but current date claims/hints omit their event chronology: s0322.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p089"
+      ],
+      "proposals": [
+        {
+          "itemId": "p089",
+          "personId": "p089",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Wang Xi without corresponding temporal capture: s0322. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0322",
+              "quote": "九月，漢王遣將軍薛歐、王吸出武關，因王陵兵，從南陽迎太公、呂后於沛。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Wang Xi",
+              "王吸",
+              "Wáng Xī"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 33,
+      "problem": "Chronologically explicit Hanshu annal entries name Wang Ling but current date claims/hints omit their event chronology: s0322.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p067"
+      ],
+      "proposals": [
+        {
+          "itemId": "p067",
+          "personId": "p067",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Wang Ling without corresponding temporal capture: s0322. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0322",
+              "quote": "九月，漢王遣將軍薛歐、王吸出武關，因王陵兵，從南陽迎太公、呂后於沛。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Wang Ling",
+              "王陵",
+              "Wáng Líng"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 34,
+      "problem": "Chronologically explicit Hanshu annal entries name Taigong but current date claims/hints omit their event chronology: s0322, s0511.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p003"
+      ],
+      "proposals": [
+        {
+          "itemId": "p003",
+          "personId": "p003",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 2 chronologically explicit source unit(s) naming Taigong without corresponding temporal capture: s0322, s0511. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0322",
+              "quote": "九月，漢王遣將軍薛歐、王吸出武關，因王陵兵，從南陽迎太公、呂后於沛。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Taigong",
+              "太公",
+              "Tàigōng"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 35,
+      "problem": "Chronologically explicit Hanshu annal entries name Xin, King of Han but current date claims/hints omit their event chronology: s0332.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p091"
+      ],
+      "proposals": [
+        {
+          "itemId": "p091",
+          "personId": "p091",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Xin, King of Han without corresponding temporal capture: s0332. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0332",
+              "quote": "十一月，立韓太尉信為韓王。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Xin, King of Han",
+              "韓王信",
+              "Hán Wáng Xìn"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 36,
+      "problem": "Chronologically explicit Hanshu annal entries name Wei Bao but current date claims/hints omit their event chronology: s0337, s0388, s0401.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p048"
+      ],
+      "proposals": [
+        {
+          "itemId": "p048",
+          "personId": "p048",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 3 chronologically explicit source unit(s) naming Wei Bao without corresponding temporal capture: s0337, s0388, s0401. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0337",
+              "quote": "三月，漢王自臨晉渡河，魏王豹降，將兵從。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Wei Bao",
+              "魏豹",
+              "Wèi Bào"
+            ],
+            "activeHints": [
+              "defends Xingyang"
+            ]
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 37,
+      "problem": "Chronologically explicit Hanshu annal entries name Tian Heng but current date claims/hints omit their event chronology: s0353.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p026"
+      ],
+      "proposals": [
+        {
+          "itemId": "p026",
+          "personId": "p026",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Tian Heng without corresponding temporal capture: s0353. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0353",
+              "quote": "夏四月，田榮弟橫收得數萬人，立榮子廣為齊王。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Tian Heng",
+              "田橫",
+              "Tián Héng"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 38,
+      "problem": "Chronologically explicit Hanshu annal entries name Tian Guang but current date claims/hints omit their event chronology: s0353, s0492.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p095"
+      ],
+      "proposals": [
+        {
+          "itemId": "p095",
+          "personId": "p095",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 2 chronologically explicit source unit(s) naming Tian Guang without corresponding temporal capture: s0353, s0492. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0353",
+              "quote": "夏四月，田榮弟橫收得數萬人，立榮子廣為齊王。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Tian Guang",
+              "田廣",
+              "Tián Guǎng"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 39,
+      "problem": "Chronologically explicit Hanshu annal entries name Xiao He but current date claims/hints omit their event chronology: s0373.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p008"
+      ],
+      "proposals": [
+        {
+          "itemId": "p008",
+          "personId": "p008",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Xiao He without corresponding temporal capture: s0373. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0373",
+              "quote": "五月，漢王屯滎陽，蕭何發關中老弱未傅者悉詣軍。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Xiao He",
+              "蕭何",
+              "Xiāo Hé"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 40,
+      "problem": "Chronologically explicit Hanshu annal entries name Li Yiji but current date claims/hints omit their event chronology: s0388.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p060"
+      ],
+      "proposals": [
+        {
+          "itemId": "p060",
+          "personId": "p060",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Li Yiji without corresponding temporal capture: s0388. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0388",
+              "quote": "秋八月，漢王如滎陽，謂酈食其曰：「緩頰往說魏王豹，能下之，以魏地萬戶封生。」"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Li Yiji",
+              "酈食其",
+              "Lì Yìjī"
+            ],
+            "activeHints": [
+              "persuades Tian Guang"
+            ]
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 41,
+      "problem": "Chronologically explicit Hanshu annal entries name Han Xin but current date claims/hints omit their event chronology: s0401, s0464, s0492, s0502.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p086"
+      ],
+      "proposals": [
+        {
+          "itemId": "p086",
+          "personId": "p086",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 4 chronologically explicit source unit(s) naming Han Xin without corresponding temporal capture: s0401, s0464, s0492, s0502. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0401",
+              "quote": "九月，信等虜豹，傳詣滎陽。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Han Xin",
+              "韓信",
+              "Hán Xìn"
+            ],
+            "activeHints": [
+              "commands Han forces",
+              "conquers Qi"
+            ]
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 42,
+      "problem": "Chronologically explicit Hanshu annal entries name Sui He but current date claims/hints omit their event chronology: s0411.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p098"
+      ],
+      "proposals": [
+        {
+          "itemId": "p098",
+          "personId": "p098",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Sui He without corresponding temporal capture: s0411. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0411",
+              "quote": "十二月，布與隨何間行歸漢。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Sui He",
+              "隨何",
+              "Suí Hé"
+            ],
+            "activeHints": []
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 43,
+      "problem": "Chronologically explicit Hanshu annal entries name Yuan Sheng but current date claims/hints omit their event chronology: s0436.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p109"
+      ],
+      "proposals": [
+        {
+          "itemId": "p109",
+          "personId": "p109",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Yuan Sheng without corresponding temporal capture: s0436. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0436",
+              "quote": "轅生說漢王曰：「漢與楚相距滎陽數歲，漢常困。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Yuan Sheng",
+              "轅生",
+              "Yuán Shēng"
+            ],
+            "activeHints": [
+              "advises Liu Bang"
+            ]
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 44,
+      "problem": "Chronologically explicit Hanshu annal entries name Zhou Ke but current date claims/hints omit their event chronology: s0446.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p108"
+      ],
+      "proposals": [
+        {
+          "itemId": "p108",
+          "personId": "p108",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Zhou Ke without corresponding temporal capture: s0446. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0446",
+              "quote": "六月，羽已破走彭越，聞漢復軍成皋，乃引兵西拔滎陽城，生得周苛。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Zhou Ke",
+              "周苛",
+              "Zhōu Kē"
+            ],
+            "activeHints": [
+              "defends Xingyang"
+            ]
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 45,
+      "problem": "Chronologically explicit Hanshu annal entries name Cao Jiu but current date claims/hints omit their event chronology: s0459.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p116"
+      ],
+      "proposals": [
+        {
+          "itemId": "p116",
+          "personId": "p116",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Cao Jiu without corresponding temporal capture: s0459. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0459",
+              "quote": "九月，羽謂海春侯大司馬曹咎曰：「謹守成皋。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Cao Jiu",
+              "曹咎",
+              "Cáo Jiù"
+            ],
+            "activeHints": [
+              "defends Chenggao"
+            ]
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 46,
+      "problem": "Chronologically explicit Hanshu annal entries name Kuai Tong but current date claims/hints omit their event chronology: s0464.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p117"
+      ],
+      "proposals": [
+        {
+          "itemId": "p117",
+          "personId": "p117",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Kuai Tong without corresponding temporal capture: s0464. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0464",
+              "quote": "四年冬十月，韓信用蒯通計，襲破齊。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Kuai Tong",
+              "蒯通",
+              "Kuǎi Tōng"
+            ],
+            "activeHints": [
+              "advises Han Xin"
+            ]
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 47,
+      "problem": "Chronologically explicit Hanshu annal entries name Guan Ying but current date claims/hints omit their event chronology: s0492.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p099"
+      ],
+      "proposals": [
+        {
+          "itemId": "p099",
+          "personId": "p099",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Guan Ying without corresponding temporal capture: s0492. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0492",
+              "quote": "十一月，韓信與灌嬰擊破楚軍，殺楚將龍且，追至城陽，虜齊王廣。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Guan Ying",
+              "灌嬰",
+              "Guàn Yīng"
+            ],
+            "activeHints": [
+              "fights Chu"
+            ]
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 48,
+      "problem": "Chronologically explicit Hanshu annal entries name Long Ju but current date claims/hints omit their event chronology: s0492.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p104"
+      ],
+      "proposals": [
+        {
+          "itemId": "p104",
+          "personId": "p104",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Long Ju without corresponding temporal capture: s0492. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0492",
+              "quote": "十一月，韓信與灌嬰擊破楚軍，殺楚將龍且，追至城陽，虜齊王廣。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Long Ju",
+              "龍且",
+              "Lóng Jū"
+            ],
+            "activeHints": [
+              "commands Chu relief force"
+            ]
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 49,
+      "problem": "Chronologically explicit Hanshu annal entries name Zhang Liang but current date claims/hints omit their event chronology: s0502.",
+      "action": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+      "itemIds": [
+        "p041"
+      ],
+      "proposals": [
+        {
+          "itemId": "p041",
+          "personId": "p041",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 chronologically explicit source unit(s) naming Zhang Liang without corresponding temporal capture: s0502. The current extraction cannot be approved while these dated events are omitted.",
+          "evidence": [
+            {
+              "unit": "s0502",
+              "quote": "春二月，遣張良操印，立韓信為齊王。"
+            }
+          ],
+          "before": {
+            "note": "Current extraction lacks source-backed temporal claims/active hints for annal-dated units named in the audit.",
+            "personName": [
+              "Zhang Liang",
+              "張良",
+              "Zhāng Liáng"
+            ],
+            "activeHints": [
+              "advises Liu Bang"
+            ]
+          },
+          "after": {
+            "direction": "Repair the extraction with source-backed temporal claims or active hints for each listed unit, preserve reign/year wording and event ownership, rebuild the packet, then obtain a fresh independent full-chapter audit.",
+            "note": "Add only source-backed temporal material for listed units; do not invent precision beyond Chinese annal wording."
+          }
+        }
+      ]
+    }
+  ],
+  "distinctHolds": [
+    {
+      "kind": "date-audit-needs-revision",
+      "summary": "Native date audit retains 49 finding group(s) and 0 actionable scoped item(s).",
+      "actionableItemIds": [
+        "p016",
+        "p014",
+        "p017",
+        "p018",
+        "p015",
+        "p001",
+        "p037",
+        "p023",
+        "p040",
+        "p038",
+        "p024",
+        "p043",
+        "p025",
+        "p027",
+        "p044",
+        "p047",
+        "p052",
+        "p046",
+        "p053",
+        "p054",
+        "p055",
+        "p056",
+        "p059",
+        "p064",
+        "p065",
+        "p072",
+        "p073",
+        "p028",
+        "p085",
+        "p009",
+        "p090",
+        "p089",
+        "p067",
+        "p003",
+        "p091",
+        "p048",
+        "p026",
+        "p095",
+        "p008",
+        "p060",
+        "p086",
+        "p098",
+        "p109",
+        "p108",
+        "p116",
+        "p117",
+        "p099",
+        "p104",
+        "p041"
+      ],
+      "preservedAuditBytes": true,
+      "auditContentSha256": "7769f4615969fe785cac6431c5c878419c36a73fb74ca71474e0787d5150e366"
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book hanshu --chapter 001",
+    "validateDates": "npm run people:dates:verify -- --book hanshu --chapter 001"
+  },
+  "notes": "Owner handoff preserves sealed date-audit bytes; proposals carry forward native finding actions without re-approval. [CF-Pages-Skip]"
+}
