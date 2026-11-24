@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "sanguozhi",
+    "chapter": "037"
+  },
+  "ownerAgentId": "bc-7e809800-d0e9-44b0-a476-f02c2382016d",
+  "workerId": "cursor-nov24-retained-staging-w17-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "a896c58fc0e99898964d3fecf1bd33ebf4467b28b6d71670c9e55474f0d60a5a",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-sanguozhi-037-2016d",
+  "inputBlobWitness": {
+    "source": "dfec6deb948b5a513a3754726641ac1da48e9a7b",
+    "extraction": "cd746a68cb8a568eec06498ca6bf2c92cd69b9fe",
+    "editorial": "86866f14291ca00f99bd085f14e1f83ba433d541"
+  },
+  "sealedInputs": {
+    "source": "sha256:a6f236c25da0a71c37e1289da94e3a1db658d420f775fad758aa141da89ffee8",
+    "extraction": "sha256:0446b9e34987abe0b02631c0b11bc624a8c897c9f477e157ea72a7061aae59ac",
+    "editorial": "sha256:65fe326037cb203c2bb25d02b26f57fc9daccc61669072a0f229873372a90564"
+  },
+  "sourceExtractionSha256": "sha256:0446b9e34987abe0b02631c0b11bc624a8c897c9f477e157ea72a7061aae59ac",
+  "extractionAndEditorialReuse": {
+    "promptVersion": 7,
+    "extractionBytes": 173891,
+    "extractionReextracted": false,
+    "editorialReopened": false,
+    "appliedEditorialDecisionCount": 10
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 37: Book of Shu 7: Biographies of Pang Tong and Fa Zheng",
+    "chineseUnits": 239,
+    "translatedCount": 239,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "dispatchPeople": 98,
+    "dispatchClaims": 519
+  },
+  "sealedNativeDatePacket": {
+    "artifactPath": "research/people/checkpoints/campaign-nov24-retained-staging/sanguozhi-037/sealed-date-packet.json",
+    "contentSha256": "sha256:f53cb587d56cfb80c46881eb4c8bcd3224bf4017cd68633b473fb8e807e03910",
+    "sourceHash": "sha256:e3dc9f4d70a32a091b8d24fe90dd5222adc7aeccfe476d497d019cb9ed71f99f",
+    "extractionHash": "sha256:9b2b63f5df0060ee55db832802ad5ca6bef9ae1b1b394236dd4c6bf5fdda9498",
+    "auditVersion": 1,
+    "dateHintCheckCount": 265,
+    "peopleCount": 98,
+    "unitCount": 239,
+    "buildCommand": "npm run people:dates:packet -- --book sanguozhi --chapter 037 --out research/people/checkpoints/campaign-nov24-retained-staging/sanguozhi-037/sealed-date-packet.json"
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book sanguozhi --chapter 037",
+    "peopleValidateSummary": "Scoped person data validation passed for sanguozhi/037: 1 extraction(s), 98 local people, 741 mentions, 920 claims, 0 proposed repair(s), 10 applied repair(s), 10 editorial decision(s), 1 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book sanguozhi --chapter 037",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "findings": null,
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "candidate-packet-prepared",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "editorialDecisionCount": 10,
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained staging owner pass on sealed three-part inputs (source, extraction, editorial) at pinned git blobs on staging 20b8d0e3cd33. Full chapter read: 239 Chinese units with paired literal and idiomatic English on every sentence-bearing unit; extraction prompt v7 and 10 accepted editorial repairs reused without re-extraction or self-approved date audit. people:validate passes scoped; native date packet sealed at f53cb587d56c… for independent review (265 temporal/hint checks, 98 people). No definite English omission or source contradiction found; undated attestations retained where source supports them.",
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "gate": "independent-native-date-audit",
+      "status": "missing",
+      "requiredArtifact": "data/people/date-audits/sanguozhi/037.json",
+      "candidatePacketSha256": "sha256:f53cb587d56cfb80c46881eb4c8bcd3224bf4017cd68633b473fb8e807e03910",
+      "recordCommand": "npm run people:dates:record -- --book sanguozhi --chapter 037",
+      "notes": "Owner prepared sealed-date-packet.json only; people:dates:record and independent reviewer approval still required."
+    },
+    "identity": {
+      "gate": "independent-final-chapter-and-canonical-identity-review",
+      "status": "pending",
+      "notes": "Reuse current extraction and editorial decisions; bounded dossier review after date approval."
+    }
+  },
+  "distinctHolds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentApprovalIssued": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book sanguozhi --chapter 037",
+    "datesVerify": "npm run people:dates:verify -- --book sanguozhi --chapter 037",
+    "rebuildDatePacket": "npm run people:dates:packet -- --book sanguozhi --chapter 037 --out research/people/checkpoints/campaign-nov24-retained-staging/sanguozhi-037/sealed-date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry build, deploy, or merge."
+}

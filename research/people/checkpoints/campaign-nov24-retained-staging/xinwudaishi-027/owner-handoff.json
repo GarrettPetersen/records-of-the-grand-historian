@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "027"
+  },
+  "ownerAgentId": "bc-7e809800-d0e9-44b0-a476-f02c2382016d",
+  "workerId": "cursor-nov24-retained-staging-w17-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "a896c58fc0e99898964d3fecf1bd33ebf4467b28b6d71670c9e55474f0d60a5a",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-xinwudaishi-027-2016d",
+  "inputBlobWitness": {
+    "source": "b78e799aab88e1a7ab17a0ac81d785117498b74b",
+    "extraction": "9bb3e6677f71541e373095d7f95d9d85ef747a5c",
+    "editorial": "547203c94c7fff200e4adffb1fe89298d4d322fa"
+  },
+  "sealedInputs": {
+    "source": "sha256:ad17481f07a0229c423b710bd0034192be5b3efaad321aa2d0b5c3cdcce1d597",
+    "extraction": "sha256:5fea5ac162fe7a80af2316268b7fd2466ab744c71ffa5393edfa7d0fe5ea3673",
+    "editorial": "sha256:1a4e49e658e21f95f40e4cebfba880a4a71f701ef0a047f946a023fea447a60e"
+  },
+  "sourceExtractionSha256": "sha256:5fea5ac162fe7a80af2316268b7fd2466ab744c71ffa5393edfa7d0fe5ea3673",
+  "extractionAndEditorialReuse": {
+    "promptVersion": 7,
+    "extractionBytes": 172010,
+    "extractionReextracted": false,
+    "editorialReopened": false,
+    "appliedEditorialDecisionCount": 21
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 27 Later Tang Biographies 7: Zhu Hongzhao, Liu Yanlang, Kang Sili, Kang Yicheng, Yao Yanchou",
+    "chineseUnits": 207,
+    "translatedCount": 207,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "dispatchPeople": 83,
+    "dispatchClaims": 620
+  },
+  "sealedNativeDatePacket": {
+    "artifactPath": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-027/sealed-date-packet.json",
+    "contentSha256": "sha256:20f051c23924888a220433bb8c8540d5fa7739d2858ea1cc1bc22a4b63a54a99",
+    "sourceHash": "sha256:0e0fd519de9cf020419849c19d36c6b8c5c47e39bdc323e31c530683212366a8",
+    "extractionHash": "sha256:28daeb38b2aa2f4bbaa8ee1b5b02a88c60c006bda3ad9275f163401da074227c",
+    "auditVersion": 1,
+    "dateHintCheckCount": 231,
+    "peopleCount": 83,
+    "unitCount": 207,
+    "buildCommand": "npm run people:dates:packet -- --book xinwudaishi --chapter 027 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-027/sealed-date-packet.json"
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book xinwudaishi --chapter 027",
+    "peopleValidateSummary": "Scoped person data validation passed for xinwudaishi/027: 1 extraction(s), 83 local people, 739 mentions, 920 claims, 0 proposed repair(s), 21 applied repair(s), 21 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book xinwudaishi --chapter 027",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "findings": null,
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "candidate-packet-prepared",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "editorialDecisionCount": 21,
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained staging owner pass on sealed three-part inputs (source, extraction, editorial) at pinned git blobs on staging 20b8d0e3cd33. Full chapter read: 207 Chinese units with paired literal and idiomatic English on every sentence-bearing unit; extraction prompt v7 and 21 accepted editorial repairs reused without re-extraction or self-approved date audit. people:validate passes scoped; native date packet sealed at 20f051c23924… for independent review (231 temporal/hint checks, 83 people). No definite English omission or source contradiction found; undated attestations retained where source supports them.",
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "gate": "independent-native-date-audit",
+      "status": "missing",
+      "requiredArtifact": "data/people/date-audits/xinwudaishi/027.json",
+      "candidatePacketSha256": "sha256:20f051c23924888a220433bb8c8540d5fa7739d2858ea1cc1bc22a4b63a54a99",
+      "recordCommand": "npm run people:dates:record -- --book xinwudaishi --chapter 027",
+      "notes": "Owner prepared sealed-date-packet.json only; people:dates:record and independent reviewer approval still required."
+    },
+    "identity": {
+      "gate": "independent-final-chapter-and-canonical-identity-review",
+      "status": "pending",
+      "notes": "Reuse current extraction and editorial decisions; bounded dossier review after date approval."
+    }
+  },
+  "distinctHolds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentApprovalIssued": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 027",
+    "datesVerify": "npm run people:dates:verify -- --book xinwudaishi --chapter 027",
+    "rebuildDatePacket": "npm run people:dates:packet -- --book xinwudaishi --chapter 027 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-027/sealed-date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry build, deploy, or merge."
+}

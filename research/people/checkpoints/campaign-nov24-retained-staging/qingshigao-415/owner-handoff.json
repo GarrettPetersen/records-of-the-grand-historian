@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "415"
+  },
+  "ownerAgentId": "bc-7e809800-d0e9-44b0-a476-f02c2382016d",
+  "workerId": "cursor-nov24-retained-staging-w17-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "a896c58fc0e99898964d3fecf1bd33ebf4467b28b6d71670c9e55474f0d60a5a",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-415-2016d",
+  "inputBlobWitness": {
+    "source": "7b9b8b1184a1fcea23f97687bba843f3d506a2c0",
+    "extraction": "e7d3de4983bfc01c7af7343d1ff304dba684ccf4",
+    "editorial": "cacaafa5b3503db09b2752aa57cf562bd8cab1f1"
+  },
+  "sealedInputs": {
+    "source": "sha256:073594cdb4534fe6c0702b59e32650e574927d0896c711a1046a742b89a8536a",
+    "extraction": "sha256:761f6cc80c565b5d2e1375128b7b537f88d4ce06465eadf9147279b2dbd9bbc0",
+    "editorial": "sha256:63ce77632114f620fa0ca44a4806c41fc5d878552ede2800b7ee325aafb958dc"
+  },
+  "sourceExtractionSha256": "sha256:761f6cc80c565b5d2e1375128b7b537f88d4ce06465eadf9147279b2dbd9bbc0",
+  "extractionAndEditorialReuse": {
+    "promptVersion": 7,
+    "extractionBytes": 170970,
+    "extractionReextracted": false,
+    "editorialReopened": false,
+    "appliedEditorialDecisionCount": 7
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 415 Biographies 202: Huang Yisheng, Ding Yifang, Wang Ji, Wu Jiabang, Li Chengmou, Li Chaobin, Jiang Fushan, Liu Peiyuan",
+    "chineseUnits": 256,
+    "translatedCount": 256,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "dispatchPeople": 86,
+    "dispatchClaims": 518
+  },
+  "sealedNativeDatePacket": {
+    "artifactPath": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-415/sealed-date-packet.json",
+    "contentSha256": "sha256:7e9d39f9dd5231983926baa515ffa4892bdcbd2576342bb66b3ff8d6139d4a4f",
+    "sourceHash": "sha256:1c6b199aeb413aa5f18ed374f60a5a0a30a41f6fe86caec858865368e32e1fd9",
+    "extractionHash": "sha256:1a44be1ae1a34aad088625034f16bf7436710f0a4d67fec2c777299f169eddf5",
+    "auditVersion": 1,
+    "dateHintCheckCount": 381,
+    "peopleCount": 86,
+    "unitCount": 256,
+    "buildCommand": "npm run people:dates:packet -- --book qingshigao --chapter 415 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-415/sealed-date-packet.json"
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 415",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/415: 1 extraction(s), 86 local people, 418 mentions, 763 claims, 0 proposed repair(s), 7 applied repair(s), 7 editorial decision(s), 0 claim retraction(s), 2 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 415",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "findings": null,
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "candidate-packet-prepared",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "editorialDecisionCount": 7,
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained staging owner pass on sealed three-part inputs (source, extraction, editorial) at pinned git blobs on staging 20b8d0e3cd33. Full chapter read: 256 Chinese units with paired literal and idiomatic English on every sentence-bearing unit; extraction prompt v7 and 7 accepted editorial repairs reused without re-extraction or self-approved date audit. people:validate passes scoped; native date packet sealed at 7e9d39f9dd52… for independent review (381 temporal/hint checks, 86 people). No definite English omission or source contradiction found; undated attestations retained where source supports them.",
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "gate": "independent-native-date-audit",
+      "status": "missing",
+      "requiredArtifact": "data/people/date-audits/qingshigao/415.json",
+      "candidatePacketSha256": "sha256:7e9d39f9dd5231983926baa515ffa4892bdcbd2576342bb66b3ff8d6139d4a4f",
+      "recordCommand": "npm run people:dates:record -- --book qingshigao --chapter 415",
+      "notes": "Owner prepared sealed-date-packet.json only; people:dates:record and independent reviewer approval still required."
+    },
+    "identity": {
+      "gate": "independent-final-chapter-and-canonical-identity-review",
+      "status": "pending",
+      "notes": "Reuse current extraction and editorial decisions; bounded dossier review after date approval."
+    }
+  },
+  "distinctHolds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentApprovalIssued": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 415",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 415",
+    "rebuildDatePacket": "npm run people:dates:packet -- --book qingshigao --chapter 415 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-415/sealed-date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry build, deploy, or merge."
+}
