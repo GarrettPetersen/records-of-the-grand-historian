@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-scoped-delta-review",
+  "chapterKey": "houhanshu:039",
+  "reviewerAgentId": "bc-1f30614f-f52c-48e3-9fb1-ae5146321abf",
+  "ownerAgentId": "bc-3f24b1d8-0c5c-447a-9d70-1c2da5e9e1b1",
+  "ownerRevision": "0880929c8b659675d0c50d50eb3409b10f20a695",
+  "ownerProposalSha256": "sha256:735f7f0b9cd21f393d26f417e1e7f558ad90788b01a21ae3097f05fc75b6b9df",
+  "reviewedAt": "2026-11-24T15:45:00.000Z",
+  "scopeNote": "Independent review of the single metadata-only extractor provenance patch in owner-handoff.json. No source, people payload, editorial text, or date-audit conclusions are in scope.",
+  "observedBlocker": "Actual extractor identity required for every chunk",
+  "verdict": "approve_scoped_metadata_provenance",
+  "approvedChanges": [
+    {
+      "kind": "metadata-only-chunk-agentId",
+      "target": "data/people/extractions/houhanshu/039.json",
+      "field": "run.agentId",
+      "before": null,
+      "after": "Garretts-MacBook-Pro-2.local-cursor-sdk",
+      "reason": "Chapter-level cursor-sdk queue claim at ready commit 431e3980e8339d2639d05b9364207a0392efaca6 names worker Garretts-MacBook-Pro-2.local-cursor-sdk with chapterFingerprint sha256:c03befaa19158dd7c000a62dc2c58f96a7dc3c8a34a10faf35a710fa36680db5 matching the pinned extraction content fingerprint at promotion. Non-null run.agentId is required for native chapter-identity receipt without altering people bytes."
+    },
+    {
+      "kind": "metadata-only-chunk-agentId",
+      "target": "data/people/extractions/houhanshu/039.json",
+      "chunkId": "001",
+      "field": "run.chunks[].agentId",
+      "before": null,
+      "after": "Garretts-MacBook-Pro-2.local-cursor-sdk",
+      "reason": "No per-chunk cloud receipt exists; chapter sticky cursor-sdk claim and unchanged promotion bytes support filling this gap without inventing a bc- ID (same recovery pattern as jinshu/063 queue-worker chunk fill)."
+    },
+    {
+      "kind": "preserve-chunk-receipt",
+      "target": "data/people/extractions/houhanshu/039.json",
+      "chunkId": "002",
+      "fields": {
+        "agentId": "bc-5ecd85e0-b948-4dc7-a235-500ac8e90db0",
+        "runId": "run-309ed9d8-1f93-46d1-8da7-18c4a0589102",
+        "completedAt": "2026-08-27T00:22:13.682Z"
+      },
+      "reason": "Reproduced historical bytes at promotion 2365a46d8567e31c0e4d2fef7ee97186bb24ac5a and current pin already carry this cloud-agent receipt; no owner change proposed or required."
+    },
+    {
+      "kind": "metadata-only-chunk-agentId",
+      "target": "data/people/extractions/houhanshu/039.json",
+      "chunkId": "003",
+      "field": "run.chunks[].agentId",
+      "before": null,
+      "after": "Garretts-MacBook-Pro-2.local-cursor-sdk",
+      "reason": "Same queue-worker attribution as chunk 001; ranges 119–177 exclusive unchanged since promotion."
+    },
+    {
+      "kind": "metadata-only-chunk-agentId",
+      "target": "data/people/extractions/houhanshu/039.json",
+      "chunkId": "004",
+      "field": "run.chunks[].agentId",
+      "before": null,
+      "after": "Garretts-MacBook-Pro-2.local-cursor-sdk",
+      "reason": "Same queue-worker attribution as chunk 001; ranges 177–233 exclusive unchanged since promotion."
+    },
+    {
+      "kind": "metadata-only-chunk-agentId",
+      "target": "data/people/extractions/houhanshu/039.json",
+      "chunkId": "005",
+      "field": "run.chunks[].agentId",
+      "before": null,
+      "after": "Garretts-MacBook-Pro-2.local-cursor-sdk",
+      "reason": "Same queue-worker attribution as chunk 001; ranges 233–293 exclusive unchanged since promotion."
+    }
+  ],
+  "heldCases": [
+    {
+      "kind": "unknown-chunk-runId",
+      "chunks": ["001", "003", "004", "005"],
+      "fields": ["runId", "completedAt"],
+      "status": "retain-null",
+      "reason": "No reproduced ledger entry supplies per-chunk runId or completedAt for these ranges; filling them would be fabrication. Metadata patch correctly leaves them unknown."
+    }
+  ],
+  "pinnedEvidence": {
+    "ownerHandoff": {
+      "path": "research/people/checkpoints/campaign-nov24-retained-blocked/houhanshu-039/owner-handoff.json",
+      "sha256": "sha256:735f7f0b9cd21f393d26f417e1e7f558ad90788b01a21ae3097f05fc75b6b9df"
+    },
+    "source": {
+      "path": "data/houhanshu/039.json",
+      "gitBlob": "7e063426dd97a52d1be98c6b180cd01561fc3774",
+      "contentSha256": "sha256:f7e56ebb74dc5567e68542072de4c5ff555e9b75fbc8069dd5dedfef1b3d174c",
+      "verified": true
+    },
+    "extraction": {
+      "path": "data/people/extractions/houhanshu/039.json",
+      "gitBlob": "cba860752e8e5b45dc2fde62342404ee38a349dd",
+      "contentSha256": "sha256:d846df6e55f0e9188a56e6f4d82bce08dd019a1a00257c25c7e8b2f9ced68373",
+      "extractionContentHash": "sha256:31c14728fcfc0216f720fd48b3db3db354aebba7268d64f1b589a98e48802887",
+      "verified": true
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/houhanshu/039.json",
+      "gitBlob": "2e60a310d58171ee10a0be50a02ca88b0328eb74",
+      "contentSha256": "sha256:f44a4863cc618ce58568b37860009bcf8e397f0e3a6b9ebef9d19202b483929b",
+      "status": "audited",
+      "extractionHashPin": "sha256:31c14728fcfc0216f720fd48b3db3db354aebba7268d64f1b589a98e48802887",
+      "preservedUnchanged": true
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/houhanshu/039.json",
+      "gitBlob": "943058bcba6c162dcaef9555acd5770b80ba8713",
+      "contentSha256": "sha256:5e6d88f0a590b5e5000cf15e1dfa5efe46ce3ea73bca9069f50d9b9432f5c366",
+      "reviewerAgentId": "bc-445b2df1-6fa5-48f1-8959-165c4b218343",
+      "preservedUnchanged": true
+    },
+    "queueReadyClaim": {
+      "commit": "431e3980e8339d2639d05b9364207a0392efaca6",
+      "file": "people-work-queue.json",
+      "claimKey": "houhanshu/039",
+      "worker": "Garretts-MacBook-Pro-2.local-cursor-sdk",
+      "lane": "cursor-sdk",
+      "status": "ready",
+      "chapterFingerprint": "sha256:c03befaa19158dd7c000a62dc2c58f96a7dc3c8a34a10faf35a710fa36680db5",
+      "matchesCurrentExtractionFingerprint": true
+    },
+    "queueClaimCommit": {
+      "commit": "33fec8d2e1e743cb80862d97012876edb60fd245",
+      "status": "claimed",
+      "note": "Earlier claim fingerprint differed (pre-promotion source generation); ready-state pin is authoritative for retained bytes now on master."
+    },
+    "promotionCommit": "2365a46d8567e31c0e4d2fef7ee97186bb24ac5a"
+  },
+  "affectedNativeDependencies": {
+    "extractionValidation": {
+      "impact": "none-on-people-bytes",
+      "note": "Patch touches only run provenance fields; extraction content hash used by date audit remains sha256:31c14728…"
+    },
+    "dateAudit": {
+      "impact": "reuse-unchanged",
+      "staleItems": [],
+      "closure": "Pinned audited report at gitBlob 2e60a310… remains valid after metadata-only agentId fill because extractionHash pin matches extractionContentHash and no dated person field changes."
+    },
+    "editorial": {
+      "impact": "none",
+      "note": "Scoped patch does not add, remove, or alter editorial proposals; prior independent bc-445b2df1… review and applied repairs preserved."
+    },
+    "englishInScope": {
+      "impact": "none",
+      "note": "No English before/after pairs in owner proposal; spot-check unnecessary beyond preserving pinned editorial artifact."
+    },
+    "chapterIdentityReceipt": {
+      "impact": "unblocks-after-patch",
+      "requiredAuthorAgentIdsAfterPatch": [
+        "Garretts-MacBook-Pro-2.local-cursor-sdk",
+        "bc-5ecd85e0-b948-4dc7-a235-500ac8e90db0"
+      ],
+      "note": "Native validateChapterIdentityBundle requires non-null run.agentId and authorAgentIds must include run.agentId plus distinct chunk producer bc-5ecd85e0… for chunk 002."
+    }
+  },
+  "validation": {
+    "independentOfOwner": true,
+    "pinnedBytesVerifiedAtReview": "2026-11-24T15:45:00.000Z",
+    "methods": [
+      "git cat-file blob SHA-256 compared to owner-handoff pinnedInputs",
+      "people-work-queue.json claims['houhanshu/039'] at commits 431e3980 and 33fec8d2",
+      "promotion extraction run metadata at 2365a46d compared to current pin"
+    ],
+    "englishEditorialChronologySourceContent": "unchanged in scope",
+    "fabricatedIdentities": false,
+    "findings": []
+  }
+}
