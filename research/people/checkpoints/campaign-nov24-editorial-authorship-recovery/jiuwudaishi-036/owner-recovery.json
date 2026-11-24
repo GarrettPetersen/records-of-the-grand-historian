@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "kind": "editorial-owner-recovery",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "036",
+    "worker": "cursor-nov24-retained-editorial-2",
+    "mode": "editorial",
+    "branch": "cursor/nov24-retained-jiuwudaishi-036-d69789",
+    "stagingParent": "dbabdb0876b338a6529f9dc5a976cb667e5b87e9"
+  },
+  "agentId": "bc-569b10df-2bb7-4731-ad12-002ad9d69789",
+  "inputBlobs": {
+    "data/jiuwudaishi/036.json": "83c90875ebc9e229ad2a051e81a1062fc2225ae8",
+    "data/people/extractions/jiuwudaishi/036.json": "ef325e20025b53958ce99da42b973d68ae45024a",
+    "data/people/date-audits/jiuwudaishi/036.json": "44ace3aded9a83c67dd17603abb452fbaf5a00b8",
+    "data/people/editorial-decisions/jiuwudaishi/036.json": "a808c70bf0d154546bf923e6e27941442cdf8334"
+  },
+  "filesConsulted": [
+    "data/jiuwudaishi/036.json",
+    "data/people/extractions/jiuwudaishi/036.json",
+    "data/people/editorial-decisions/jiuwudaishi/036.json",
+    "data/people/date-audits/jiuwudaishi/036.json",
+    "scripts/lib/people-editorial-decisions.mjs",
+    "scripts/lib/people-qualified-scope.mjs",
+    "scripts/apply-people-translation-repairs.mjs"
+  ],
+  "commands": [
+    {
+      "command": "node (reproduce) validateAppliedEditorialDecisions on pinned inputs",
+      "result": "Editorial decision validation failed: applied jiuwudaishi:036:r0001 has no matching independent accept/revise authorization; applied jiuwudaishi:036:r0002 has no matching independent accept/revise authorization"
+    },
+    {
+      "command": "node -- repair realignment from sealed editorial + apply-people-translation-repairs --reconcile-current",
+      "result": "15 applied repairs realigned to August 2026 accept set; validateAppliedEditorialDecisions passes; extraction hash e7a73b613e2ec5ec827cbdea0a54512b5c7dab8c"
+    },
+    {
+      "command": "assertChapterGates",
+      "result": "Editorial subgate passes; full qualification blocked on stale date audit (extractionHash no longer matches pinned audit fingerprint 3ceffc3a...)"
+    }
+  ],
+  "diagnosis": {
+    "staleContext": "Unauthorized Kong Qing (s0101) repairs were inserted as r0001–r0002, displacing all fifteen independently accepted repair ids so each applied record carried another repair's reasoning contract.",
+    "preservedAcceptances": "data/people/editorial-decisions/jiuwudaishi/036.json left byte-identical at a808c70b…; all fifteen bc-add0ec9b accept decisions retained.",
+    "delta": "Reset extraction.translationRepairs to the fifteen accepted proposals/decisions (decision.reason on each applied row), dropped orphan r0016–r0017 duplicates, reconciled claims/mentions."
+  },
+  "remainingIssues": [
+    {
+      "gate": "date-audit",
+      "detail": "Pinned date audit extractionHash is stale after repair-accounting fix; needs independent people:dates workflow re-approval, not owner certification."
+    },
+    {
+      "gate": "editorial-follow-up",
+      "detail": "Kong Qing expansion on s0101 remains in committed chapter English but lacks independent approval; see supplemental-translation-repairs.json for a fresh review round."
+    }
+  ],
+  "smallestPathForward": [
+    "Merge this extraction repair-accounting fix.",
+    "Schedule independent date re-audit for jiuwudaishi/036 against extraction e7a73b61…",
+    "Open a second editorial review for supplemental Kong Qing repairs without renumbering the accepted r0001–r0015 set."
+  ],
+  "artifacts": {
+    "supplementalRepairs": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/jiuwudaishi-036/supplemental-translation-repairs.json"
+  }
+}
