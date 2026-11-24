@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "kind": "current-master-transport-identity-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "098"
+  },
+  "ownerAgentId": "bc-51363396-965c-4f76-ab20-8ede9c95a7d5",
+  "campaignWorker": "cursor-nov24-current-master-3",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "116d26fec8ae43dc070a8f9d7a8be7e0525c57a7",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-new-master-owner-transports",
+    "commit": "9f68d0379d1f3010cf0d19be5664a1aa31a863b5",
+    "planFingerprint": "sha256:abc7660c312a6e1e40cb9453b10f0fad144dbc8771b910947b9081552ca01601",
+    "sourcePacketSha256": "sha256:c82ccb6b3ab36bd04227bba0e2ebc56a5912c5481e8ddd8582dd6ee0cc8577d6",
+    "transportSha256": "sha256:d501723843b15b2a57937c5c76fb20342d2e90c6e82a3c34c8a561c59b7cca08",
+    "transportBytes": 546273,
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "sha256:79737e9817ece8dcea24b4fc35c97a0742bb3f0c3898862b6b8e663e72265180",
+        "caseCount": 9
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "sha256:5087239956c326c012f72abfed3e5d58de897eeb2814631609bfee4f46bb208f",
+        "caseCount": 10
+      },
+      {
+        "path": "transport-part-003.json",
+        "sha256": "sha256:7d5a453f9351459f57f8dc6112e082d934857147d4d6b9818e481680d3bf75f9",
+        "caseCount": 19
+      }
+    ],
+    "preparationReceiptSha256": "sha256:14466e35e02debc098a266a9f09a8e4d80242fec9a760d39443dcd25b7d0f71b"
+  },
+  "sealedInputs": {
+    "source": "sha256:658c14a2d3b5dacbe1ca0f40246413146e3741d72765870143c724bb9486ca93",
+    "extraction": "sha256:af191e8e430d2d506d06899622d5e89c3043e2975dd1b424ce1d6b8d5fb1b00b",
+    "editorial": "sha256:d7478470028e4f8b5c5c1ddef2a6a72dfe1e98a92db7cc0e13e453b77a3bf791",
+    "dateAudit": "sha256:da7b8c936a4777ef16c630abe4a6443a1b23903e931b204437907c5a5cb8770c"
+  },
+  "chronologyStatus": "audited (independent date audit on sealed extraction)",
+  "editorialStatus": "4 applied editorial decisions; no pending proposals",
+  "reviewCases": 38,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 38 cases retain preparation-proposed canonicalPersonId with unresolvedIdentity true. 21 overflow cases preserve bounded-retrieval uncertainty; no concrete false-merge or wrong-actor contradiction found in chapter source. No canonical extraction or shared-registry edits.",
+  "ownerEvidenceSha256": "sha256:f65dc64225f193f5b2c8030b8405e8d33d891da85c7f7410d89921073f666896",
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-nov24-current-master-transport/shiji-098/preparation-receipt.json",
+    "transportPart001": "research/people/checkpoints/campaign-nov24-current-master-transport/shiji-098/transport-part-001.json",
+    "transportPart002": "research/people/checkpoints/campaign-nov24-current-master-transport/shiji-098/transport-part-002.json",
+    "transportPart003": "research/people/checkpoints/campaign-nov24-current-master-transport/shiji-098/transport-part-003.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-nov24-current-master-transport/shiji-098/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-nov24-current-master-transport/shiji-098/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/campaign-nov24-current-master-transport/shiji-098/lookup-receipt.json"
+  },
+  "reproduce": {
+    "verifyPreparationReceipt": "sha256sum research/people/checkpoints/campaign-nov24-current-master-transport/shiji-098/preparation-receipt.json",
+    "verifyTransportPart001": "sha256sum research/people/checkpoints/campaign-nov24-current-master-transport/shiji-098/transport-part-001.json",
+    "verifyTransportPart002": "sha256sum research/people/checkpoints/campaign-nov24-current-master-transport/shiji-098/transport-part-002.json",
+    "verifyTransportPart003": "sha256sum research/people/checkpoints/campaign-nov24-current-master-transport/shiji-098/transport-part-003.json",
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 098"
+  },
+  "notes": "Owner evidence is not independent approval. Reviewer must seal requiredReport per transport instructions."
+}
