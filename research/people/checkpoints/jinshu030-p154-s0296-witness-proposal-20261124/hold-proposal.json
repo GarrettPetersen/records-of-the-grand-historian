@@ -1,0 +1,260 @@
+{
+  "schemaVersion": 1,
+  "kind": "jinshu030-p154-s0296-witness-hold-repair-proposal",
+  "status": "proposed-only",
+  "applied": false,
+  "createdAt": "2026-11-24T00:45:00.000Z",
+  "scope": {
+    "book": "jinshu",
+    "chapter": "030"
+  },
+  "hold": {
+    "transportPart": "011",
+    "personLocalId": "jinshu:030:p154",
+    "personId": "p154",
+    "unitId": "s0296",
+    "verdict": "hold",
+    "reasonFingerprint": "sha256:e7143bd675d8cd2098830c427913cd1670198bc92eb936ab62adec96d8ee494a",
+    "reason": "The p154 record attaches an English personal name to s0296, but the witnessed Chinese lists only gesture parallels (仰手似乞 through 喜怒憂歡) with no personal-name span in the primary text; I hold rather than approve cross-record certainty for this actor linkage.",
+    "sourceWitnessQuote": "仰手似乞",
+    "independentReviewBranch": "cursor/jinshu030-independent-review-85d3",
+    "independentReviewCommit": "7dc682707b"
+  },
+  "sealedPins": {
+    "stagingPr": 5479,
+    "stagingCommit": "33756287500867672ab5692bfbb9d1f9dc8b4470",
+    "identityOverlayCommit": "4250c15c07f1416179ea73b9645b87d009cf5a47",
+    "doNotModify": [
+      "#5479",
+      "codex/cursor-glossary-nov24-2026-jinshu030",
+      "sealed chapter/extraction/editorial/date inputs"
+    ]
+  },
+  "fingerprints": {
+    "chapter": "sha256:9a7f13e741d985b271cc050a17564ec89b37667663d59ff1d223aea2d7975384",
+    "extraction": "sha256:0e1d94e626ad3e430535dc42a00ef80c4bb4a2f6651862174bc65b703723cfa8",
+    "editorial": "sha256:d3a2d59472fac4792ed2272b73d5a59cfa06d21f658abfd6bfda19ccbd8bc16f",
+    "dateAudit": "sha256:2871fd8d343a1fd320f7caeaa428b782e3bcde618543e6265b4e14326d0d2d9a",
+    "editorialCandidateDecisions": "sha256:562f32abec41a2c95b9b142e05b011b628ce3d60a2d7b113804edfa785988987"
+  },
+  "chineseWitnessTrace": {
+    "unitId": "s0296",
+    "zh": "仰手似乞，俯手似奪，捧手似謝，擬手似訴，拱臂似自首，攘臂似格鬥，矜莊似威，怡悅似福，喜怒憂歡，貌在聲色。",
+    "zhDigest": "sha256:220475953f41664f6e0f586d17f213a2d92ae6dedc10a8458ae631d470a0c142",
+    "containsPersonalNameZhangPei": false,
+    "surroundingAuthorAttribution": {
+      "introducingUnitId": "s0252",
+      "zh": "其後，明法掾張裴又注律，表上之，其要曰：",
+      "literal": "Later legal clerk Zhang Pei annotated the statutes, memorialized them, summarizing:",
+      "idiomatic": "Zhang Pei’s statutory commentary begins:",
+      "chinesePersonalNameSpan": "張裴",
+      "validPrimaryChineseWitness": true,
+      "supportedPersonId": "p153",
+      "supportedLocalId": "jinshu:030:p153"
+    },
+    "discourseNote": "s0296 continues the 要曰 commentary block opened at s0252, but the unit itself has no personal-name span. Primary Chinese witness for Zhang Pei remains s0252."
+  },
+  "translationRepairs": [
+    {
+      "id": "jinshu:030:proposed-s0296-idiomatic-gestures",
+      "unit": {
+        "id": "s0296",
+        "kind": "paragraph-sentence",
+        "blockIndex": 31,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "idiomatic",
+      "before": "Zhang Pei lists gesture and expression lexicons for inferring intent.",
+      "after": "Raised hands resemble begging; lowered hands resemble snatching; cupped hands resemble apology; pointing hands resemble petitioning; folded arms resemble turning oneself in; rolled-up sleeves resemble combat; solemn bearing resembles majesty; a cheerful face resembles good fortune; joy, anger, sorrow, and delight show in voice and countenance.",
+      "reason": "Chinese at s0296 enumerates eight gesture/expression parallels (仰手似乞; 俯手似奪; 捧手似謝; 擬手似訴; 拱臂似自首; 攘臂似格鬥; 矜莊似威; 怡悅似福) plus 喜怒憂歡，貌在聲色. The current idiomatic collapses that list into an English author summary that invents “Zhang Pei,” which is absent from this unit’s Chinese. Replace with a complete idiomatic rendering of each gesture and expression, without injecting the commentator’s name.",
+      "confidence": "high",
+      "sourceReason": {
+        "kind": "primary-chinese-witness",
+        "unitId": "s0296",
+        "quote": "仰手似乞，俯手似奪，捧手似謝，擬手似訴，拱臂似自首，攘臂似格鬥，矜莊似威，怡悅似福，喜怒憂歡，貌在聲色。"
+      }
+    },
+    {
+      "id": "jinshu:030:proposed-s0296-literal-no-change",
+      "unit": {
+        "id": "s0296",
+        "kind": "paragraph-sentence",
+        "blockIndex": 31,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "field": "literal",
+      "before": "Upturned hands resemble begging; downturned hands resemble seizing; cupped hands resemble thanks; imitative hands resemble pleading; folded arms resemble surrender; flung arms resemble brawl; composed bearing resembles awe; glad faces resemble blessing; joy, anger, grief, pleasure sit in voice and countenance.",
+      "after": "Upturned hands resemble begging; downturned hands resemble seizing; cupped hands resemble thanks; imitative hands resemble pleading; folded arms resemble surrender; flung arms resemble brawl; composed bearing resembles awe; glad faces resemble blessing; joy, anger, grief, pleasure sit in voice and countenance.",
+      "action": "no-change",
+      "reason": "Literal already renders each Chinese gesture/expression parallel in order (仰手/俯手/捧手/擬手/拱臂/攘臂/矜莊/怡悅 + 喜怒憂歡，貌在聲色). No exact correction is required.",
+      "confidence": "high",
+      "sourceReason": {
+        "kind": "literal-already-faithful",
+        "unitId": "s0296",
+        "quote": "仰手似乞，俯手似奪，捧手似謝，擬手似訴，拱臂似自首，攘臂似格鬥，矜莊似威，怡悅似福，喜怒憂歡，貌在聲色。"
+      }
+    }
+  ],
+  "extractionRepair": {
+    "action": "remove-unsupported-duplicate-person",
+    "unsupportedPersonId": "p154",
+    "unsupportedLocalId": "jinshu:030:p154",
+    "keepIntact": {
+      "personId": "p153",
+      "localId": "jinshu:030:p153",
+      "chineseWitnessUnit": "s0252",
+      "chineseSurface": "張裴",
+      "englishSurfaces": [
+        {
+          "unitId": "s0252",
+          "exact": "Zhang Pei"
+        },
+        {
+          "unitId": "s0260",
+          "exact": "Zhang Pei"
+        },
+        {
+          "unitId": "s0269",
+          "exact": "Zhang Pei"
+        }
+      ],
+      "roles": [
+        {
+          "roleId": "official",
+          "units": [
+            "s0252"
+          ]
+        },
+        {
+          "roleId": "commentator",
+          "units": [
+            "s0252"
+          ]
+        }
+      ],
+      "claimsPreserved": [
+        "sex@s0252",
+        "attestation@s0252 (commentary after Taishi 4 promulgation)",
+        "office 明法掾@s0252",
+        "event-participation commentator@s0252,s0253,s0260,s0269"
+      ]
+    },
+    "remove": {
+      "personRow": "p154",
+      "surfaces": [
+        {
+          "personId": "p154",
+          "language": "en",
+          "exact": "Zhang Pei",
+          "unitId": "s0296",
+          "reason": "English-only surface invented by current idiomatic; no Chinese personal-name span in s0296"
+        }
+      ],
+      "nameClaims": [
+        {
+          "personId": "p154",
+          "value": {
+            "kind": "personal",
+            "en": "Zhang Pei"
+          },
+          "units": [
+            "s0296"
+          ]
+        }
+      ],
+      "roleClaims": [
+        {
+          "personId": "p154",
+          "roleId": "official",
+          "units": [
+            "s0296"
+          ]
+        },
+        {
+          "personId": "p154",
+          "roleId": "commentator",
+          "units": [
+            "s0296"
+          ]
+        }
+      ],
+      "otherClaims": [
+        {
+          "personId": "p154",
+          "predicate": "sex",
+          "units": [
+            "s0296"
+          ]
+        },
+        {
+          "personId": "p154",
+          "predicate": "attestation",
+          "units": [
+            "s0296"
+          ],
+          "note": "Duplicate of p153 attestation; wrong unit"
+        },
+        {
+          "personId": "p154",
+          "predicate": "event-participation",
+          "units": [
+            "s0296"
+          ],
+          "note": "Gesture-lexicon participation rests on fabricated EN name; do not relocate onto p153/s0296 because Chinese has no personal-name span"
+        }
+      ]
+    },
+    "relocationDecision": {
+      "relocateMentionTo": null,
+      "removalInsteadOfRelocation": true,
+      "reason": "Valid Chinese witness for Zhang Pei is already recorded on p153 at s0252 (明法掾張裴又注律). Relocating p154’s s0296 English mention to s0252 would duplicate p153. Exact repair is removal of unsupported p154 (person, EN surface, and claims), leaving p153’s source-supported mentions intact. Do not add a new p153 mention on s0296."
+    }
+  },
+  "minimumFingerprintDependencies": {
+    "chapter": {
+      "fingerprint": "sha256:9a7f13e741d985b271cc050a17564ec89b37667663d59ff1d223aea2d7975384",
+      "impact": "Only s0296.idiomatic changes on apply; literal unchanged. All other units untouched."
+    },
+    "extraction": {
+      "fingerprint": "sha256:0e1d94e626ad3e430535dc42a00ef80c4bb4a2f6651862174bc65b703723cfa8",
+      "impact": "On apply: delete p154 person/surfaces/claims. p153 and all other 207 people unchanged."
+    },
+    "editorial": {
+      "fingerprint": "sha256:d3a2d59472fac4792ed2272b73d5a59cfa06d21f658abfd6bfda19ccbd8bc16f",
+      "impact": "Existing accepted editorial decisions stay valid until an apply creates one new idiomatic repair decision for s0296. No prior decision references p154."
+    },
+    "dateAudit": {
+      "fingerprint": "sha256:2871fd8d343a1fd320f7caeaa428b782e3bcde618543e6265b4e14326d0d2d9a",
+      "pathOnIdentitySealed": "data/people/date-audits/jinshu/030.json",
+      "impact": "p154 personCheck and hints-p154 are supported-but-unit-wrong (evidence quote is gesture Chinese at s0296). After p154 removal, drop only p154/hints-p154 rows in a scoped date refresh. Preserve p153 personCheck (evidence 張裴@s0252) and all other personChecks.",
+      "p154DateRows": [
+        "personChecks:p154",
+        "itemChecks:hints-p154"
+      ],
+      "p153DateRowsPreserved": [
+        "personChecks:p153",
+        "itemChecks:hints-p153"
+      ]
+    },
+    "identityPart011": {
+      "holdReasonFingerprint": "sha256:e7143bd675d8cd2098830c427913cd1670198bc92eb936ab62adec96d8ee494a",
+      "unaffectedApprovals": [
+        "sha256:2884b2bb77b993087d4aeded634ad47e3a23506737b0eef274808dee60780485",
+        "sha256:15b242db77c74450498947132266d3f97a0527942d6623ceb818162c6476fb94",
+        "sha256:17026ed9de5df6aef4bcc70e8df4667ceadd993b79d32c8d46e261484f413a1a",
+        "sha256:23dd7cd9088016a7d27df18767930a2f84a3de19b44c747ce656f4171baf3ea4",
+        "sha256:3f30f8ca1c53eda0bf4088c1c96ff8ddad042842d205c645265f4d2739ed0022"
+      ],
+      "impact": "Proposal does not rewrite part-011 artifacts. After a future apply, only the p154 hold case needs re-review; the five approved part-011 cases stay reusable while their sealed fingerprints remain current."
+    }
+  },
+  "nonActions": [
+    "Do not modify PR #5479 or branch codex/cursor-glossary-nov24-2026-jinshu030",
+    "Do not edit data/jinshu/030.json, extraction, editorial decisions, or date audits in this proposal",
+    "Do not rerun broad people validators, identity resolution, or make update",
+    "Do not merge p154 into p153 via identity tooling in this proposal (removal of empty duplicate after EN repair is sufficient)",
+    "Do not alter s0260/s0269 English discourse attributions already owned by p153"
+  ]
+}
