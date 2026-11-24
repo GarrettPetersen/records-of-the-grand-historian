@@ -1,0 +1,273 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-final-p109-correction-acceptance",
+  "book": "jinshu",
+  "chapter": "047",
+  "pullRequest": 5423,
+  "ownerRevision": "a5d811010200de85729bccc6b890c3246f31ca2d",
+  "baseOwnerCommitCompared": "b19c24324f342737a5eaa948b51d32561e6c1a3d",
+  "priorIndependentReviewCommit": "5ec9a048dcd534f5260ac02f34a6644d23153ec8",
+  "priorHoldCaseId": "sha256:2a42e97cf3de3563b58cb523e6ff4e77f626f1d39ee2c1d6760817473f16d5b1",
+  "reviewer": {
+    "agentId": "bc-f5b6b706-b1a5-4233-a9e0-855c2834d8b5",
+    "model": "Composer",
+    "independentOfAuthor": true,
+    "role": "independent-final-reviewer",
+    "completedAt": "2026-11-24T05:39:07.856Z"
+  },
+  "fingerprints": {
+    "sourceHash": "sha256:a861c9b72a867252169600e8bb26375fb81db2ab59f03790e3d70846da27f61b",
+    "extractionHashBefore": "sha256:15c98a5c4bdabfaeb1ff697eee3d2841309491fc5d38a4f372c9587de04d297e",
+    "extractionHashAfter": "sha256:1bf570b96cbecc3912eb671e09e83e6da1d75000a30a54febaacd15e505e8c69",
+    "matchOwnerReceiptBefore": true,
+    "matchOwnerReceiptAfter": true,
+    "matchOwnerReceiptSource": true,
+    "dateAuditExtractionHash": "sha256:15c98a5c4bdabfaeb1ff697eee3d2841309491fc5d38a4f372c9587de04d297e",
+    "dateAuditStale": true
+  },
+  "sourceCheck": {
+    "unitId": "s0257",
+    "zh": "駿既伏誅，裴楷息瓚，駿之婿也，為亂兵所害。",
+    "en": "When Jun fell, Pei Kai’s son Pei Zan—Jun’s son-in-law—was cut down by mutinous troops.",
+    "exactQuote": "駿之婿也",
+    "quotePresent": true,
+    "daughterToken女Present": false,
+    "peiZanSurfacesPresent": true,
+    "yangJunSurfacePresent": true,
+    "supportsDisplayedSonInLawConnection": true,
+    "sonInLawReading": "駿之婿也 attaches to 裴楷息瓚 / Pei Zan (p108) as Yang Jun’s (p105) son-in-law; it does not name a daughter and does not supply「女」."
+  },
+  "caseLevelDecisions": [
+    {
+      "caseId": "sha256:2a42e97cf3de3563b58cb523e6ff4e77f626f1d39ee2c1d6760817473f16d5b1",
+      "localPersonId": "jinshu:047:p109",
+      "canonicalPersonId": "per_F8XE8A62QSD918GY3RDE",
+      "priorVerdict": "hold",
+      "revisionVerdict": "accept-owner-correction",
+      "acceptance": true,
+      "reason": "Owner removed the unproved separately nameable daughter p109 and all「女」-witness claims. s0257 still contains no「女」; removal is warranted. The prior hold is resolved by deletion of the defective local person, not by inventing a name witness.",
+      "evidence": [
+        {
+          "unitId": "s0257",
+          "quote": "駿之婿也"
+        },
+        {
+          "unitId": "s0257",
+          "quote": "裴楷息瓚"
+        }
+      ]
+    },
+    {
+      "caseId": "affected-p108-son-in-law",
+      "localPersonId": "jinshu:047:p108",
+      "priorRelation": {
+        "relation": "spouse-of",
+        "personId": "p109",
+        "kinshipTermZh": "婿"
+      },
+      "revisedRelation": {
+        "relation": "kin-of",
+        "personId": "p105",
+        "kinshipTermZh": "婿",
+        "subjectRole": "son-in-law",
+        "objectRole": "father-in-law"
+      },
+      "revisionVerdict": "accept-owner-correction",
+      "acceptance": true,
+      "reason": "Exact「駿之婿也」supports Pei Zan as Yang Jun’s son-in-law. Rewiring from spouse-of invented wife p109 to explicit kin-of p105 preserves the source-supported connection without asserting an unproved daughter.",
+      "evidence": [
+        {
+          "unitId": "s0257",
+          "quote": "駿之婿也"
+        },
+        {
+          "unitId": "s0257",
+          "quote": "瓚"
+        }
+      ],
+      "afterClaimIndex1based": 759,
+      "afterClaim": [
+        "p108",
+        "family-relationship",
+        {
+          "relation": "kin-of",
+          "personId": "p105",
+          "kinshipTerm": {
+            "zh": "婿",
+            "en": "son-in-law"
+          },
+          "subjectRole": "son-in-law",
+          "objectRole": "father-in-law"
+        },
+        "explicit",
+        [
+          "s0257"
+        ]
+      ]
+    },
+    {
+      "caseId": "affected-p105-related-local-people",
+      "localPersonId": "jinshu:047:p105",
+      "priorRelatedLocalPeople": [
+        "p108",
+        "p109"
+      ],
+      "revisedRelatedLocalPeople": [
+        "p108"
+      ],
+      "removedParentOfDaughterClaim": true,
+      "revisionVerdict": "accept-owner-correction",
+      "acceptance": true,
+      "reason": "Dropping relatedLocalPeople p109 and the parent-of-p109 /「女」claim matches the absence of a daughter name in s0257 while retaining Pei Zan (p108) as the supported in-law link.",
+      "evidence": [
+        {
+          "unitId": "s0257",
+          "quote": "駿之婿也"
+        }
+      ]
+    }
+  ],
+  "concreteDefects": [],
+  "overallAcceptance": true,
+  "affectedCanonicalDossiersBeyondNamedLocals": [
+    {
+      "canonicalPersonId": "per_F8XE8A62QSD918GY3RDE",
+      "effect": "local-member-removed",
+      "detail": "Prior hold case membership for jinshu:047:p109 under per_F8XE8A62QSD918GY3RDE is vacated by person deletion. Host must retire/reconcile that dossier membership; this review does not mint a certificate."
+    },
+    {
+      "localPersonId": "jinshu:047:p105",
+      "effect": "member-contract-changed",
+      "detail": "relatedLocalPeople lost p109; parent-of-p109 claim removed. Host identity memberVersion/fingerprint for p105 changes; do not reopen unrelated accepted cases."
+    },
+    {
+      "localPersonId": "jinshu:047:p108",
+      "effect": "member-contract-changed",
+      "detail": "relatedLocalPeople lost p109; spouse-of-p109 replaced by kin-of-p105（婿）. Host identity memberVersion/fingerprint for p108 changes; do not reopen unrelated accepted cases."
+    }
+  ],
+  "noOtherLocalsReferenceP109After": true,
+  "extractionDiffSummary": {
+    "peopleBefore": 149,
+    "peopleAfter": 148,
+    "removedPeople": [
+      "p109"
+    ],
+    "claimsBefore": 1024,
+    "claimsAfter": 1019,
+    "removedNonDateFamilyAndPersonClaims": [
+      "p105 parent-of p109 (女)",
+      "p108 spouse-of p109 (婿)",
+      "p109 sex",
+      "p109 child-of p105",
+      "p109 spouse-of p108"
+    ],
+    "addedOrRewritten": [
+      "p108 kin-of p105 (婿 / son-in-law → father-in-law)"
+    ]
+  },
+  "nativeDateCarryForward": {
+    "dateAuditFileUntouchedByOwner": "data/people/date-audits/jinshu/047.json",
+    "priorAuditStatus": "audited",
+    "priorAuditExtractionHash": "sha256:15c98a5c4bdabfaeb1ff697eee3d2841309491fc5d38a4f372c9587de04d297e",
+    "currentExtractionHash": "sha256:1bf570b96cbecc3912eb671e09e83e6da1d75000a30a54febaacd15e505e8c69",
+    "auditIsStale": true,
+    "doNotReplayFullAudit": true,
+    "preserveUnchangedProofsByClaimHash": true,
+    "note": "Claim index IDs (claim-N) shift after deletions; native applier must key preserved proofs by claimHash (and hints-p###), not by unstable packet ordinal alone.",
+    "removedDateBearingItems": [
+      {
+        "claimHash": "sha256:39fb43c321d93bdbf9ec237edd2b624edc7424bc21c66cabff894c176a021994",
+        "priorPacketItemId": "claim-766",
+        "personId": "p109",
+        "predicate": "attestation",
+        "value": {
+          "sourceDate": {
+            "text": "及帝崩"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 290,
+              "precision": "year"
+            }
+          }
+        },
+        "evidence": [
+          "s0257"
+        ],
+        "semantic": "Removed with unproved daughter p109; was only date-bearing attestation/hint binding for that local person."
+      },
+      {
+        "priorPacketItemId": "hints-p109",
+        "personId": "p109",
+        "predicate": "active-date-hints",
+        "value": [
+          "onOrAfter AD 290"
+        ],
+        "semantic": "Active-date hint row for deleted local person p109 removed."
+      }
+    ],
+    "addedDateBearingItems": [],
+    "changedDateBearingSemanticsForP105P108": {
+      "p105": "No date-bearing claimHash content change detected for Yang Jun temporal rows; only non-date kinship/relatedLocalPeople changed.",
+      "p108": "No date-bearing claimHash content change detected for Pei Zan death/attestation rows; kinship rewire is non-date-bearing kin-of."
+    },
+    "semanticImpact": [
+      "Drop p109 attestation dated 及帝崩 / westernBounds onOrAfter AD 290 (unproved daughter activity).",
+      "Drop hints-p109 onOrAfter AD 290.",
+      "Retain p105 and p108 existing dated death/attestation/event rows bound to 及帝崩; they remain source-supported and should keep prior audited proofs via claimHash.",
+      "New p108 kin-of p105 row is non-date-bearing and needs no chronology approval by itself."
+    ],
+    "unresolvedRemaining": []
+  },
+  "nativeApplierBindings": {
+    "ownerReceipt": "research/people/jinshu047-owner-p109-identity-witness-receipt-20261124.json",
+    "requireExactOwnerRevision": "a5d811010200de85729bccc6b890c3246f31ca2d",
+    "requireExtractionHash": "sha256:1bf570b96cbecc3912eb671e09e83e6da1d75000a30a54febaacd15e505e8c69",
+    "requireSourceHash": "sha256:a861c9b72a867252169600e8bb26375fb81db2ab59f03790e3d70846da27f61b",
+    "identity": {
+      "acceptPersonRemoval": "p109",
+      "acceptKinshipRewire": {
+        "from": {
+          "subject": "p108",
+          "relation": "spouse-of",
+          "object": "p109",
+          "zh": "婿"
+        },
+        "to": {
+          "subject": "p108",
+          "relation": "kin-of",
+          "object": "p105",
+          "zh": "婿",
+          "subjectRole": "son-in-law",
+          "objectRole": "father-in-law"
+        }
+      },
+      "doNotMintCertificate": true,
+      "doNotReopenApprovedCases": 147,
+      "hostMustReconcileCanonical": [
+        "per_F8XE8A62QSD918GY3RDE",
+        "jinshu:047:p105",
+        "jinshu:047:p108"
+      ]
+    },
+    "chronology": {
+      "markAuditStaleUntilCarryForward": true,
+      "dropProofsFor": [
+        "sha256:39fb43c321d93bdbf9ec237edd2b624edc7424bc21c66cabff894c176a021994",
+        "hints-p109"
+      ],
+      "preserveProofsForUnchangedClaimHashes": true,
+      "noFullAuditReplay": true
+    }
+  },
+  "constraintsHonored": {
+    "ownerBranchNotEdited": true,
+    "completeAuditNotReplayed": true,
+    "publicationNotAsserted": true,
+    "certificateNotMinted": true,
+    "quotationsNotInvented": true
+  },
+  "scopedValidateAtOwnerTip": "PASS (people:validate jinshu/047 against a5d81101 extraction/source)"
+}
