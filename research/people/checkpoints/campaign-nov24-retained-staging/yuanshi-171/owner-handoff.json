@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "yuanshi",
+    "chapter": "171"
+  },
+  "ownerAgentId": "bc-7bd97b7f-52be-4243-a9bd-88408f559891",
+  "workerId": "cursor-nov24-retained-staging-w13-o7",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "b47b9663fdbdd4d3edbb9d18acae1c2036aece976c3ddae3b957719de2a6db74",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-yuanshi-171-59891",
+  "extractionBytes": 97471,
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:2cc3b86b3485280aaae8383efb9b96a7e1b0ba7da6b8ec6c2ab1e373132fb580",
+    "people": 67,
+    "claims": 283,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "38d2848d337dc0283a501149518530d7e04b5578",
+    "extraction": "e1649facb82a3c8fe265f96610c304b33eb1184f",
+    "editorial": "aa0e38eb1fd6953cb7e2ea6e5e3fe8e599875f72"
+  },
+  "sealedInputs": {
+    "source": "sha256:152b3150dcc461d235b9c02d13bf7f9e09f206409915a264e09623364965be7f",
+    "extraction": "sha256:2cc3b86b3485280aaae8383efb9b96a7e1b0ba7da6b8ec6c2ab1e373132fb580",
+    "editorial": "sha256:5b39c34d99827485195d1fcadef09861f1bc337cf84d576176830a790f357d92"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 171 Biographies 58: Liu Yin, Wu Cheng",
+    "chineseUnits": 145,
+    "translatedCount": 145,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-171/date-packet.json",
+    "sha256": "sha256:422759a0efab5f82fc0efee9a635cf3d546cd5d3a831c8136480b8226b65d2a9",
+    "itemCount": 179,
+    "peopleCount": 67,
+    "sourceHash": "sha256:5c4f7d7417cbd808d654c01db4e9d2d4666f463ec87dc87d40cfbd6a99e0d0d5",
+    "extractionHash": "sha256:26bc927f425b5a58c170c24d0c24a83bb3faf94bbc3024663420529fef596179",
+    "diagnostics": {
+      "status": "PASS",
+      "errors": []
+    }
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReextracted": false,
+    "editorialSelfApproved": false,
+    "acceptedExtractionAt": "sha256:2cc3b86b3485280aaae8383efb9b96a7e1b0ba7da6b8ec6c2ab1e373132fb580",
+    "acceptedEditorialAt": "sha256:5b39c34d99827485195d1fcadef09861f1bc337cf84d576176830a790f357d92",
+    "appliedEditorialDecisionCount": 3,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book yuanshi --chapter 171",
+    "peopleValidateSummary": "Scoped person data validation passed for yuanshi/171: 1 extraction(s), 67 local people, 332 mentions, 512 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book yuanshi --chapter 171",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    },
+    "datePacketPrepare": {
+      "command": "npm run people:dates:packet -- --book yuanshi --chapter 171 --out research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-171/date-packet.json"
+    },
+    "chronologyStatus": "pending-independent-native-date-audit",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, accepted extraction (prompt v7), and applied editorial repairs at pinned git blobs. Full chapter Chinese units read with paired literal and idiomatic English on every sentence-bearing unit; people:validate passes scoped with zero proposed repairs. Native date packet built from current sealed extraction; people:dates:verify reports un-audited because no native independent date report exists yet. No definite English omission, extraction coverage gap, or source contradiction found; no owner chronology self-approval.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "independentNativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetArtifact": "research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-171/date-packet.json",
+      "packetSha256": "sha256:422759a0efab5f82fc0efee9a635cf3d546cd5d3a831c8136480b8226b65d2a9",
+      "gate": "independent-native-date-audit-then-record",
+      "recordCommand": "npm run people:dates:record -- --book yuanshi --chapter 171"
+    },
+    "canonicalIdentityReview": {
+      "required": true,
+      "status": "pending",
+      "notes": "Full chapter independent identity review against canonical dossier remains after chronology approval path."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book yuanshi --chapter 171",
+    "datesVerify": "npm run people:dates:verify -- --book yuanshi --chapter 171",
+    "datePacket": "npm run people:dates:packet -- --book yuanshi --chapter 171 --out research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-171/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; owner-handoff and checkpoint date-packet without altering sealed inputs."
+}
