@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "ownerAgentId": "bc-159f19bf-4834-45ac-9043-8f3fc66a8383",
+  "workerId": "cursor-nov24-retained-staging-w3-o5",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "b4a5420aa3ab9df71518b8dd5351ccd62355859a0f047e1008b6a18567e84703",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "050"
+  },
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-050-a8383",
+  "inputBlobWitness": {
+    "source": "440b732a12518e30f25ef31f7aac4eb6fc1537d5",
+    "extraction": "408bbaf13e07934af841c3babb670ca0375b74f8",
+    "dateAudit": "e93903cef3db57ec8534f16b453a13c22ac151b8",
+    "editorial": "74c377fefda796b968b91b5464c2b207665b077a"
+  },
+  "sealedInputs": {
+    "source": "sha256:15ecad42ae6fcc6ae0be6e61f91ac686ea47830265ce6350b19c4119f7d09fa5",
+    "extraction": "sha256:78a88b985c780245cfa0812ff4e3f0ba770ef6d4b19eaaca53c2c5e8987967d3",
+    "dateAudit": "sha256:03b9e7158d10f453ba982c7e0ba9c5513c05f101d4e85f55ff7fb35fc343a6d2",
+    "editorial": "sha256:c7bc771e4b54d15d94d12a008abaa24a7a06ce884fae5eef1ce281521a2086e3"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 358,
+    "translatedCount": 358,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingUnits": [],
+    "fullEnglishCoverage": true
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book qingshigao --chapter 050",
+    "summary": "Scoped person data validation passed for qingshigao/050: 1 extraction(s), 11 local people, 70 mentions, 121 claims, 0 proposed repair(s), 7 applied repair(s), 7 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 358,
+      "translatedCount": 358,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "chronologyStatus": "research-blocked",
+    "dateAuditSummary": "Complete initial independent audit of all 358 Chinese source units, all 28 temporal or active-hint items, and all eleven people. Qing calendar epochs date the technical treatise and its adoptions, not the personal activity of cited astronomers; seven cited figures remain source-specific holds. The dated 1672 observation and 1740/1744 Qing court events are supported. No source or canonical extraction was changed.",
+    "dateAuditReviewedAt": "2026-09-23T13:21:25.137Z",
+    "editorialDecisionCount": 7,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "datesVerify": "research-blocked"
+  },
+  "substantiveFindings": "Pinned blobs verified. Calendar treatise with eleven people and full English on 358 units; seven editorial repairs accepted and applied. Dated 1672 observation and 1740/1744 court events remain supported per sealed audit. Seven astronomer or citation holds and broader treatise-level holds remain research-blocked where Qing epoch titles date the system rather than personal activity. No owner-proposed extraction, source, or new translation repair.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "kind": "chronology-research-blocked",
+      "status": "research-blocked",
+      "source": "data/people/date-audits/qingshigao/050.json",
+      "summary": "Independent audit: seven findings retain source-specific chronology holds; dated institutional events supported.",
+      "findingCount": 7
+    }
+  ],
+  "chapterReady": false,
+  "nextGate": "chronology-research-resolution-or-independent-final-review",
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 050",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 050"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging owner pass only; sealed inputs unchanged. Chronology remains research-blocked at pinned audit; chapter not ready for final independent check until audited status or scoped holds resolved."
+}
