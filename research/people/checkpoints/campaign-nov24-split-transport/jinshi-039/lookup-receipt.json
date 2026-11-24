@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-people-lookup-receipt",
+  "scope": {
+    "book": "jinshi",
+    "chapter": "039"
+  },
+  "reviewer": {
+    "agentId": "bc-ca427376-658d-437a-b79f-c86543eb642c",
+    "name": "cursor-nov24-independent-jinshi-039"
+  },
+  "transportSeals": {
+    "transportPart001Sha256": "34e97fe849a103aa4e25a06ba6ce698737487067a542f5c3d7e9901115fae53e",
+    "transportPart002Sha256": "bc940e5f92ad6bf960315dc629af6b56ea473682f59649e1ec1290688dd95771",
+    "planFingerprint": "sha256:0723ddd24df407550869770d12137cb9722e26c16d921859ad945ced4ac8ef15"
+  },
+  "queries": [
+    {
+      "route": "/v1/manifest",
+      "purpose": "Confirm live lookup generation before bounded header reads",
+      "generation": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+      "note": "Live lookup revision differs from transport registryProvenance revision 110c2f92; sealed transport units and dossier headers in transport parts remain primary evidence for this review."
+    },
+    {
+      "route": "/v1/people/per_0K0BQ9606XVXXP8ADT82",
+      "purpose": "Cross-chapter Su Chuo cluster header check",
+      "localPeopleCount": 8
+    },
+    {
+      "route": "/v1/people/per_0YAYPCVYWR4VNX7VRZ76",
+      "purpose": "Huang Chao overflow-case header check",
+      "localPeopleCount": 91
+    }
+  ],
+  "conclusion": "Lookup used only for bounded canonical header confirmation; membership, anchor localId alignment, and literal primary Chinese witnesses are drawn from sealed transport parts and current chapter JSON embedded therein.",
+  "authorPrUntouched": "d01230a067969c00263761e4e33cd57e63a09b0c"
+}
