@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xintangshu",
+    "chapter": "051"
+  },
+  "ownerAgentId": "bc-f7cb81ae-3fc7-4cae-92d0-36013bc0945d",
+  "workerId": "cursor-nov24-retained-staging-w10-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "892a491c64e2d709f2f81f9d3b925676866762d3c9d6243dc51b67d3f5d63644",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-xintangshu-051-0945d",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:5b39de32ea88264acfdabb91b24e602e035c7c55dd080a65d278a2d39ed2e949",
+    "people": 30,
+    "claims": 211,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "03c8745640dbc3583bd11d4fae4c172cb054a063",
+    "extraction": "1dd28f732f0edb66441f028297e0a9e54b47a9c3",
+    "editorial": "3e7542ec3c89ca6d872bf2c40d5c7aca8eac2d89"
+  },
+  "sealedContentSha256": {
+    "source": "sha256:7ef42d53626a097db0974c8dee66337e5dc8cda3e02b4bcbde84308609ae4f16",
+    "extraction": "sha256:5b39de32ea88264acfdabb91b24e602e035c7c55dd080a65d278a2d39ed2e949",
+    "editorial": "sha256:cb5cf1bf587826fd0592328c625d8709af12b6566d7def293f6c92ec18befa75"
+  },
+  "datePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-051/date-packet.json",
+    "contentSha256": "sha256:57d73089f6b54aa47a2bff8bf0679dabbc4bda97b71361946fe85d1d572ad272",
+    "packetSourceHash": "sha256:ebf1931a05fed64d7d7fe9c6a152798b4f0f42a539f3213bddc49d727cf8d0d8",
+    "packetExtractionHash": "sha256:b8fb2a4fd6a8dd9da3baba51330800dace71ceda1b63a78bb1e99af705bfc137",
+    "itemCount": 76,
+    "peopleInPacket": 30,
+    "unitCount": 170
+  },
+  "sourceCoverage": {
+    "titleEn": "Volume 51 Treatises 47: Finance and Economics 1",
+    "titleZh": "卷五十一 志第四十一 食貨一",
+    "sentenceCount": 170,
+    "translatedCount": 170,
+    "englishComplete": true,
+    "bothFieldsOnUnits": true
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "gitBlob": "1dd28f732f0edb66441f028297e0a9e54b47a9c3",
+    "contentSha256": "sha256:5b39de32ea88264acfdabb91b24e602e035c7c55dd080a65d278a2d39ed2e949",
+    "bytes": 59401,
+    "canonicalEdits": false
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "gitBlob": "3e7542ec3c89ca6d872bf2c40d5c7aca8eac2d89",
+    "contentSha256": "sha256:cb5cf1bf587826fd0592328c625d8709af12b6566d7def293f6c92ec18befa75",
+    "acceptedDecisionCount": 1,
+    "repairsReflectedInSource": true,
+    "claimRetractions": 0,
+    "claimRevisions": 0
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book xintangshu --chapter 051",
+      "passed": true,
+      "summary": "Scoped person data validation passed for xintangshu/051: 1 extraction(s), 30 local people, 96 mentions, 347 claims, 0 proposed repair(s), 1 applied repair(s), 1 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book xintangshu --chapter 051",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    },
+    "datePacketBuild": {
+      "command": "npm run people:dates:packet -- --book xintangshu --chapter 051 --out research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-051/date-packet.json",
+      "completed": true
+    }
+  },
+  "substantiveFindings": "Finance treatise chapter: thirty local people, 211 extraction claims, full sentence translation coverage; one accepted editorial repair reflected in source. Native date packet lists 76 candidate chronology rows (46 dated claims + 30 active-date-hint rows). No canonical extraction or source edits in this pass.",
+  "remainingIndependentEvidence": {
+    "nativeIndependentDateAudit": {
+      "required": true,
+      "completed": false,
+      "reason": "No data/people/date-audits record; people:dates:verify reports un-audited. Owner prepared sealed date-packet only; does not self-approve.",
+      "packetSha256": "sha256:57d73089f6b54aa47a2bff8bf0679dabbc4bda97b71361946fe85d1d572ad272",
+      "minimumContinuation": "Independent reviewer records full native date audit via people:dates:record against packet at sha256:57d73089f6b54aa47a2bff8bf0679dabbc4bda97b71361946fe85d1d572ad272 without altering pinned extraction or editorial blobs."
+    },
+    "canonicalIdentityReview": {
+      "required": true,
+      "completed": false,
+      "reason": "Chapter-scoped validation passed; corpus-wide merge/split identity review remains outside this owner pass."
+    }
+  },
+  "distinctHolds": [
+    {
+      "kind": "independent-native-date-audit",
+      "detail": "Candidate chronology sealed in date-packet; await separate source reviewer approval."
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentApprovalIssued": false,
+  "ownerChangesRequired": false,
+  "completedAt": "2026-11-24T17:08:03.435Z",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xintangshu --chapter 051",
+    "verifyDates": "npm run people:dates:verify -- --book xintangshu --chapter 051",
+    "buildDatePacket": "npm run people:dates:packet -- --book xintangshu --chapter 051 --out research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-051/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter owner pass: reuse extraction and editorial; prepare date-packet; no registry, deploy, or merge."
+}
