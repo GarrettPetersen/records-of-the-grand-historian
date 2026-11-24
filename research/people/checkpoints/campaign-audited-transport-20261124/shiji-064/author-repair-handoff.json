@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "kind": "campaign-audited-identity-author-repair-handoff",
+  "authorAgentId": "bc-a1d9fb49-57cd-49f8-a504-e22bc5dcc56f",
+  "pullRequest": 5521,
+  "branch": "cursor/shiji-064-audited-owner-94c2",
+  "nativeFindings": [
+    {
+      "localId": "shiji:064:p012",
+      "unitId": "s0047",
+      "failedQuote": "至常曾孫",
+      "caseId": "sha256:d469caa6f27c8496b5833b8c4c8492e3c1b6beb062979c00133a437cc5e68464",
+      "diagnosis": "至常曾孫 is genealogical prose, not a personal-name witness; extraction already uses descriptive-kinship only.",
+      "disposition": "hold-evidence-correction"
+    },
+    {
+      "localId": "shiji:064:p013",
+      "unitId": "s0047",
+      "failedQuote": "曾孫和",
+      "caseId": "sha256:877426c6cfb082376639035b75e70daecb04b5b979b5c9b9b7d69924cb45a97d",
+      "diagnosis": "Named surface 和 belongs to p016 Tian He; 曾孫和 cannot satisfy assertDossierPrimaryWitness on p013.",
+      "disposition": "literal-attribution-correction",
+      "correctedQuote": {
+        "localId": "shiji:064:p016",
+        "quote": "和"
+      }
+    }
+  ],
+  "sealedInputsUnchanged": {
+    "extraction": "sha256:c7b34a259d7a3352f86d387d40d80ae22d42bcd17cfd2a93911a135116376447"
+  },
+  "ownerEvidenceSupplement": "owner-evidence-repair-supplement.json",
+  "extractionPatchCandidate": null,
+  "preservedDecisions": {
+    "membershipUnchanged": true,
+    "doNotRewriteIndependentReport": true
+  }
+}

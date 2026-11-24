@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "kind": "audited-native-witness-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "064"
+  },
+  "pullRequest": 5521,
+  "authorBranch": "cursor/shiji-064-audited-owner-94c2",
+  "ownerAgentId": "bc-0eb589e8-bd06-4e8c-bf58-1afc35d46126",
+  "ownerWorkerId": "cursor-nov24-audited-recovery-2",
+  "transportSha256": "ac6f5972b63c072b4802cd6f956c9732c0f80d92433b52a3a31a1cdab3320a93",
+  "nativeFindings": [
+    {
+      "text": "Witness does not support shiji:064:p013 shiji:064:s0047 quote=\"曾孫和\"",
+      "caseId": "sha256:877426c6cfb082376639035b75e70daecb04b5b979b5c9b9b7d69924cb45a97d",
+      "localPerson": "shiji:064:p013"
+    },
+    {
+      "text": "Witness does not support shiji:064:p012 shiji:064:s0047 quote=\"至常曾孫\"",
+      "caseId": "sha256:d469caa6f27c8496b5833b8c4c8492e3c1b6beb062979c00133a437cc5e68464",
+      "localPerson": "shiji:064:p012"
+    }
+  ],
+  "sealedUnit": {
+    "unitId": "s0047",
+    "zh": "至常曾孫和，因自立為齊威王，用兵行威，大放穰苴之法，而諸侯朝齊。"
+  },
+  "diagnosis": "p012 (child of Tian Chang) and p013 (parent of Tian He) are English-only descriptive-kinship rows without zh evidence on s0047. Owner quotes 曾孫和 / 至常曾孫 concatenate kinship and personal name; assert requires person-linked zh spans. Named actors 常 (p008), 和 (p016), and 齊威王 (p010) carry the literal Chinese witnesses.",
+  "disposition": "literal-attribution-correction",
+  "correctedWitnessesForIndependentReplay": [
+    {
+      "caseId": "sha256:d469caa6f27c8496b5833b8c4c8492e3c1b6beb062979c00133a437cc5e68464",
+      "holdRecommendedUnlessExtractionLinksZh": true,
+      "sourceWitnesses": [
+        {
+          "localId": "shiji:064:p008",
+          "book": "shiji",
+          "chapter": "064",
+          "unitId": "s0047",
+          "quote": "常"
+        },
+        {
+          "localId": "shiji:064:p016",
+          "book": "shiji",
+          "chapter": "064",
+          "unitId": "s0047",
+          "quote": "和"
+        }
+      ],
+      "unresolvedLocal": "shiji:064:p012",
+      "note": "Grandparent/child inference record; retain membership anchor on p012 per preparation."
+    },
+    {
+      "caseId": "sha256:877426c6cfb082376639035b75e70daecb04b5b979b5c9b9b7d69924cb45a97d",
+      "holdRecommendedUnlessExtractionLinksZh": true,
+      "sourceWitnesses": [
+        {
+          "localId": "shiji:064:p008",
+          "book": "shiji",
+          "chapter": "064",
+          "unitId": "s0047",
+          "quote": "常"
+        },
+        {
+          "localId": "shiji:064:p016",
+          "book": "shiji",
+          "chapter": "064",
+          "unitId": "s0047",
+          "quote": "和"
+        }
+      ],
+      "unresolvedLocal": "shiji:064:p013"
+    }
+  ],
+  "extractionPatchCandidate": null,
+  "chapterInputsUnchanged": true,
+  "independentReportRewrite": false,
+  "sealedInputsUnchanged": {
+    "source": "sha256:91f640750a8485859c8ce63d7d7b3565af65278ebb3e5cc93c86f27b97fc7566",
+    "extraction": "sha256:c7b34a259d7a3352f86d387d40d80ae22d42bcd17cfd2a93911a135116376447",
+    "editorial": "sha256:48a42cf0fd2fbfe7f477b222288cd56863ccf4ed594cee129500205d2c638dcb",
+    "dateAudit": "sha256:43b148f4618aba142b141f95aad850f1c6b79c3a18d464346b479f9a381aaf66"
+  }
+}

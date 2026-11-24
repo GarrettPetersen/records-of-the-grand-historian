@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-primary-witness-diagnosis",
+  "scope": { "book": "shiji", "chapter": "064" },
+  "pullRequest": 5521,
+  "authorBranch": "cursor/shiji-064-audited-owner-94c2",
+  "independentIdentityReport": {
+    "referenceBranch": "cursor/codex-identity-review-shiji-064-402361",
+    "verdictSummary": "14/14 approve; independent report unchanged on owner branch."
+  },
+  "diagnosis": {
+    "caseId": "sha256:c257060cf6af84551bbb619bdbdd3b365ef5b42680a09f1b7067567f58b140b6",
+    "localPeople": ["shiji:064:p010", "shiji:064:p016"],
+    "failedWitnessPattern": "Treat the received s0047 clause 因自立為齊威王 as a single personal identification of 和 (Tian He) with the reign title 齊威王, without the Suoyin genealogy split.",
+    "receivedPrimary": {
+      "unitId": "s0047",
+      "zh": "至常曾孫和，因自立為齊威王，用兵行威，大放穰苴之法，而諸侯朝齊。"
+    },
+    "literalAttributionCorrection": {
+      "p016": {
+        "witness": "和",
+        "unitId": "s0047",
+        "attribution": "Tian He (至常曾孫和) self-establishment; does not exhaust the full Wei Wang reign biography."
+      },
+      "p010": {
+        "witness": "齊威王",
+        "unitIds": ["s0048", "s0047"],
+        "attribution": "Regnal title 齊威王 appears in received s0047 and names the commissioner in s0048 齊威王使大夫追論…; Suoyin (三家註) reads 田和自立，至其孫，因號爲齊威王, separating 和 from his grandson 威王."
+      }
+    },
+    "disposition": "concrete-hold-on-conflation-only",
+    "ownerAlignment": "Retain both canonical records; do not merge p016 and p010. Owner evidence may cite substring 齊威王@s0047 but conclusions must follow the split attribution above.",
+    "externalWitnessPinned": {
+      "id": "suoyin-split",
+      "quote": "田和自立，至其孫，因號爲齊威王。",
+      "source": "data/people/date-audits/shiji/064.json supplementary evidence"
+    }
+  },
+  "sealedInputsUnchanged": true,
+  "chronologyProof": "research/people/checkpoints/retrospective-chronology-20261124/shiji-064.json"
+}
