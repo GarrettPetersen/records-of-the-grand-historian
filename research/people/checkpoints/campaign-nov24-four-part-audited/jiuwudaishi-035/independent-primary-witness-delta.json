@@ -1,0 +1,227 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-primary-witness-delta",
+  "chapterKey": "jiuwudaishi/035",
+  "reviewerAgentId": "bc-a5eca6f2-59a5-42c6-88ca-b7b21dc1dd53",
+  "ownerAgentId": "bc-7e44ff29-fd0a-40b3-afba-2b66bc99de9f",
+  "ownerRevision": "107e7c678765d6148e0f254b7a4ab7c3ff50a5c9",
+  "ownerProposalSha256": "0fcc91a0ab27222c2b1342493b352fa55bb9b663d90d02feafbb964358d4e090",
+  "previousReviewHead": "8cdc76be2e740309b54f31d15d1ddbf1b304d4d4",
+  "priorIndependentRun": "run-bdb67a99-5b76-4c87-a65b-02408ace1e3a",
+  "reviewedAt": "2026-11-24T15:05:00.000Z",
+  "verdict": "approve-proposal-amended",
+  "verdictSummary": "Owner correctly removes unsupported temple 明宗 from p112 annal units and keeps biography Mingzong on p001 (s0240). One schema amendment is required: compact person rows must include ≥1 name-surface entry. After that, scoped people:validate passes; identity case may close with annal contextual witnesses only (no s0240 quote on p112).",
+  "closedCases": [
+    {
+      "caseId": "sha256:dab8aa2c8a3713786e65928d93a67a572946472f08921b8527d9a6ab475b4937",
+      "localId": "jiuwudaishi:035:p112",
+      "canonicalPersonId": "per_XQXFTK938WTJ9BVXXQFP",
+      "priorVerdict": "hold",
+      "proposedVerdictAfterPatch": "approve",
+      "unresolvedIdentity": true,
+      "identityWitnessPolicy": "Annal silent sovereign: certify ruler role and AD 926 context on s0237「從之」and s0239 appointment line only; do not cite s0240 明宗 on p112. Cross-link p001 in hints without merge.",
+      "recommendedSourceWitnesses": [
+        {
+          "localId": "jiuwudaishi:035:p112",
+          "book": "jiuwudaishi",
+          "chapter": "035",
+          "unitId": "s0237",
+          "quote": "從之。"
+        },
+        {
+          "localId": "jiuwudaishi:035:p112",
+          "book": "jiuwudaishi",
+          "chapter": "035",
+          "unitId": "s0239",
+          "quote": "壬寅，以樞密副使孔循為樞密使。"
+        }
+      ]
+    }
+  ],
+  "heldCases": [],
+  "dependencies": [
+    {
+      "localId": "jiuwudaishi:035:p001",
+      "relation": "biography-owner-of-明宗-亶-on-s0240",
+      "note": "Temple Mingzong and taboo 亶 remain explicit on p001; not merged into p112."
+    },
+    {
+      "localId": "jiuwudaishi:035:p114",
+      "relation": "appointed-by-p112",
+      "claimIds": ["p114:relationship:appointed-by", "p114:event-participation:s0239"],
+      "unchangedByPatch": true
+    },
+    {
+      "path": "data/people/date-audits/jiuwudaishi/035.json",
+      "blob": "a73b5114a389b52592f2ebc3fdea34f8a1af0359",
+      "note": "AD 926 attestations on p112 s0237/s0238/s0239 unchanged; no chronology delta."
+    }
+  ],
+  "primarySourceComparison": {
+    "units": [
+      {
+        "unitId": "s0237",
+        "zh": "從之。",
+        "enLiteral": "The request was approved.",
+        "enIdiomatic": "The request was approved.",
+        "finding": "Imperial assent with no ruler name; supports silent sovereign p112, not temple 明宗."
+      },
+      {
+        "unitId": "s0239",
+        "zh": "壬寅，以樞密副使孔循為樞密使。",
+        "enLiteral": "On renyin, deputy Privy Council commissioner Kong Xun was made Privy Council commissioner.",
+        "enIdiomatic": "On renyin Kong Xun became Privy Council commissioner.",
+        "finding": "Dated court act during reign; no 明宗/亶 surface."
+      },
+      {
+        "unitId": "s0240",
+        "zh": "明宗聖德和武欽孝皇帝，諱亶，初名嗣源，及即位，改今諱，代北人也。",
+        "enIdiomatic": "Mingzong, the Sagely, Virtuous, Harmonious, Martial, and Reverent Filial Emperor, was named Dan; originally Siyuan, he changed to his present taboo name at accession; he came from northern Dai.",
+        "finding": "Owned by p001; must not back-fill p112 annal evidence."
+      }
+    ],
+    "englishOmissions": []
+  },
+  "ownerProposalReview": {
+    "substance": "accept",
+    "ownerBeforeVerified": true,
+    "ownerAfterAsSubmittedValidates": false,
+    "ownerAfterFailure": "compact schema: /people/111/5 must NOT have fewer than 1 items (empty name-surfaces array)",
+    "inventedChineseNote": "Display label 後唐主 does not appear in owned annal units; acceptable as descriptive person header with x-field disclosure, not as a primary witness quote."
+  },
+  "supportedPatch": {
+    "target": "data/people/extractions/jiuwudaishi/035.json",
+    "kind": "extraction-person-record",
+    "personId": "p112",
+    "caseId": "sha256:dab8aa2c8a3713786e65928d93a67a572946472f08921b8527d9a6ab475b4937",
+    "independentAmendment": "Add one explicit descriptive-kinship surface (schema minimum); otherwise adopt owner after.",
+    "sourceRationale": "Annal units s0237/s0239 identify a reigning Later Tang sovereign only by assent and appointment context. Temple 明宗 on strongly-inferred s0237/s0239 was unsupported; biography naming belongs on p001/s0240.",
+    "before": [
+      "p112",
+      [
+        "Mingzong",
+        "明宗",
+        "Mingzong"
+      ],
+      "historical",
+      "Ruler",
+      {
+        "n": [],
+        "r": [],
+        "a": [
+          "AD 926"
+        ],
+        "p": [
+          "Later Tang"
+        ],
+        "x": "Silent imperial subject of the Secretariat memorial's approval and of Kong Xun's appointment; not named on owned-unit wording."
+      },
+      [
+        [
+          {
+            "kind": "temple",
+            "en": "Mingzong",
+            "zh": "明宗",
+            "pinyin": "Mingzong"
+          },
+          "strongly-inferred",
+          [
+            "s0237",
+            "s0239"
+          ]
+        ]
+      ],
+      [
+        [
+          "ruler",
+          "strongly-inferred",
+          [
+            "s0237",
+            "s0239"
+          ]
+        ]
+      ]
+    ],
+    "after": [
+      "p112",
+      [
+        "Later Tang emperor (unnamed on annal surface)",
+        "後唐主",
+        "Later Tang emperor"
+      ],
+      "historical",
+      "Ruler",
+      {
+        "n": [],
+        "r": [
+          "p001"
+        ],
+        "a": [
+          "AD 926"
+        ],
+        "p": [
+          "Later Tang"
+        ],
+        "x": "Annal silent imperial subject at s0237「從之」and s0239; temple 明宗 and taboo 亶 appear only on biography s0240 (jiuwudaishi:035:p001). Cross-person identity with p001 is chronologically plausible but not name-certified on p112 units."
+      },
+      [
+        [
+          {
+            "kind": "descriptive-kinship",
+            "en": "unnamed Later Tang sovereign on annal surface",
+            "zh": "後唐主"
+          },
+          "explicit",
+          [
+            "s0237",
+            "s0239"
+          ]
+        ]
+      ],
+      [
+        [
+          "ruler",
+          "explicit",
+          [
+            "s0237",
+            "s0239"
+          ]
+        ]
+      ]
+    ]
+  },
+  "preserved": {
+    "unrelatedIdentityParts": [
+      "independent-identity-report-part-001.json",
+      "independent-identity-report-part-002.json",
+      "independent-identity-report-part-003.json"
+    ],
+    "unchangedReportRows": 113,
+    "priorPartFourHoldRow": "sha256:dab8aa2c8a3713786e65928d93a67a572946472f08921b8527d9a6ab475b4937",
+    "canonicalDataEdited": false
+  },
+  "validation": {
+    "inputBlobsAtOwnerRevision": {
+      "data/jiuwudaishi/035.json": "7848e6aabc48e10b398246065766f1eb657548f6",
+      "data/people/extractions/jiuwudaishi/035.json": "6e031428ed8c4d84103224dee52b6741733da496",
+      "data/people/date-audits/jiuwudaishi/035.json": "a73b5114a389b52592f2ebc3fdea34f8a1af0359",
+      "data/people/editorial-decisions/jiuwudaishi/035.json": "c80a57a11b91eaa33cd76db85cce1738e1871120"
+    },
+    "ownerProposalSha256Verified": true,
+    "scopedValidateCommand": "npm run people:validate -- --book jiuwudaishi --chapter 035",
+    "baselineAtOwnerRevision": {
+      "exitCode": 0,
+      "summary": "PASS at 107e7c6787 (unaltered extraction)"
+    },
+    "ownerAfterUnamended": {
+      "exitCode": 1,
+      "error": "compact schema: /people/111/5 must NOT have fewer than 1 items"
+    },
+    "independentSupportedAfter": {
+      "exitCode": 0,
+      "summary": "PASS with supportedPatch.after applied to p112 people row only (restored after test)"
+    },
+    "chronologyDeltaRequired": false,
+    "dateAuditNote": "No changes to p112 attestation claims or audited date report composition."
+  }
+}
