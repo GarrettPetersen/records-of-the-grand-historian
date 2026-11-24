@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "kind": "editorial-chronology-delta-independent-review",
+  "transport": "codex/cursor-glossary-nov24-2026-editorially-reviewed-date-deltas",
+  "scope": {
+    "id": "houhanshu-106",
+    "book": "houhanshu",
+    "chapter": "106",
+    "ownerPr": 5529
+  },
+  "reviewer": {
+    "agentId": "bc-846df7da-16df-49e5-b4ac-eef19ac70d51",
+    "runId": "run-668bfdff-a638-4982-9cdb-d0726e61f1e2",
+    "independentOfExtractor": true
+  },
+  "reviewedAt": "2026-11-24T08:45:00.000Z",
+  "sealedInput": {
+    "commit": "c1235d5ff18f8942dc3d5c994388bda8345e3067",
+    "packetPath": "research/people/checkpoints/nov24-editorial-chronology-deltas/houhanshu-106/chronology-delta.json",
+    "artifactId": 14902891661,
+    "artifactDigest": "sha256:5453930fb68afa414a9ea1b96f026e225cb9e94be02853af51741f5576f2dec5",
+    "bytesHash": "sha256:2d6825aa9fd7bf0b77d83445cc5ac1019322031dc51c31ba8fcefd16063f2dbe"
+  },
+  "lineage": {
+    "priorSourceCommit": "b32e2e05e0f6356fb5a6914c19f64d39dfa89ddf",
+    "sourceCommit": "66bbff94bf0d17b7afb3dc642c414ac77339b9ca",
+    "editorialBlob": "61859058f11d41e84934780d42a63333f7e9379f",
+    "previousSourceHash": "sha256:9577a30a0302841a8fcf7bf99ce230ac6f1505b4deebd1a532f07cfcadc3efa0",
+    "sourceHash": "sha256:3a88ef2cbd5f12781f39f6ef6e4129722928f65dca6f4fbc11283c4d716f22d0",
+    "previousExtractionHash": "sha256:04577ad9e92073530ffc05ca8ca5ea147021d91e4287b537d3c5229b323d914b",
+    "extractionHash": "sha256:83bbee19d22a517b2edec9091c321ad656cfb7e4d5e09ba0725fd91981c32749"
+  },
+  "priorAudit": {
+    "status": "audited",
+    "itemChecks": 288,
+    "personChecks": 105,
+    "reviewedUnits": 887,
+    "note": "Initial independent chronology audit unchanged by this scoped delta review except superseded rows listed below."
+  },
+  "retainedItemChecks": 288,
+  "retainedPersonChecks": 105,
+  "status": "approved",
+  "summary": "Editorial English corrections only; primary Chinese unchanged at affected witnesses. Approved merging duplicate undated Chiyou attestations (s0055, s0102), retiring redundant claim-13, and dropping Dong Zhongshu personal-name carryover at s0060. All other prior item and person checks stand.",
+  "reviewedUnits": [
+    {
+      "id": "s0055",
+      "zh": "應龍處南極，殺蚩尤與誇父，不得復上，故下數旱。"
+    },
+    {
+      "id": "s0060",
+      "zh": "暴巫聚蛇八日。"
+    },
+    {
+      "id": "s0102",
+      "zh": "其神蚩尤。"
+    }
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-11",
+      "verdict": "approved",
+      "change": "merge-duplicates",
+      "personId": "p005",
+      "predicate": "attestation",
+      "evidence": [
+        "s0055",
+        "s0102"
+      ],
+      "value": {
+        "undatedSourceAttestation": true,
+        "event": "Quoted in the commentary on the rain-prayer rite; no date is given."
+      },
+      "witnesses": [
+        {
+          "unit": "s0055",
+          "quote": "應龍處南極，殺蚩尤與誇父，不得復上，故下數旱。"
+        },
+        {
+          "unit": "s0102",
+          "quote": "其神蚩尤。"
+        }
+      ],
+      "reason": "Both units quote or presuppose Chiyou within the rain-prayer / commentary block without calendar material. One undated attestation with combined evidence is source-supported; no date implication changes."
+    },
+    {
+      "id": "claim-13",
+      "verdict": "approved",
+      "change": "removed-as-duplicate",
+      "personId": "p005",
+      "predicate": "attestation",
+      "priorEvidence": [
+        "s0102"
+      ],
+      "reason": "Retired in favor of merged claim-11; prior claim-13 duplicated the same undated event text already covered jointly with s0055."
+    }
+  ],
+  "unitAttributionChecks": [
+    {
+      "unitId": "s0060",
+      "zh": "暴巫聚蛇八日。",
+      "beforePersonIds": [
+        "p008"
+      ],
+      "afterPersonIds": [],
+      "verdict": "approved",
+      "reason": "Unit continues Dong Zhongshu's rain-rite instructions but does not name 董仲舒; personal-name attribution remains at s0058 only."
+    }
+  ],
+  "personChecks": [
+    {
+      "personId": "p005",
+      "verdict": "approved",
+      "reason": "Chiyou (蚩尤) explicit in s0055 and s0102; merged undated attestation preserves prior chronology."
+    },
+    {
+      "personId": "p008",
+      "verdict": "approved",
+      "reason": "Remove spurious s0060 mention; Dong Zhongshu surfaces limited to s0058 where 董仲舒 appears."
+    }
+  ],
+  "priorChecksSuperseded": [
+    {
+      "kind": "unit-attribution",
+      "unitId": "s0060",
+      "personId": "p008",
+      "action": "invalidate",
+      "reason": "Prior extraction incorrectly extended p008 personal-name from s0058 into s0060."
+    },
+    {
+      "kind": "item",
+      "id": "claim-13",
+      "action": "retire",
+      "reason": "Absorbed into merged claim-11."
+    }
+  ],
+  "remainingDiscrepancies": []
+}
