@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "kind": "exact-chapter-identity-owner-handoff",
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "019"
+  },
+  "workerId": "cursor-nov24-partitioned-1",
+  "ownerAgentId": "bc-23529211-836c-4588-b3ee-a1d4918b098f",
+  "sourceRevision": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+  "stagingBase": "79ae4c4de6c6739c3dc12f011c3b789dba50e3c1",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-partitioned-owner-transports",
+    "commit": "9be1bddf9a2d45496c8f0694583a74b973ec027c",
+    "sourcePacketSha256": "2130ad12ffbcaad5ec780381d4ef9b4aab5ceb4996407ceed06ca83f6e8ff17d",
+    "planFingerprint": "sha256:335c1a361a3e57b5b4616f69e3e16a86d751553646cbe19fc535a61072a63063",
+    "transportSha256": "sha256:4070b83520cf517ada3c247fb22cb016a8be1392f449a0582e437fe877ff5898",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "f700acf875d78e7aa597f3090a63558ab45c4236aac8e754e59ebf2b5f5d7fd4",
+        "caseCount": 15
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "95f956bd6a85fb0ca66989515663616c97e6c8a1a0342aa70207002fc63de29b",
+        "caseCount": 16
+      }
+    ],
+    "preparationReceiptSha256": "deab0e5aaa48bfe22a851bba1aa1ac515df4fc3b6e890b28165d7dc5d6975aa9"
+  },
+  "sealedInputs": {
+    "source": "sha256:457e2fbfcbc4af313b20cc8c6bf886ee0fa8ff720a93b2345a9ecb7a13492c40",
+    "extraction": "sha256:0f0d67a8fd5df816c8dd4e76d0550ae152e6c6a95da3363a8578ab9a8b12029c",
+    "editorial": "sha256:4f1e6594eaad5791b6615ea4b696548d89f20311d9553e6cbfabf4bab2d0526d",
+    "dateAudit": "sha256:ea8ebbfbe7e99ed968f6ed4909124323e110a500c7b153d9fdf7a758ad5301b1"
+  },
+  "chronologyStatus": "audited",
+  "editorialStatus": "reviewed-with-applied-proposals",
+  "reviewCases": 31,
+  "canonicalEdits": [],
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 31 scoped identity cases: retain accepted canonical membership; unresolvedIdentity preserved where proposed; no concrete chapter-level actor contradiction or false-merge hold. Bounded overflow acknowledged; omitted homonyms not treated as separation evidence. No supplemental English repairs required in owner pass.",
+  "artifacts": {
+    "preparationReceipt": "preparation-receipt.json",
+    "transportPart001": "transport-part-001.json",
+    "transportPart002": "transport-part-002.json",
+    "ownerEvidence": "owner-evidence.json",
+    "validationReceipt": "validation-receipt.json"
+  },
+  "nextGate": "independent-bounded-dossier-identity-review",
+  "ownerEvidenceSha256": "sha256:aab2a9ab4225eac2ceebd0789ec51acf22b4620bb2f7394f4a8c94669e7df298",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 019"
+  },
+  "notes": "Owner evidence is not independent approval. Transport parts copied unchanged from partitioned transport commit; chapter-only scope on staging base 79ae4c4."
+}
