@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "kind": "separate-transport-audited-source-owner-handoff",
+  "scope": {
+    "book": "hanshu",
+    "chapter": "104"
+  },
+  "ownerAgentId": "bc-31959fae-132e-4d10-86f7-24a41b42d3ab",
+  "workerId": "cursor-nov24-separate-transport-owner-4",
+  "campaign": "campaign-nov24-separate-transport-audited",
+  "idempotencyKey": "a8eec7e5a23407ace2e2e0d352c5c333ec667014b70c5e1c806b6c17cc6c180d",
+  "stagingBase": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-separate-transport-owner-hanshu-104-42d3ab",
+  "inputBlobWitness": {
+    "source": "8ff99418e2e22c6942a15355836d388dce63afd1",
+    "extraction": "8ee0b3fcccea4fc18bf89be9430fb5c313711eeb",
+    "dateAudit": "b3988323ab9ecd5df8e0514477431804f43068c8",
+    "editorial": "ce60c795f08c9e617c3ff3630e81b8473d28d6e6"
+  },
+  "sealedInputs": {
+    "source": "sha256:af091ff9c61cad109431dbf2aad2f9a870bbbd0ffcaf24a4941fed63ab0933d7",
+    "extraction": "sha256:b99487a76f3001912c84bbdef37c84ac888d8bca75882964f55a67f14bef89e0",
+    "dateAudit": "sha256:c622c96ca11f66c0537ce1ab23ef4ed33801474602f08208776cc586553f05b2",
+    "editorial": "sha256:04c592422be1cd9eb66f9084368812dda314faea36b2c8c4750dba86220441fe"
+  },
+  "chapterReady": true,
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book hanshu --chapter 104",
+    "summary": "Scoped person data validation passed for hanshu/104: 1 extraction(s), 150 local people, 757 mentions, 1622 claims, 0 proposed repair(s), 26 applied repair(s), 27 editorial decision(s), 0 claim retraction(s), 5 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 47 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 302,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionValidate": {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/hanshu/104.json",
+      "status": "ok",
+      "summary": "data/people/extractions/hanshu/104.json: ok (150 people, 757 mentions, 1622 claims, 599 candidates)"
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book hanshu --chapter 104",
+      "status": "audited",
+      "findings": 0
+    },
+    "chronologyStatus": "audited",
+    "chronologySummary": "Fresh final independent canonical chronology audit reviewed all 302 Chinese units, 413 temporal or active-hint items, and 150 people after the 64-operation first repair and 39-operation residual repair. Every prior finding is resolved: 19 unsupported chronology containers are now explicit undated source attestations, 18 derivative hints are absent, Yuan She p116 retains independently supported BC 7–AD 23 coverage, and Sun Jian p149 is correctly bounded to Wang Mang’s AD 6–8 regency. No unresolved date finding or research hold remains."
+  },
+  "substantiveFindings": "Owner read all 302 Chinese units with paired literal and idiomatic English for Volume 92: Youxias. Han youxia (knight-errant) collective biographies. Sealed extraction, applied editorial history, and independent date audit align at pinned git blobs; scoped validation and extraction checks pass with zero proposed repairs. Validator reports 47 legacy persons without active-date hints; audited date artifact closes chronology with zero findings and explicit undated containers. No new definite English omission, source contradiction, false merge, or chronology defect in this pass. Bounded name-index lookup (generation cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac) exercised for cross-chapter name surfaces; truncation retained as uncertainty not separation evidence.",
+  "distinctHolds": [],
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 136,
+    "identityTransportParts": 5,
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "artifactRetention": "GitHub Actions artifact nov24-separate-transport-audited-chapter-packets",
+    "notes": "Native preliminary identity preparation targets 136 cases across 5 sealed transport parts. Owner handoff is not independent identity approval."
+  },
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; full-sentence English/literal+idiomatic coverage scan; npm run people:validate; people:dates:verify; validate-people-extraction; retained independent date and editorial artifacts; no canonical extraction or source edits.",
+    "peopleLookupGeneration": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    }
+  },
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book hanshu --chapter 104",
+    "validateDates": "npm run people:dates:verify -- --book hanshu --chapter 104"
+  },
+  "notes": "[CF-Pages-Skip] Source-owner pass only; push owner-handoff without altering sealed inputs."
+}
