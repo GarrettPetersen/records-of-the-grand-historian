@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "kind": "consolidated-independent-chapter-recheck",
+  "book": "jinshu",
+  "chapter": "085",
+  "candidate": {
+    "pr": 5428,
+    "branch": "codex/cursor-glossary-nov24-2026-jinshu085",
+    "commit": "d5be3605fe57a5330afd0b599f61e350b0d83250",
+    "priorCandidate": "103736d18c27e8985ec6fc1ef1b4dc361384754e",
+    "priorReviewCommit": "53d6b3e1c83b1e5bad3f94bd4b5261f63ed3c969",
+    "priorReviewPr": 5431,
+    "sourceSha256": "sha256:6b616104f7e5f2f626ca52a9d3c45900830f3b99a40f96cdfff35dea051fc203",
+    "extractionSha256": "sha256:c668e6ab54213e2fc43d5e01631082693a5540214b328ae82907313c21e82d34",
+    "datePacketSourceHash": "sha256:76706a52e0cf3d0959a4ccd988ed381bb53e6fb33c453f72d9145be60892c2da",
+    "datePacketExtractionHash": "sha256:5f97bbd7ff704664101338dbfd5d40e598ecaf437ef9d75ce5256e9cb22dbcba",
+    "chapterFingerprint": "sha256:4c82a897155a6840aa5a6d261ecba7d36df8367b05793c27dc8ff415ce42405f",
+    "proposalsFingerprint": "sha256:631d2515b989056b010da0cef676a84f57e64e07188db05980f642daaeeb705e"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "Composer",
+    "model": "Composer",
+    "agentId": "bc-65fb5d6a-4638-432a-aaa2-0356929fe257",
+    "independentOfAuthor": true,
+    "sameReviewerAsPrior": true,
+    "reviewedAt": "2026-11-23T16:33:09.259Z"
+  },
+  "gates": {
+    "editorialEnglish": {
+      "satisfied": true,
+      "detail": "Prior schema-3 accept ×13 retained; chapterFingerprint and proposalsFingerprint still match; validateAppliedEditorialDecisions PASS. No English source changes in this revision."
+    },
+    "chronology": {
+      "satisfied": false,
+      "nativeStatus": "needs-revision",
+      "nativeArtifact": "data/people/date-audits/jinshu/085.json",
+      "priorAudit": "archived to date-audit-history (stale vs new extraction hash)",
+      "verifiedOwnerRepairs": [
+        "claim-206 / Jiangzhou 義熙中 on s0143 removed",
+        "claim-378 / s0282 foreign office sourceDate + before-AD-404 removed",
+        "127 parenthetical invented Western endpoints cleared",
+        "14 research-required active-date hints cleared",
+        "Explicit 隆安中 (claim-205) and 義熙中 death (claim-208) preserved on their own units"
+      ],
+      "remainingIncorrectPacketItems": [
+        "claim-9",
+        "claim-237",
+        "claim-280",
+        "claim-281",
+        "claim-282",
+        "claim-296",
+        "claim-339",
+        "claim-340",
+        "claim-341",
+        "claim-342",
+        "claim-343",
+        "claim-352",
+        "claim-353",
+        "claim-379",
+        "claim-380",
+        "claim-381",
+        "claim-382",
+        "claim-395",
+        "claim-396",
+        "claim-397",
+        "claim-399",
+        "claim-400",
+        "claim-407",
+        "claim-408",
+        "claim-409",
+        "claim-410",
+        "claim-412",
+        "claim-207",
+        "claim-392"
+      ],
+      "note": "Removal of unsupported endpoints is not dating evidence and was not treated as such. No Western years were guessed for cleared or remaining claims."
+    },
+    "canonicalIdentity": {
+      "satisfied": false,
+      "nativeIdentityReviewRecorded": false,
+      "blockers": [
+        "Chronology gate not satisfied (needs-revision)",
+        "extraction.run.agentId remains null",
+        "Within-chapter duplicate locals remain: 26 clusters / unresolvedIdentity=True / mergeApplied=False",
+        "No accepted catalog rebuild or native identity-review seal in this cloud recheck",
+        "Major-name uniqueness still not certifiable from truncated prior searches; spot-check only reused bounded lookup"
+      ],
+      "duplicateLocalsAdjudication": {
+        "acceptedAsHold": true,
+        "mergeApplied": false,
+        "unresolvedIdentity": true,
+        "note": "Owner source adjudication without silent merges is appropriate; holds remain until native identity certification."
+      }
+    }
+  },
+  "lookup": {
+    "manifestGeneration": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+    "spotcheckArtifact": "lookup-spotcheck.json",
+    "credentialUsed": true,
+    "note": "Candidates only; not identity decisions."
+  },
+  "scopedValidation": {
+    "peopleValidate": "passed with 13 editorial decisions; 14 persons without active-date hint after allusion-hint clears",
+    "dateAuditStatus": "needs-revision"
+  },
+  "ownerReturn": {
+    "sameOwner": "cursor-github-nov24-2 / bc-e9c3ed78-9d42-4a75-8ea8-b7bd764b43cd",
+    "requiredOwnerActions": [
+      "Clear remaining invented Western endpoints listed in the new needs-revision date audit (29 packet items), especially 年十八 age→year conversions and non-era office/title/sequencing labels",
+      "Fix era-phrase evidence ownership where 隆安中/義熙初 are cited on units that do not contain the phrase (e.g. claim-207, claim-392)",
+      "Do not invent replacement Western years for cleared packaging",
+      "Keep unresolvedIdentity holds / no silent merges until native identity review with real extractor provenance",
+      "After chronology repairs, same reviewer re-audits again before identity/publication"
+    ]
+  }
+}
