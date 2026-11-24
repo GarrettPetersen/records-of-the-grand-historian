@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "067"
+  },
+  "ownerAgentId": "bc-ee82af31-0ed0-4fa2-9ec9-f46232e210cc",
+  "workerId": "cursor-nov24-retained-staging-w18-o6",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "abe5dc51e67a59023e7a51bbce6300399c05b57e00a7ffdcdaa2f416e9ce110b",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-xinwudaishi-067-210cc",
+  "extractionBytes": 222079,
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "5c79c8c9f1e4e187861149e52a7a01874b096a692eb081dbd51338a6133c508e",
+    "people": 145,
+    "claims": 703,
+    "promptVersion": 7,
+    "workOrderSourceExtractionSha256Verified": true
+  },
+  "inputBlobWitness": {
+    "source": "9edf63b05105d8b5b7a98698308c5538a2ceea09",
+    "extraction": "c56355cc01225a476740944dbd7a1c4be025ac53",
+    "editorial": "905afa6f53a24e2ed37169b7dde6c33c7aff31a2"
+  },
+  "sealedInputs": {
+    "source": "sha256:7d4f885661fd978a4b270b8a2297a132600c3ffacb7120b9c951214669eb214b",
+    "extraction": "sha256:5c79c8c9f1e4e187861149e52a7a01874b096a692eb081dbd51338a6133c508e",
+    "editorial": "sha256:4efa8655c55ad4b7e67ba848420b98340f4854fdb0d1354813fd96a9d861be46"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 194,
+    "totalContentUnits": 194,
+    "translatedCount": 194,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-067/date-packet.json",
+    "sha256": "sha256:5c868f3daceb3db37691b8361cc7c40c0a839d3748c3711a9bfe3e25b98ff9b4",
+    "sourceHash": "sha256:57f16be88cf93e6c86a2bd5c4e2ecab7d5a6a25d4c85183c2fb78554dd844e2a",
+    "extractionHash": "sha256:1b0da4eb40f0005fa948e83b6a5952d6198d4b1bdee4d9606f6e255cceb69379",
+    "itemCount": 390,
+    "peopleCount": 145,
+    "buildCommand": "npm run people:dates:packet -- --book xinwudaishi --chapter 067 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-067/date-packet.json"
+  },
+  "extractionAndEditorialReuse": {
+    "extractionUnchanged": true,
+    "editorialUnchanged": true,
+    "extractionPromptVersion": 7,
+    "note": "Existing prompt v7 extraction and accepted editorial decisions retained; no re-extraction and no owner self-approval of chronology."
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book xinwudaishi --chapter 067",
+    "peopleValidateSummary": "Scoped person data validation passed for xinwudaishi/067: 1 extraction(s), 145 local people, 860 mentions, 1177 claims, 0 proposed repair(s), 10 applied repair(s), 10 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book xinwudaishi --chapter 067",
+      "exitCode": 0,
+      "status": "un-audited",
+      "parsed": {
+        "total": 1,
+        "counts": {
+          "un-audited": 1
+        },
+        "chapters": [
+          {
+            "book": "xinwudaishi",
+            "chapter": "067",
+            "status": "un-audited",
+            "auditVersion": 1
+          }
+        ]
+      }
+    },
+    "chronologyStatus": "un-audited",
+    "independentNativeDateReport": {
+      "present": false,
+      "missingGate": "Independent native date audit report at data/people/date-audits/xinwudaishi/067.json"
+    },
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and editorial at pinned git blobs on 4394bd71e4ddea797aefde7d83407e881868262a. Full chapter source read: 194 Chinese-bearing units with 0 missing idiomatic English and 0 missing literal English. people:validate passes on current sealed extraction. No native date audit file exists; people:dates:verify reports un-audited. Owner prepared sealed date-packet sha256:5c868f3daceb3db37691b8361cc7c40c0a839d3748c3711a9bfe3e25b98ff9b4 for independent reviewer; did not record an audit or alter sealed inputs. No definite English omission or chronology contradiction identified in owner pass.",
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "command": "npm run people:dates:record -- --book xinwudaishi --chapter 067",
+      "prerequisitePacket": "sha256:5c868f3daceb3db37691b8361cc7c40c0a839d3748c3711a9bfe3e25b98ff9b4",
+      "note": "Separate independent reviewer must approve full chapter chronology from sealed date-packet; owner did not self-approve."
+    },
+    "canonicalIdentity": {
+      "required": true,
+      "note": "Independent canonical identity review against dossier evidence after date gate."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 067",
+    "datesVerify": "npm run people:dates:verify -- --book xinwudaishi --chapter 067",
+    "datePacket": "npm run people:dates:packet -- --book xinwudaishi --chapter 067 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-067/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; sealed inputs unchanged; pending independent native date audit."
+}
