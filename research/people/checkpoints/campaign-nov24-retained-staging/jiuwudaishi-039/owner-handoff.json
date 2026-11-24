@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": { "book": "jiuwudaishi", "chapter": "039" },
+  "ownerAgentId": "bc-0e48d1f5-a248-4aeb-b767-52dabf1dcab9",
+  "workerId": "cursor-nov24-retained-staging-w5-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "597b278cbbd00fddce2949ee1ddb691a96dbb0f60307a142361ac4cf1da1602e",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-jiuwudaishi-039-dcab9",
+  "extractionBytes": 366688,
+  "inputBlobWitness": {
+    "source": "7fa5885720aebfb5418acaca014bdd2dd61484c9",
+    "extraction": "010a62b5ca49a88683187ccaf8b6146a4e2e1721",
+    "dateAudit": "1c51a5e5dc76c8efed8ff16afd13bc6c7cb62f14",
+    "editorial": "d17b16f5ca358a8c1c9d14b705cf470c777d0bde"
+  },
+  "sealedInputs": {
+    "source": "sha256:8ea72d1e35aec59e7026f421984b80179da65a72bddbc00b72578791e677edae",
+    "extraction": "sha256:53e85bc2dd75edace73a1b87fc80d79b3b5f11f9a625228ee8895acd78f20452",
+    "dateAudit": "sha256:9ff5652518c6c52891701829ee52bb7a108e0c0f2435ae68a462a9afebe509d3",
+    "editorial": "sha256:65ea286d79ab21d69023e13840571a7d8a98e9cf695ffee0d541ef3b679ab1c2"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 219,
+    "translatedCount": 219,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jiuwudaishi --chapter 039",
+    "summary": "Scoped person data validation passed for jiuwudaishi/039: 1 extraction(s), 183 local people, 500 mentions, 2069 claims, 0 proposed repair(s), 26 applied repair(s), 26 editorial decision(s), 1 claim retraction(s), 2 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book jiuwudaishi --chapter 039",
+      "exitCode": 1,
+      "status": "stale",
+      "auditReportSha256": "sha256:9ff5652518c6c52891701829ee52bb7a108e0c0f2435ae68a462a9afebe509d3",
+      "workOrderAuditSha256Verified": true,
+      "reportStatusField": "audited",
+      "sealedReportExtractionHash": "sha256:e16d5992f973618370b462fc70bafea7ad05248deaa0c01c2a04ea9d7e4baaca",
+      "currentPacketExtractionHash": "sha256:64ca958d6fdd646a8ead7888fc855d1110be27b978370321ba216f5d876bcc44",
+      "sourceHashMatch": true,
+      "findings": 0
+    },
+    "chronologyStatus": "stale-audit-packet",
+    "dateAuditSummary": "Reviewed 219 units, 846 checks, and 183 people (sealed report bytes preserved).",
+    "editorialDecisionCount": 26,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "substantiveFindings": "All four git blobs match the work-order witness. Scoped validation passes on current applied extraction (1 claim retraction, 2 claim revisions after the independent audit seal). The retained date-audit file still reads status audited with zero findings, but people:dates:verify returns stale because report.extractionHash (e16d5992…) no longer matches the current packet (64ca958d…) while sourceHash is unchanged. Original independent date report bytes are preserved; owner did not rewrite audit hashes or re-approve chronology. English and Chinese coverage complete for all 219 units.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "kind": "stale-date-audit-packet",
+      "reason": "Applied editorial dependency changed extraction fingerprint after independent audit; scoped proof reuse or independent re-audit required before audited verify.",
+      "preservedAuditBytes": true,
+      "ownerApprovedAudit": false
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained-staging source-owner handoff only; no sealed input edits."
+}
