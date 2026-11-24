@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 1,
+  "kind": "source-hold-delta-proposal",
+  "chapterKey": "beiqishu/047",
+  "pullRequest": 5594,
+  "ownerAgentId": "bc-0fa2c5a7-1dcc-4526-9fd8-172656dd1d79",
+  "ownerWorkerId": "cursor-nov24-current-master-followup-1",
+  "ownerHead": "b4ef2c4901c9fc95ebdc6930a2a91ccad1f7c80c",
+  "reviewHead": "ccd9254b48e1ee0759afcab26a74bbfc0e7554ab",
+  "independentReviewerAgentId": "bc-6e0f06ce-d521-43f2-ab36-8b8eb89b54e8",
+  "independentReport": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-047/independent-identity-report-part-003.json",
+  "additionalEvidence": [
+    {
+      "path": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-047/independent-english-defects.json",
+      "gitBlob": "b2374191d69d3af14f35c65b790ac0f2337d82df",
+      "sha256": "de34af389995cc3dc3efb5001a0bf743b2420a7c26d652ee5515ef302d42b2a4"
+    },
+    {
+      "path": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-047/independent-lookup-receipt.json",
+      "gitBlob": "950da97f4976df0d681685ad749a5ca01c88fd3b",
+      "sha256": "dd0add2f226a95d3faf9a8f393ba0fa42b51c1cc6016829b7ceb9817f35d49e2"
+    },
+    {
+      "path": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-047/independent-review-receipt.json",
+      "gitBlob": "de95b7404ed506006e3cfd9cdf0cb7c06337d9ba",
+      "sha256": "16d650df84fcd986944bcaa5412fdc80510d0793d8fd4481ef8d1b6b546ca18e"
+    }
+  ],
+  "sealedInputs": {
+    "sourceGitBlob": "24c26f830e368760238b86a9a5426bf06b260396",
+    "sourceSha256": "sha256:ab26e72e846569ca047fe0104ce230ffc1c8be7dacb72957c84ff470eb62d58d",
+    "extractionGitBlob": "b28a3e787c5b9824261234060a7ecf9790cd7b89",
+    "extractionSha256": "sha256:fbf76094db09b10be5dd9ec38a98f6336e214e895afb2a131eb759fe84c87f3f",
+    "dateAuditGitBlob": "005f5b6ae9d56fc47195346b6699f87c802fd46d",
+    "dateAuditSha256": "sha256:069909cf452e41afce97c66094ca7b67c9cab0ff1d95aff32c04f334282c0265",
+    "editorialGitBlob": "0efd49823225bb6495f83bfa67f65a853ce10b12",
+    "editorialSha256": "sha256:089bea3752f5d8bee77677e4321fa5a17be3397b70bc7b3cfcebc237fa157dee"
+  },
+  "diagnosisSummary": "Independent hold on case sha256:40b2e28e…: beiqishu:047:p079 invents Mother of Zheng Zimo (子默母 / 鄭子默母) with no primary substring in s0198. The same unit explicitly identifies p080 as 義雲之姑卽子默祖母.",
+  "holds": [
+    {
+      "caseId": "sha256:40b2e28e65a2e0939b393e9f31c1669c15ae82c4e716d10bd3644ef97033df48",
+      "canonicalPersonId": "per_EC0TRZ54QD8E1YX6EEGC",
+      "localPeople": ["beiqishu:047:p079"],
+      "independentVerdict": "hold",
+      "independentReason": "子默母 not primary-witnessed; s0198 names grandmother via 義雲之姑卽子默祖母",
+      "ownerDiagnosis": "Extraction inferred Zimo's mother because Yiyun's aunt is Zimo's grandmother. The source clause equates 義雲之姑 with 子默祖母 only; it does not name or imply Zimo's mother. The composite labels 子默母 and 鄭子默母 are editorial glosses without chapter Chinese support. p080 already holds explicit 姑 and 子默祖母 on s0198.",
+      "sourceWitness": {
+        "book": "beiqishu",
+        "chapter": "047",
+        "unitId": "s0198",
+        "path": "data/beiqishu/047.json",
+        "zhLiteral": "鄭子默正被任用，義雲之姑卽子默祖母，遂除度支尚書，攝左丞。",
+        "quotesInUnit": ["鄭子默", "義雲之姑", "子默祖母"],
+        "absentFromUnit": ["子默母", "鄭子默母", "母"],
+        "enLiteral": "Zheng Zimo was then in active use; Yi Yun's paternal aunt was Zimo's grandmother, and he was therefore made Minister of Revenue and acting Left Vice Director.",
+        "enIdiomatic": "Zheng Zimo was then in favor; Yiyun's aunt was Zimo's grandmother, so he was made minister of revenue and acting left vice director."
+      },
+      "impactedDependencies": {
+        "extraction": [
+          "Remove beiqishu:047:p079 person row and strongly-inferred name claim 子默母",
+          "Retract p078 child-of p079 (mother)",
+          "Retract p079 child-of p080 misread (daughter-of-grandmother-as-mother)",
+          "Strip p079 from p078 and p080 relatedLocalPeople"
+        ],
+        "chronology": [
+          "Remove p079 explicit-event-contextual-date attestation on s0198 (乾明初 / AD 560); p078 and p080 retain s0198 contextual attestations where supported."
+        ],
+        "identity": [
+          "After apply: drop beiqishu:047:p079 from canonical cluster per_EC0TRZ54QD8E1YX6EEGC (host registry step).",
+          "Preserve beiqishu:047:p080 case and explicit 姑 / 子默祖母 witnesses; do not merge p079 into p080."
+        ],
+        "translations": "No English change: both fields already translate 義雲之姑卽子默祖母 as Yiyun's aunt = Zimo's grandmother without inventing a mother."
+      },
+      "operations": [
+        {
+          "op": "remove-person",
+          "book": "beiqishu",
+          "chapter": "047",
+          "personId": "p079",
+          "reason": "not-a-name",
+          "sourceWitness": {
+            "unitId": "s0198",
+            "excerpt": "義雲之姑卽子默祖母",
+            "note": "Source names grandmother kinship only; 子默母 never appears."
+          }
+        },
+        {
+          "op": "strip-related",
+          "book": "beiqishu",
+          "chapter": "047",
+          "personId": "p078",
+          "removedRelated": ["p079"]
+        },
+        {
+          "op": "strip-related",
+          "book": "beiqishu",
+          "chapter": "047",
+          "personId": "p080",
+          "removedRelated": ["p079"]
+        },
+        {
+          "op": "claim-retraction",
+          "book": "beiqishu",
+          "chapter": "047",
+          "subject": "p078",
+          "predicate": "family-relationship",
+          "before": {
+            "relation": "child-of",
+            "personId": "p079",
+            "kinshipTerm": { "zh": "母", "en": "mother" },
+            "parentage": "biological",
+            "subjectRole": "son",
+            "objectRole": "mother",
+            "certainty": "strongly-inferred",
+            "evidence": ["s0198"]
+          },
+          "after": null,
+          "reason": "s0198 does not attest 母 or 子默母; grandmother-only kinship is on p080."
+        },
+        {
+          "op": "claim-retraction",
+          "book": "beiqishu",
+          "chapter": "047",
+          "subject": "p079",
+          "predicate": "family-relationship",
+          "before": {
+            "relation": "child-of",
+            "personId": "p080",
+            "kinshipTerm": { "zh": "女", "en": "daughter" },
+            "parentage": "biological",
+            "subjectRole": "daughter",
+            "objectRole": "mother",
+            "certainty": "strongly-inferred",
+            "evidence": ["s0198"]
+          },
+          "after": null,
+          "reason": "Grandmother attestation does not license inventing an unnamed daughter/mother person."
+        }
+      ],
+      "holdAfterApply": false,
+      "holdAfterApplyNote": "After p079 removal, identity review should re-certify p080 (祖母) and p078 (鄭子默) on s0198; no mother record should remain in chapter extraction."
+    }
+  ],
+  "preserved": {
+    "unchangedScopes": "All other 90 identity cases and transport artifacts on this branch",
+    "p080GrandmotherClaims": "Explicit descriptive-kinship 姑 and 子默祖母 on s0198; p080 ancestor-of p078 with 祖母",
+    "p004KinOfP080": "畢義雲 kin-of p080 via 姑 on s0198 unchanged",
+    "englishFields": "data/beiqishu/047.json units s0198 literal and idiomatic English unchanged"
+  },
+  "validation": {
+    "command": "npm run people:validate -- --book beiqishu --chapter 047",
+    "atProposalAuthoring": {
+      "applied": false,
+      "result": "PASS on unmodified extraction at ownerHead",
+      "summary": "Scoped person data validation passed for beiqishu/047: 1 extraction(s), 91 local people, 559 mentions, 570 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s). Host must re-validate after apply."
+    }
+  },
+  "notes": "Owner-authored repair scope only; not self-approved. Host applies via native editorial/false-person tooling, then independent identity re-review."
+}
