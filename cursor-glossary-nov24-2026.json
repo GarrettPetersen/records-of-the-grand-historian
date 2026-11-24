@@ -176,7 +176,7 @@
    "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
   }
  ],
- "lastCheckedAt": "2026-11-24T07:17:48.224Z",
+ "lastCheckedAt": "2026-11-24T07:19:19.839Z",
  "lookup": {
   "authenticatedManifestVerified": true,
   "access": "read-only",
@@ -2334,7 +2334,21 @@
      "status": "in_progress",
      "conclusion": null,
      "runId": 45346112266,
-     "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45346112266"
+     "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45346112266",
+     "result": {
+      "status": "completed",
+      "conclusion": "failure",
+      "finding": "The GitHub runner lacked the empty generated registry parent; use the existing registry workflow’s initialization."
+     }
+    },
+    "retryWithRegistryParent": {
+     "status": "in_progress",
+     "conclusion": null,
+     "source": "c3e701f23fbe682b0100921af3058acfb7ca8690",
+     "ref": "codex/cursor-glossary-nov24-2026-release-eighteen-curation-registry-initialized",
+     "workflowRevision": "d673b9baa11401c07cd907144821862c88dfd4e1",
+     "runId": 45346835538,
+     "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45346835538"
     }
    }
   }
@@ -22224,14 +22238,15 @@
       "runId": "run-48bbc1b6-38dd-41a6-83bd-a489706f1b57",
       "observedAt": "2026-11-24T07:02:01.258Z",
       "capture": {
-       "status": "pending-native-certification",
+       "status": "native-witness-hold",
        "head": "5b136325d724ea94a4905c3e30b5a4f8802d009e",
        "reportSha256": "f0ebcb67d6a8fb5fb72b912bd099a1e307a099c579d7a5f45e7807d2835b73e2",
        "summary": {
         "cases": 12,
         "holds": [],
         "repairs": 0
-       }
+       },
+       "nativeFinding": "Witness does not support liaoshi:106:p007 in s0019, quote 林牙斡魯之孫."
       }
      },
      "liaoshi/042": {
@@ -22295,14 +22310,15 @@
       "runId": "run-4fbe6d9c-d719-40a8-9c2c-64cbfbe6fdd3",
       "observedAt": "2026-11-24T07:02:01.258Z",
       "capture": {
-       "status": "pending-native-certification",
+       "status": "native-witness-hold",
        "head": "5ac284fffb0d2fedc59fa6100082bcf29cf62e0a",
        "reportSha256": "ccf9f20a3ba2600b615c41fde522e3a72d9e3db63c08dd4a6aefec9135855f9b",
        "summary": {
         "cases": 14,
         "holds": [],
         "repairs": 0
-       }
+       },
+       "nativeFinding": "Witness does not support shiji:064:p013 in s0047, quote 曾孫和."
       }
      },
      "qingshigao/026": {
@@ -23065,7 +23081,7 @@
       "ref": "codex/cursor-glossary-nov24-2026-retrospective-native-certify-current",
       "workflowRevision": "45e9c8ad388dd1407b6d0962905f9deaf5e4fb72",
       "source": "32d461ef5297344e103a040cf9ee28fb05837535",
-      "status": "in_progress",
+      "status": "completed",
       "jobs": [
        {
         "key": "liaoshi/106",
@@ -23091,9 +23107,19 @@
        }
       ],
       "artifact": "retrospective-native-certify-current-evidence",
-      "conclusion": null,
+      "conclusion": "failure",
       "runId": 45346107088,
-      "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45346107088"
+      "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45346107088",
+      "failures": [
+       {
+        "key": "liaoshi/106",
+        "error": "Witness does not support liaoshi:106:p007 in s0019, quote 林牙斡魯之孫."
+       },
+       {
+        "key": "shiji/064",
+        "error": "Witness does not support shiji:064:p013 in s0047, quote 曾孫和."
+       }
+      ]
      }
     ],
     "ownerContinuations": [
@@ -23433,7 +23459,22 @@
        "workflowRevision": "799a7e4f79a3ec742801eb57fc99409862092f71",
        "source": "50310cdac7912f2975a22896ad5631f7bada5845",
        "validatorBlob": "fa38824b8d61b4c35dc48bc56440ec9d41dc77de",
-       "status": "dispatch_pending"
+       "status": "completed",
+       "runId": 45346319143,
+       "conclusion": "success",
+       "artifactId": 14897684500,
+       "artifactDigest": "sha256:cb3931372acb58f4b6a81a6a52c6fe6f80b1f3b9f2d66dd182b8d91f107ca842"
+      },
+      "transfer": {
+       "status": "attachment_pending",
+       "pr": 5488,
+       "head": "18a3879f80152439c2dfee5b411f8ea53aca1288",
+       "previousHead": "50310cdac7912f2975a22896ad5631f7bada5845",
+       "source": "486d52193b8d3cf68b99ad1c794c759b22c02ff8",
+       "ref": "codex/cursor-glossary-nov24-2026-020-identity-with-restored-authors",
+       "workflowRevision": "5286e6974c89deebacbe0d06c332b32c19656962",
+       "reviewedDateItems": 650,
+       "restoredChunks": 13
       }
      }
     }
