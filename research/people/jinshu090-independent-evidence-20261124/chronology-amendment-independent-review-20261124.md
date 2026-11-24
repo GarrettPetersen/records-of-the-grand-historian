@@ -1,6 +1,8 @@
-# Jinshu 090 — independent review of owner chronology apply (`be3d658`)
+# Jinshu 090 — independent review of owner apply (#5489)
 
-**Owner tip:** `be3d65879b2e3496b37565c08138fe1522a290e9` (#5489) · **Evidence base:** `041d402f` (553 item checks) · **50** editorials unchanged
+**Chronology apply:** `be3d6587` · **Hint fix tip:** `5ff5c1e8d1f790777330bf88e0edec69bef1b521`
+
+**Owner tip:** `5ff5c1e8d1f790777330bf88e0edec69bef1b521` (#5489) · **Evidence base:** `041d402f` (553 item checks) · **50** editorials unchanged
 
 ## Claim amendments (82)
 
@@ -14,18 +16,20 @@
 
 | Bucket | source-supported undated | research-hold | contradiction |
 |--------|-------------------------:|--------------:|--------------:|
-| undated English (24) | 20 | 0 | 4 |
+| undated English (24) | 24 | 0 | 0 |
 | genealogy (8) | — | 8 | 0 |
 
 ## Verdict
 
-**BLOCKED** — `chronology-amendment-independent-review-20261124.json`
+**Amended native review published** — `amended-date-audit-report-20261124.json`
 
-### Blocking hint IDs
+### Flagged hint repairs (p075/p076/p158/p176)
 
-- **hints-p075**: Hint still asserts Western year/bound without Chinese regnal year on person biography units.
-- **hints-p076**: Hint still asserts Western year/bound without Chinese regnal year on person biography units.
-- **hints-p158**: Hint still asserts Western year/bound without Chinese regnal year on person biography units.
-- **hints-p176**: Hint still asserts Western year/bound without Chinese regnal year on person biography units.
+- **hints-p075**: verified
+- **hints-p076**: verified
+- **hints-p158**: verified
+- **hints-p176**: verified
+
+
 
 Rebuild: `node research/people/build-jinshu090-chronology-amendment-independent-review-20261124.mjs`

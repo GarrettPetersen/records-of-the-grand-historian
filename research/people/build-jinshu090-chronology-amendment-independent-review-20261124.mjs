@@ -6,14 +6,23 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
-import { validateDateAuditReport, DATE_AUDIT_VERSION, dateAuditItems, dateAuditDiagnostics } from '../../scripts/lib/people-date-audit.mjs';
+import {
+  validateDateAuditReport,
+  DATE_AUDIT_VERSION,
+  buildDateAuditPacket,
+  dateAuditItems,
+  dateAuditDiagnostics,
+} from '../../scripts/lib/people-date-audit.mjs';
 import { temporalContainers } from '../../scripts/lib/people-date-values.mjs';
 import { sha256, readJson } from '../../scripts/lib/people-content.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '../..');
 const OUT_DIR = path.join(ROOT, 'research/people/jinshu090-independent-evidence-20261124');
 const APPLY_DIR = path.join(OUT_DIR, 'owner-apply-pin-be3d658');
-const OWNER_TIP = 'be3d65879b2e3496b37565c08138fe1522a290e9';
+const HINTFIX_TIP_DEFAULT = '5ff5c1e8d1f790777330bf88e0edec69bef1b521';
+const OWNER_TIP = process.argv[2] ?? process.env.JINSHU090_OWNER_TIP ?? HINTFIX_TIP_DEFAULT;
+const CHRONOLOGY_APPLY_TIP = 'be3d65879b2e3496b37565c08138fe1522a290e9';
+const FLAGGED_HINTS = ['hints-p075', 'hints-p076', 'hints-p158', 'hints-p176'];
 const REVIEWER = 'bc-3794b569-dd8b-4e85-ae88-2c86a0bef9f8';
 const PRIOR_REPORTS = [
   'partial-date-report-preface-20261124.json',
@@ -167,8 +176,53 @@ for (const row of delta.applied) {
 }
 
 const editorialPost = execSync(`git show ${OWNER_TIP}:data/people/editorial-decisions/jinshu/090.json`, { encoding: 'utf8' });
-const editorialPre = execSync(`git show ${delta.baseTip}:data/people/editorial-decisions/jinshu/090.json`, { encoding: 'utf8' });
+const editorialPre = execSync(`git show ${CHRONOLOGY_APPLY_TIP}:data/people/editorial-decisions/jinshu/090.json`, {
+  encoding: 'utf8',
+});
 const editorialUnchanged = sha256(editorialPost) === sha256(editorialPre);
+
+const hintScopesRaw = execSync(
+  `git show ${OWNER_TIP}:research/people/jinshu090-owner-hint-west-strip-20261124/amendment-scopes.json`,
+  { encoding: 'utf8' },
+);
+const hintScopes = JSON.parse(hintScopesRaw);
+const HINTFIX_DIR = path.join(OUT_DIR, 'owner-hintfix-pin-5ff5c1e');
+fs.mkdirSync(HINTFIX_DIR, { recursive: true });
+fs.writeFileSync(path.join(HINTFIX_DIR, 'amendment-scopes.json'), `${hintScopesRaw}\n`);
+
+const flaggedHintFailures = [];
+const flaggedHintVerified = [];
+for (const repair of hintScopes.repairs ?? []) {
+  if (!FLAGGED_HINTS.includes(repair.itemId)) continue;
+  const live = postItems.find((i) => i.id === repair.itemId);
+  const lines = live?.value ?? [];
+  const hasWestern = /\bAD \d+|\bonOr(?:Before|After)\b|\(AD/i.test(lines.join(' '));
+  const linesMatch = JSON.stringify(lines) === JSON.stringify(repair.after);
+  const u = repair.unitIds?.[0];
+  const zh = unitMap.get(u) ?? '';
+  const quoteNeedle = repair.chinese?.replace(/。$/, '').slice(0, 6);
+  const quote = zh.includes(quoteNeedle) ? quoteNeedle : repair.chinese?.slice(0, 4);
+  const chineseOk = zh.includes(quote);
+  if (!linesMatch || hasWestern || !chineseOk) {
+    flaggedHintFailures.push({
+      id: repair.itemId,
+      linesMatch,
+      hasWestern,
+      chineseOk,
+      lines,
+      expectedAfter: repair.after,
+    });
+    continue;
+  }
+  flaggedHintVerified.push({
+    id: repair.itemId,
+    personId: repair.personId,
+    evidence: [{ unit: u, quote }],
+    event: `Active-date hints for ${repair.personId} after Western strip (#5489 ${OWNER_TIP.slice(0, 8)})`,
+    verdict: 'supported',
+    reason: `${u} “${quote}” anchors undated English hint without AD projection; owner stripped “${repair.stripped}” per independent blocker review.`,
+  });
+}
 
 const hintClass = { undatedEnglish: [], genealogy: [] };
 const hintBlocking = [];
@@ -217,7 +271,13 @@ for (const id of GENEALOGY_HINTS) {
 
 const diagnostics = dateAuditDiagnostics({ ...pin, items: postItems });
 const claimRepairCount = delta.applied.filter((a) => a.kind !== 'same-person-hint-align').length;
-const passed = repairFailures.length === 0 && hintBlocking.length === 0 && editorialUnchanged && diagnostics.length === 0;
+const passed =
+  repairFailures.length === 0 &&
+  hintBlocking.length === 0 &&
+  flaggedHintFailures.length === 0 &&
+  flaggedHintVerified.length === FLAGGED_HINTS.length &&
+  editorialUnchanged &&
+  diagnostics.length === 0;
 
 const blockingAggregate = {
   claimRepairs: repairFailures,
@@ -230,6 +290,29 @@ for (const file of PRIOR_REPORTS) {
   for (const check of report.itemChecks) priorChecks.set(check.id, check);
 }
 for (const check of repairRows) priorChecks.set(check.id, check);
+for (const check of flaggedHintVerified) priorChecks.set(check.id, check);
+for (const row of hintClass.undatedEnglish.filter((h) => h.classification === 'source-supported-undated' && !FLAGGED_HINTS.includes(h.id))) {
+  const w = row.evidence[0];
+  if (!w) continue;
+  priorChecks.set(row.id, {
+    id: row.id,
+    evidence: [w],
+    event: `Active-date hints (${row.id}) — source-supported undated English`,
+    verdict: 'supported',
+    reason: `${w.unit} “${w.quote}” supports undated active-date hint without Western projection.`,
+  });
+}
+for (const row of hintClass.genealogy) {
+  const w = row.evidence[0];
+  if (row.classification !== 'source-supported-research-hold' || !w) continue;
+  priorChecks.set(row.id, {
+    id: row.id,
+    evidence: [w],
+    event: `Active-date hints (${row.id}) — genealogy / 時-only research hold`,
+    verdict: 'research-blocked',
+    reason: `${w.unit} “${w.quote}” supports kinship or 時-only wording; “research required” is a source-supported unknown, not a calendar contradiction.`,
+  });
+}
 
 const amendedVerdicts = { supported: 0, incorrect: 0, 'research-blocked': 0 };
 for (const check of priorChecks.values()) amendedVerdicts[check.verdict] += 1;
@@ -310,7 +393,18 @@ const report = {
   blockingAggregate,
   packetDiagnosticsPostApply: diagnostics,
   findings,
-  references: [{ path: 'owner-apply-pin-be3d658/chronology-apply-delta.json', tip: OWNER_TIP }],
+  ownerHintFixTip: OWNER_TIP,
+  chronologyApplyTip: CHRONOLOGY_APPLY_TIP,
+  flaggedHintRepairs: {
+    verified: flaggedHintVerified.map((r) => r.id),
+    failures: flaggedHintFailures,
+    receipt: 'owner-hintfix-pin-5ff5c1e/amendment-scopes.json',
+  },
+  references: [
+    { path: 'owner-apply-pin-be3d658/chronology-apply-delta.json', tip: CHRONOLOGY_APPLY_TIP },
+    { path: 'owner-hintfix-pin-5ff5c1e/amendment-scopes.json', tip: OWNER_TIP },
+    { path: 'date-packet-pin.json', note: 'Sealed 553-review packet (pre-owner-apply extraction hash)' },
+  ],
   scope: {
     priorItemChecksPreserved: 553 - repairRows.length,
     amendedItemChecks: repairRows.length,
@@ -321,37 +415,86 @@ const report = {
 const reviewJsonPath = path.join(OUT_DIR, 'chronology-amendment-independent-review-20261124.json');
 fs.writeFileSync(reviewJsonPath, `${JSON.stringify(report, null, 2)}\n`);
 
+const postPacket = buildDateAuditPacket('jinshu', '090', { suppliedExtraction: postExtraction });
+const postPacketPath = path.join(OUT_DIR, 'date-packet-post-5489-5ff5c1e.json');
+fs.writeFileSync(postPacketPath, `${JSON.stringify(postPacket, null, 2)}\n`);
+
 if (passed) {
+  const allItemChecks = [...priorChecks.values()].sort((a, b) => {
+    const na = a.id.startsWith('hints-') ? 1e6 + Number(a.id.slice(8)) : Number(a.id.split('-')[1]);
+    const nb = b.id.startsWith('hints-') ? 1e6 + Number(b.id.slice(8)) : Number(b.id.split('-')[1]);
+    return na - nb;
+  });
+  const blockedIds = new Set(allItemChecks.filter((c) => c.verdict !== 'supported').map((c) => c.id));
+  const nativeFindings = [];
+  for (const file of PRIOR_REPORTS) {
+    const prior = JSON.parse(fs.readFileSync(path.join(OUT_DIR, file), 'utf8'));
+    for (const finding of prior.findings ?? []) {
+      const items = finding.items.filter((id) => blockedIds.has(id));
+      if (!items.length) continue;
+      const key = `${finding.problem?.slice(0, 40)}`;
+      let row = nativeFindings.find((f) => f.problem === finding.problem);
+      if (!row) {
+        row = { items: [], problem: finding.problem, action: finding.action };
+        nativeFindings.push(row);
+      }
+      for (const id of items) {
+        if (!row.items.includes(id)) row.items.push(id);
+      }
+    }
+  }
+  const genealogyHoldIds = hintClass.genealogy
+    .filter((h) => h.classification === 'source-supported-research-hold')
+    .map((h) => h.id);
+  nativeFindings.push({
+    items: genealogyHoldIds,
+    problem:
+      'Eight genealogy / 時-only active-date hints remain research holds: source-supported unknowns, not concrete source contradictions.',
+    action: 'Retain until host pins explicit dates; do not invent Western years.',
+  });
+  const listedBlocked = new Set(nativeFindings.flatMap((f) => f.items));
+  for (const id of blockedIds) {
+    if (listedBlocked.has(id)) continue;
+    nativeFindings.push({
+      items: [id],
+      problem: `Residual research-blocked item ${id} after owner apply; no unsupported Western geometry remains on amended extraction.`,
+      action: 'Host may clear when independent reviewer accepts undated or research-hold reason.',
+    });
+  }
   const nativeAmended = {
     schemaVersion: 1,
     auditVersion: DATE_AUDIT_VERSION,
     book: 'jinshu',
     chapter: '090',
-    sourceHash: pin.sourceHash,
-    extractionHash: report.extractionHashPostApply,
+    sourceHash: postPacket.sourceHash,
+    extractionHash: postPacket.extractionHash,
     status: 'needs-revision',
     reviewer: report.reviewer,
     reviewedAt: report.reviewedAt,
     summary:
-      'Native amended item checks for owner apply; chapter remains needs-revision on 32 held hints (undated English / genealogy). Not data/people/date-audits install.',
+      'Native amended review: claim-60, claim-911, 80 Western strips, and four flagged hints verified at #5489 5ff5c1e. Eight genealogy hints held as research-blocked unknowns. Fifty editorials unchanged. Not data/people/date-audits install.',
     reviewedUnits: pin.units.map((u) => u.id),
-    itemChecks: [...priorChecks.values()].sort((a, b) => {
-      const na = a.id.startsWith('hints-') ? 1e6 + Number(a.id.slice(8)) : Number(a.id.split('-')[1]);
-      const nb = b.id.startsWith('hints-') ? 1e6 + Number(b.id.slice(8)) : Number(b.id.split('-')[1]);
-      return na - nb;
-    }),
+    itemChecks: allItemChecks,
     personChecks: [],
-    findings: report.findings,
-    references: report.references,
+    findings: nativeFindings,
+    references: [],
+    evidenceRef: 'research/people/jinshu090-independent-evidence-20261124/amended-date-audit-report-20261124.json',
+    carriedForward: {
+      sealedPacket: 'date-packet-pin.json',
+      postApplyPacket: 'date-packet-post-5489-5ff5c1e.json',
+      preservedEditorialDecisions: 50,
+    },
   };
-  validateDateAuditReport(nativeAmended, pin);
+  validateDateAuditReport(nativeAmended, postPacket);
   fs.writeFileSync(
     path.join(OUT_DIR, 'amended-date-audit-report-20261124.json'),
     `${JSON.stringify(nativeAmended, null, 2)}\n`,
   );
 }
 
-const md = `# Jinshu 090 — independent review of owner chronology apply (\`be3d658\`)
+const md = `# Jinshu 090 — independent review of owner apply (#5489)
+
+**Chronology apply:** \`${CHRONOLOGY_APPLY_TIP.slice(0, 8)}\` · **Hint fix tip:** \`${OWNER_TIP}\`
 
 **Owner tip:** \`${OWNER_TIP}\` (#5489) · **Evidence base:** \`041d402f\` (553 item checks) · **50** editorials ${editorialUnchanged ? 'unchanged' : '**CHANGED**'}
 
@@ -372,7 +515,11 @@ const md = `# Jinshu 090 — independent review of owner chronology apply (\`be3
 
 ## Verdict
 
-**${passed ? 'Amended native review published' : 'BLOCKED'}** — \`chronology-amendment-independent-review-20261124.json\`
+**${passed ? 'Amended native review published' : 'BLOCKED'}** — \`${passed ? 'amended-date-audit-report-20261124.json' : 'chronology-amendment-independent-review-20261124.json'}\`
+
+### Flagged hint repairs (p075/p076/p158/p176)
+
+${FLAGGED_HINTS.map((id) => `- **${id}**: ${flaggedHintVerified.some((r) => r.id === id) ? 'verified' : 'FAILED'}`).join('\n')}
 
 ${
   hintBlocking.length
@@ -392,8 +539,13 @@ console.log(
       claimRepairsVerified: repairRows.length,
       claimFailures: repairFailures.length,
       hintBlocking: hintBlocking.map((h) => h.id),
+      flaggedHintVerified: flaggedHintVerified.map((r) => r.id),
+      flaggedHintFailures,
       editorialUnchanged,
       diagnostics: diagnostics.length,
+      evidenceRef: passed
+        ? 'research/people/jinshu090-independent-evidence-20261124/amended-date-audit-report-20261124.json'
+        : null,
     },
     null,
     2,
