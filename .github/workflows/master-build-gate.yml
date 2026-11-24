@@ -60,20 +60,20 @@ jobs:
           const assembled=assembleChapterIdentityReviewParts(sourcePacket.plan,[transportData],[body],[pin.agent],sourcePacket.authorAgentIds,sourcePacket.reviewCaseIds);
           const encoding=Buffer.from(JSON.stringify(assembled)+'\n'), report=path.join(temp,'recorded-aggregate.json'), part=path.join(temp,'review-part.json'), job=path.join(temp,'recorded-job.json');
           fs.writeFileSync(report,encoding);fs.writeFileSync(part,bytes);
-          const joint={schemaVersion:1,kind:'captured-independent-identity-review-parts',phase:'report-recorded',scope:sourcePacket.scope,agentId:pin.agent,runId:pin.run,sourcePacketSha256:meta.sourcePacketSha256,reportSha256:hash(encoding),transportPolicy:meta.transportPolicy,parts:[{schemaVersion:1,kind:'captured-independent-identity-review-part',phase:'report-recorded',agentId:pin.agent,runId:pin.run,sourcePacketSha256:meta.sourcePacketSha256,transportSha256:hash(fs.readFileSync(transport)),reportSha256:hash(bytes),transportFile:transport,reportFile:part}]};
+          const joint={schemaVersion:1,kind:'captured-independent-identity-review-parts',phase:'report-recorded',scope:sourcePacket.scope,agentId:pin.agent,runId:pin.run,sourcePacketSha256:meta.sourcePacketSha256,reportSha256:hash(encoding),transportPolicy:meta.transportPolicy,authorAgentIds:sourcePacket.authorAgentIds,parts:[{schemaVersion:1,kind:'captured-independent-identity-review-part',phase:'report-recorded',scope:sourcePacket.scope,agentId:pin.agent,runId:pin.run,sourcePacketSha256:meta.sourcePacketSha256,transportSha256:hash(fs.readFileSync(transport)),reportSha256:hash(bytes),transportFile:transport,reportFile:part}]};
           fs.writeFileSync(job,JSON.stringify(joint)+'\n');
           const song=path.join(prior,'songshu-004','composition.json');assert.equal(bare(hash(fs.readFileSync(song))),pin.song);
           const results=[];
-          for(const [key,args] of [['jinshu-031',{packet,report,job}],['songshu-004',{composition:song,sourceRevision:source}]]){
+          for(const [key,args] of [['jinshu-031',{packet,report,job}]]){
            try{const value=await recordChapterIdentityReview({...args,registry,out:path.join(out,key+'.json')});results.push({key,receipt:value});}catch(e){results.push({key,error:e.message});}
           }
           fs.writeFileSync(path.join(out,'summary.json'),JSON.stringify(results,null,2)+'\n');console.log(JSON.stringify(results));
-          assert(results.some(x=>x.receipt?.nativeIdentityProofAccepted),'Both exact composition results remain held');
+          assert(results.some(x=>x.receipt?.nativeIdentityProofAccepted),'Exact Jinshu 031 composition remains held');
           JS
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: nov24-exact-deferred-composition-certs
+          name: nov24-jinshu031-exact-composition-cert
           path: data/people/generated/nov24-deferred-native-composition/
           if-no-files-found: error
           retention-days: 7
