@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 0,
+  "kind": "native-date-audit-draft",
+  "warning": "Research draft only — not data/people/date-audits/jinshu/110.json; independent evidence does not seal chapter chronology.",
+  "book": "jinshu",
+  "chapter": "110",
+  "ownerHeadCommit": "3f7eb2d43500de6548019363b68d05bd00045797",
+  "independentEvidenceCommit": "f5602490f491e7c6fc23ce7e962f308ece6057f6",
+  "status": "incomplete-blocked",
+  "sourceHash": "sha256:8144104d4ac1315269785914019693c352b302fa79654cdf7f353c42a21b2beb",
+  "extractionHashAtReview": "sha256:9f1573e0006d086e7f6d11b6aec72324e0179e22b2ff9d5ba134c37666339a8d",
+  "reviewer": {
+    "agentId": "bc-53e29e7b-3acd-4386-bdb7-68f17317dbc3",
+    "model": "Composer 2.5",
+    "independentOfExtractor": true,
+    "completedAt": "2026-11-24T04:45:00.000Z"
+  },
+  "coverageReceipts": [
+    "research/people/jinshu110-native-chronology-coverage-receipt-20261124.json",
+    "research/people/jinshu110-independent-owner-head-review-3f7eb2d4-20261124.json"
+  ],
+  "summary": "Owner head aligns with independent 22-row westernYear remediation. Four Western-shaped packet rows remain: claim-670 (unit-native 昇平四年, conversion hold) and claim-94–96 (off-chapter westernInterval on speech exemplars — substantive contradictions under undated-source rule). Prior 631-item packet review plus 168 westernBounds strip preserved. No guessed Western added in this draft.",
+  "approvedOwnerAlignments": {
+    "westernBoundsStrip168": "verified at 3f98645596",
+    "westernYearStrip22": {
+      "verifiedAt": "3f7eb2d43500de6548019363b68d05bd00045797",
+      "claimIds": [
+        "claim-46", "claim-54", "claim-55", "claim-56", "claim-57", "claim-61", "claim-62",
+        "claim-64", "claim-65", "claim-68", "claim-69", "claim-70",
+        "claim-138", "claim-139", "claim-140", "claim-141", "claim-142", "claim-143",
+        "claim-146", "claim-147", "claim-148", "claim-150"
+      ]
+    }
+  },
+  "remainingWesternShapedRows": [
+    {
+      "claimId": "claim-670",
+      "unitId": "s0255",
+      "primaryChinese": "昇平四年，俊死，時年四十二，在位十一年。",
+      "field": "westernBounds",
+      "auditDisposition": "hold-pending-conversion-certification",
+      "contradiction": false
+    },
+    {
+      "claimId": "claim-94",
+      "unitId": "s0019",
+      "primaryChinese": "且用兵殺伐，哲王盛典，湯、武親行誅放，而仲尼美之。",
+      "field": "westernInterval",
+      "auditDisposition": "reject-off-chapter",
+      "contradiction": true
+    },
+    {
+      "claimId": "claim-95",
+      "unitId": "s0020",
+      "primaryChinese": "魏武養于宦官，莫知所出，眾不盈旅，遂能終成大功。",
+      "field": "westernInterval",
+      "auditDisposition": "reject-off-chapter",
+      "contradiction": true
+    },
+    {
+      "claimId": "claim-96",
+      "unitId": "s0021",
+      "primaryChinese": "暴胡酷亂，蒼生屠膾，寡君奮劍而誅除之，黎元獲濟，可謂功格皇天，勳侔高祖。",
+      "field": "westernInterval",
+      "auditDisposition": "reject-off-chapter",
+      "contradiction": true
+    }
+  ],
+  "consolidatedTrueContradictions": {
+    "count": 3,
+    "claimIds": ["claim-94", "claim-95", "claim-96"],
+    "ownerRepairShape": "Replace westernInterval with undatedSourceAttestation or unresolved + sourceDate matching recall labels (仲尼/魏武/高祖) on cited units only."
+  },
+  "preservedIndependentScope": {
+    "priorPacketReviewUnique": 631,
+    "notReAuditedThisTurn": true,
+    "frozenExemplars": "claim-774 through claim-787",
+    "hintRows": 181
+  },
+  "cannotSealBecause": [
+    "Three off-chapter westernInterval speech attestations",
+    "Native conversion table not applied for 昇平四年 in audit file",
+    "No approved write to data/people/date-audits/jinshu/110.json"
+  ]
+}
