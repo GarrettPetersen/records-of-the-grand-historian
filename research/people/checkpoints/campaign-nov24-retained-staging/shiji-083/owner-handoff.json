@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "083"
+  },
+  "ownerAgentId": "bc-0732cd11-ca48-4204-b03d-95f209effd3e",
+  "workerId": "cursor-nov24-retained-staging-w15-o7",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "12413307793d64c662a5f5d2defac43fbafac07c175eda51536b760decaa21b8",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-083-ffd3e",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "workOrderPeople": 104,
+    "workOrderClaims": 258,
+    "sourceExtractionSha256Witness": "7470ec3be2660b6b1c845e299e9ce46fb817086d05b5d29d774e4c5f250a528c"
+  },
+  "extractionBytes": 120370,
+  "inputBlobWitness": {
+    "source": "836c4499d29d0b5a5c0af76f3cfe0492b0cce5cd",
+    "extraction": "26411e033664e1530f8867eeb26e19f0dddda44f",
+    "editorial": "d26e3650d26b089076b391478ca6b432cc22c255",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:7cfd8e070ded460013a1e0ecb605e95e251c579446c10844744de114b8e391c9",
+    "extraction": "sha256:7470ec3be2660b6b1c845e299e9ce46fb817086d05b5d29d774e4c5f250a528c",
+    "editorial": "sha256:045a2739d53e30c4cb9b827d11d748f3c423d91cf545c638067e9e9f1dc1ecad",
+    "dateAudit": null
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Biographies of Lu Zhonglian and Zou Yang",
+    "chineseUnits": 232,
+    "translatedCount": 232,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "editorialAndExtractionReuse": {
+    "extractionSealed": true,
+    "editorialSealed": true,
+    "editorialDecisionCount": 6,
+    "editorialProposalCount": 6,
+    "appliedTranslationRepairsInSource": true,
+    "ownerExtractionEdits": false,
+    "ownerEditorialEdits": false
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-083/date-packet.json",
+    "sha256": "sha256:2931051e2d4398def2c7cb608d3f41ba52e3141f02aa1d54e051e20b4d805118",
+    "command": "npm run people:dates:packet -- --book shiji --chapter 083 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-083/date-packet.json",
+    "packetSourceHash": "sha256:8dcef7768f57ed8e2cbfa0f2401d4ee786c3f7e3b6d028d7a8a9dc210f9942e7",
+    "packetExtractionHash": "sha256:9712431662ab12dc9c59b6f95febef47d5265d8904376df9a8102ef677f60b9a",
+    "itemCount": 255,
+    "peopleCount": 104,
+    "unitCount": 232,
+    "chronologyGeometryDiagnostics": 0
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book shiji --chapter 083",
+    "peopleValidateSummary": "Scoped person data validation passed for shiji/083: 1 extraction(s), 104 local people, 488 mentions, 523 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 083",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "candidateValidationCommands": [
+    "npm run people:validate -- --book shiji --chapter 083",
+    "npm run people:dates:verify -- --book shiji --chapter 083",
+    "npm run people:dates:packet -- --book shiji --chapter 083 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-083/date-packet.json"
+  ],
+  "remainingIndependentProofs": {
+    "date": "Independent native date audit against sealedNativeDatePacket (sha256:2931051e2d4398def2c7cb608d3f41ba52e3141f02aa1d54e051e20b4d805118); record via people:dates:record. Owner did not run people:dates:run or self-approve.",
+    "identity": "Independent bounded chapter identity review against sealed extraction and canonical dossier evidence after date approval; no identity merge/split edits in this owner pass."
+  },
+  "substantiveFindings": "Pinned three-part inputs witness-verified at staging 20b8d0e3. Chapter read: 232 Chinese units with paired literal and idiomatic English; 104 local people and accepted editorial repairs align with source citations. people:validate passes at sealed extraction hash; people:dates:verify remains un-audited (no data/people/date-audits/shiji/083.json). Fresh native date packet has 255 temporal items and zero chronology-geometry diagnostics. No definite English omission, extraction contradiction, or owner date repair required.",
+  "distinctHolds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 083",
+    "datesVerify": "npm run people:dates:verify -- --book shiji --chapter 083",
+    "datePacket": "npm run people:dates:packet -- --book shiji --chapter 083 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-083/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner evidence only; sealed inputs unchanged; missing gate is independent native date audit."
+}
