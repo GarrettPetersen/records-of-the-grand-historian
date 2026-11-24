@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": { "book": "jiuwudaishi", "chapter": "038" },
+  "ownerAgentId": "bc-0e48d1f5-a248-4aeb-b767-52dabf1dcab9",
+  "workerId": "cursor-nov24-retained-staging-w5-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "597b278cbbd00fddce2949ee1ddb691a96dbb0f60307a142361ac4cf1da1602e",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-jiuwudaishi-038-dcab9",
+  "extractionBytes": 391272,
+  "inputBlobWitness": {
+    "source": "b5d78abfadf506ee0c6fecfbd46d0a0a13606cd3",
+    "extraction": "83f3bc5d918e8dd84bf6e3c18fdb08468f38b195",
+    "dateAudit": "aa29734d17c51e04ed5e739ae8f14c87b194c930",
+    "editorial": "47bb317a65781f478ee8bc1ac1b8de70734f0a5a"
+  },
+  "sealedInputs": {
+    "source": "sha256:ade59d8c62b58717d04589c06bc00887419b0b92e57ce522267126a7d215e8c7",
+    "extraction": "sha256:6464e246875cdafd60ae129e12d1ca1a6361b0b95c4b754d024322192bf396ae",
+    "dateAudit": "sha256:e90999e3bd2117831a9bc6155b9cc4d660f4e8c60a6a4e1a0aa9017f2cfb6698",
+    "editorial": "sha256:0240f0e26b2954395465a3d17a37cb0a4fe0fcfffb014cbedf150eacdddbca17"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 276,
+    "translatedCount": 276,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jiuwudaishi --chapter 038",
+    "summary": "Scoped person data validation passed for jiuwudaishi/038: 1 extraction(s), 210 local people, 557 mentions, 2138 claims, 0 proposed repair(s), 37 applied repair(s), 37 editorial decision(s), 2 claim retraction(s), 20 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book jiuwudaishi --chapter 038",
+      "exitCode": 0,
+      "status": "audited",
+      "auditReportSha256": "sha256:e90999e3bd2117831a9bc6155b9cc4d660f4e8c60a6a4e1a0aa9017f2cfb6698",
+      "workOrderAuditSha256Verified": true,
+      "findings": 0,
+      "affectedItems": 0
+    },
+    "chronologyStatus": "audited",
+    "dateAuditSummary": "Reviewed 276 units, 840 checks, and 210 people.",
+    "editorialDecisionCount": 37,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "substantiveFindings": "Witness-verified sealed inputs on staging a50a027b. All 276 Chinese units have complete English and literal translations; 210 people and dated claims match independent audit references. Editorial repairs applied in source; date audit packet hashes match current extraction and source. people:dates:verify audited with zero findings. No new definite translation defect or chronology contradiction in owner review.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained-staging source-owner handoff only; no sealed input edits."
+}
