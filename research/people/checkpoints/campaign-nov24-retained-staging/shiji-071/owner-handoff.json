@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "ownerAgentId": "bc-b9897fd8-a041-4889-a4df-680136d348a7",
+  "workerId": "cursor-nov24-retained-staging-w18-o5",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "f43289994f0dcd2bde1811e01040a4a7e63c8ede96ec63b2adddb5ab0f27bcb6",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "phase": "dispatch_pending",
+  "promptVersion": 7,
+  "extractionReuse": {
+    "status": "sealed-unchanged",
+    "reason": "Work order pins promptVersion 7 extraction; owner does not re-extract."
+  },
+  "editorialReuse": {
+    "status": "accepted-applied-in-source",
+    "reason": "Pinned editorial-decisions reflect independently reviewed repairs already materialized in chapter source."
+  },
+  "notIndependentApproval": true,
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentDateApprovalIssued": false,
+  "independentIdentityApprovalIssued": false,
+  "scope": {
+    "book": "shiji",
+    "chapter": "071"
+  },
+  "branch": "cursor/nov24-retained-staging-owner-shiji-071-348a7",
+  "inputBlobWitness": {
+    "source": "d197cf0b3a60f3d2b93f9fe3ff2514266b4c82e5",
+    "extraction": "79327d386daa7b3ca191cdc009cbc0b47f57f1a0",
+    "editorial": "2f7cfed3c7427efc20a9cbaa1a9a60f4906a59ce"
+  },
+  "sealedInputs": {
+    "source": "sha256:09bb523296769c6607844a381b03145a62e86748bafc1bf8ca7ab4e121a2478f",
+    "extraction": "sha256:5c19e709d6e1e4df5d095a4fba5f167c8acd867ccf212168bb138050c0a78c38",
+    "editorial": "sha256:9a7ecf55902069ae2ab1c4b141c3881365aaf1972065ee03cd1f8c11aef24f5f"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Biographies of Shu Lizi and Gan Mao",
+    "sentenceCount": 231,
+    "translatedCount": 231,
+    "chineseUnits": 231,
+    "emptyChinese": 0,
+    "missingIdiomatic": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 220617,
+    "workOrderPeople": 94,
+    "workOrderClaims": 639
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-071/date-packet.json",
+    "sha256": "sha256:ca1d090ef171e5edbdb718a9fdc809167c5f312012ea31f41ab6f3cf1d88e6f1",
+    "sourceHash": "sha256:26ba7ab11ff35ecfb271a08c85bdc844e072a777f7cdee746514b4c4e70d4702",
+    "extractionHash": "sha256:fb755ccea86f8b8718e789abdbaa7e8ee002abb857af4a691f5241b0fb1d20dc",
+    "itemCount": 401,
+    "peopleCount": 94,
+    "unitCount": 231,
+    "buildCommand": "npm run people:dates:packet -- --book shiji --chapter 071 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-071/date-packet.json"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book shiji --chapter 071",
+    "peopleValidateSummary": "Scoped person data validation passed for shiji/071: 1 extraction(s), 94 local people, 711 mentions, 989 claims, 0 proposed repair(s), 22 applied repair(s), 22 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s).",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 071",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "nativeDateReportState": "no-native-date-report"
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "editorialDecisionCount": 22,
+    "peopleDatesScanFindings": 0
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "remainingIndependentEvidence": {
+    "chronology": {
+      "status": "pending-independent-native-date-audit",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-071/date-packet.json",
+      "packetSha256": "sha256:ca1d090ef171e5edbdb718a9fdc809167c5f312012ea31f41ab6f3cf1d88e6f1",
+      "reason": "No data/people/date-audits report exists; owner prepared a fresh native packet from pinned source and extraction only and does not self-approve.",
+      "reviewerCommand": "npm run people:dates:run -- --book shiji --chapter 071 --run --model <independent-reviewer-model>"
+    },
+    "identity": {
+      "status": "pending-bounded-canonical-identity-review",
+      "reason": "Chapter extraction validates at pinned hash; independent canonical identity certification remains after chronology approval."
+    }
+  },
+  "distinctHolds": [
+    {
+      "gate": "independent-native-date-audit",
+      "detail": "data/people/date-audits/shiji/071.json is absent; people:dates:verify reports un-audited."
+    }
+  ],
+  "substantiveFindings": "Staging blob witness verified for source, extraction, and editorial inputs at 4394bd7. Full chapter Chinese read with English idiomatic/literal fields: 231 substantive units, 0 missing idiomatic, 0 missing literal. Retained promptVersion 7 extraction (94 people, 639 claims per work order) and accepted editorial repairs validate with zero proposed repairs and zero legacy temporal debt. Native date packet sealed at sha256:ca1d090ef171e5edbdb718a9fdc809167c5f312012ea31f41ab6f3cf1d88e6f1; triage scan reports zero automatic findings. No definite English omission or source-backed chronology contradiction requiring owner repair in this pass; undated and Western-interval claims remain for independent date review.",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 071",
+    "datesVerify": "npm run people:dates:verify -- --book shiji --chapter 071",
+    "datesPacket": "npm run people:dates:packet -- --book shiji --chapter 071 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-071/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; sealed production inputs unchanged; independent date audit still missing."
+}

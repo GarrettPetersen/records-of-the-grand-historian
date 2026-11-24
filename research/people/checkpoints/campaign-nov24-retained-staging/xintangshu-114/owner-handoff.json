@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "ownerAgentId": "bc-b9897fd8-a041-4889-a4df-680136d348a7",
+  "workerId": "cursor-nov24-retained-staging-w18-o5",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "f43289994f0dcd2bde1811e01040a4a7e63c8ede96ec63b2adddb5ab0f27bcb6",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "phase": "dispatch_pending",
+  "promptVersion": 7,
+  "extractionReuse": {
+    "status": "sealed-unchanged",
+    "reason": "Work order pins promptVersion 7 extraction; owner does not re-extract."
+  },
+  "editorialReuse": {
+    "status": "accepted-applied-in-source",
+    "reason": "Pinned editorial-decisions reflect independently reviewed repairs already materialized in chapter source."
+  },
+  "notIndependentApproval": true,
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentDateApprovalIssued": false,
+  "independentIdentityApprovalIssued": false,
+  "scope": {
+    "book": "xintangshu",
+    "chapter": "114"
+  },
+  "branch": "cursor/nov24-retained-staging-owner-xintangshu-114-348a7",
+  "inputBlobWitness": {
+    "source": "ac4c04aa41602eec84e2bab5bfbc521b0b9307d9",
+    "extraction": "48874779e16db19cc04f3e1036327396f7408dff",
+    "editorial": "660d85e471c96ef47e6369215c2068c2cf0c657e"
+  },
+  "sealedInputs": {
+    "source": "sha256:6c521740e9c4d3d88cd3f3db2532321fa244e2690a88772813d4d53a9b2d2d9b",
+    "extraction": "sha256:82b763a8ffab319221d5381352c2fb18304b84e14d1a5d9d0c2b7acdd16a86f6",
+    "editorial": "sha256:6a126e519a370ec57e74ff188e63d26b9156ba69d1ea22f46c54159814f7a0fd"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 114 Biographies 39: Cui Rong and Descendent Cong, Descendent Neng, Neng's Nephew: Shen You, Neng's Nephew an Qian, Neng's Son: Yan Ceng, Xu Yanbo, Su Weidao, Dou Lu Qin Wang",
+    "sentenceCount": 267,
+    "translatedCount": 267,
+    "chineseUnits": 267,
+    "emptyChinese": 0,
+    "missingIdiomatic": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 221059,
+    "workOrderPeople": 119,
+    "workOrderClaims": 823
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-114/date-packet.json",
+    "sha256": "sha256:e102d3ac8918aa6326236e11dcb55ed56b7b3e9eb5af430ed940ffa0ccd44f75",
+    "sourceHash": "sha256:e9514811c5e1de4dd9d7b9b6e50c33c9c24c60b465a231747e1701743955df17",
+    "extractionHash": "sha256:ddce8190b2aeb9728471f97292f604ca93f61c43fc31a6ad911a5de646abf812",
+    "itemCount": 329,
+    "peopleCount": 119,
+    "unitCount": 267,
+    "buildCommand": "npm run people:dates:packet -- --book xintangshu --chapter 114 --out research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-114/date-packet.json"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book xintangshu --chapter 114",
+    "peopleValidateSummary": "Scoped person data validation passed for xintangshu/114: 1 extraction(s), 119 local people, 537 mentions, 1292 claims, 0 proposed repair(s), 14 applied repair(s), 14 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s).",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book xintangshu --chapter 114",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "nativeDateReportState": "no-native-date-report"
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "editorialDecisionCount": 14,
+    "peopleDatesScanFindings": 0
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "remainingIndependentEvidence": {
+    "chronology": {
+      "status": "pending-independent-native-date-audit",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-114/date-packet.json",
+      "packetSha256": "sha256:e102d3ac8918aa6326236e11dcb55ed56b7b3e9eb5af430ed940ffa0ccd44f75",
+      "reason": "No data/people/date-audits report exists; owner prepared a fresh native packet from pinned source and extraction only and does not self-approve.",
+      "reviewerCommand": "npm run people:dates:run -- --book xintangshu --chapter 114 --run --model <independent-reviewer-model>"
+    },
+    "identity": {
+      "status": "pending-bounded-canonical-identity-review",
+      "reason": "Chapter extraction validates at pinned hash; independent canonical identity certification remains after chronology approval."
+    }
+  },
+  "distinctHolds": [
+    {
+      "gate": "independent-native-date-audit",
+      "detail": "data/people/date-audits/xintangshu/114.json is absent; people:dates:verify reports un-audited."
+    }
+  ],
+  "substantiveFindings": "Staging blob witness verified for source, extraction, and editorial inputs at 4394bd7. Full chapter Chinese read with English idiomatic/literal fields: 267 substantive units, 0 missing idiomatic, 0 missing literal. Retained promptVersion 7 extraction (119 people, 823 claims per work order) and accepted editorial repairs validate with zero proposed repairs and zero legacy temporal debt. Native date packet sealed at sha256:e102d3ac8918aa6326236e11dcb55ed56b7b3e9eb5af430ed940ffa0ccd44f75; triage scan reports zero automatic findings. No definite English omission or source-backed chronology contradiction requiring owner repair in this pass; undated and Western-interval claims remain for independent date review.",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xintangshu --chapter 114",
+    "datesVerify": "npm run people:dates:verify -- --book xintangshu --chapter 114",
+    "datesPacket": "npm run people:dates:packet -- --book xintangshu --chapter 114 --out research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-114/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; sealed production inputs unchanged; independent date audit still missing."
+}

@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "ownerAgentId": "bc-b9897fd8-a041-4889-a4df-680136d348a7",
+  "workerId": "cursor-nov24-retained-staging-w18-o5",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "f43289994f0dcd2bde1811e01040a4a7e63c8ede96ec63b2adddb5ab0f27bcb6",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "phase": "dispatch_pending",
+  "promptVersion": 7,
+  "extractionReuse": {
+    "status": "sealed-unchanged",
+    "reason": "Work order pins promptVersion 7 extraction; owner does not re-extract."
+  },
+  "editorialReuse": {
+    "status": "accepted-applied-in-source",
+    "reason": "Pinned editorial-decisions reflect independently reviewed repairs already materialized in chapter source."
+  },
+  "notIndependentApproval": true,
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentDateApprovalIssued": false,
+  "independentIdentityApprovalIssued": false,
+  "scope": {
+    "book": "weishu",
+    "chapter": "089"
+  },
+  "branch": "cursor/nov24-retained-staging-owner-weishu-089-348a7",
+  "inputBlobWitness": {
+    "source": "d87a71a28a7946cd21b92d45a367b417ea544e14",
+    "extraction": "e4d3334ad1c6b3ac9abe2e588ece8d3d7eb40e10",
+    "editorial": "bad35ff398326989a82b310e85e0096b88265b6c"
+  },
+  "sealedInputs": {
+    "source": "sha256:b8a53e70a64e20c0f7326776e24deb90b025808ede18085bd16c1b669d94ffac",
+    "extraction": "sha256:c50ce2acdd6e3ac98fa3a2a9882b1a221ff922befb3e94ff535299b7f125b0c8",
+    "editorial": "sha256:c206ae31639cdfb3b0630bb082710a46be5368898deb1f79aeab798d66873011"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 83b: Families of Imperial Consorts 2: Gao Zhao, Yu Jin, Hu Guozhen, Li Yanshi",
+    "sentenceCount": 261,
+    "translatedCount": 261,
+    "chineseUnits": 261,
+    "emptyChinese": 0,
+    "missingIdiomatic": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 218473,
+    "workOrderPeople": 133,
+    "workOrderClaims": 665
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/weishu-089/date-packet.json",
+    "sha256": "sha256:53c9fb0eed86e763e553c43200d2202584c38556e1fdc6d7cc6aae0bd7bd322d",
+    "sourceHash": "sha256:69805d480e5142ec94977894a87ebed25d0bda30872a418a303137b4bf6704f7",
+    "extractionHash": "sha256:59174bec8abf324f89ee21cb19d08a96f5979e05d6d1e58d6c5d369db67e60cd",
+    "itemCount": 335,
+    "peopleCount": 133,
+    "unitCount": 261,
+    "buildCommand": "npm run people:dates:packet -- --book weishu --chapter 089 --out research/people/checkpoints/campaign-nov24-retained-staging/weishu-089/date-packet.json"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book weishu --chapter 089",
+    "peopleValidateSummary": "Scoped person data validation passed for weishu/089: 1 extraction(s), 133 local people, 529 mentions, 1123 claims, 0 proposed repair(s), 10 applied repair(s), 10 editorial decision(s), 0 claim retraction(s), 3 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s).",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book weishu --chapter 089",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "nativeDateReportState": "no-native-date-report"
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "editorialDecisionCount": 10,
+    "peopleDatesScanFindings": 0
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "remainingIndependentEvidence": {
+    "chronology": {
+      "status": "pending-independent-native-date-audit",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/weishu-089/date-packet.json",
+      "packetSha256": "sha256:53c9fb0eed86e763e553c43200d2202584c38556e1fdc6d7cc6aae0bd7bd322d",
+      "reason": "No data/people/date-audits report exists; owner prepared a fresh native packet from pinned source and extraction only and does not self-approve.",
+      "reviewerCommand": "npm run people:dates:run -- --book weishu --chapter 089 --run --model <independent-reviewer-model>"
+    },
+    "identity": {
+      "status": "pending-bounded-canonical-identity-review",
+      "reason": "Chapter extraction validates at pinned hash; independent canonical identity certification remains after chronology approval."
+    }
+  },
+  "distinctHolds": [
+    {
+      "gate": "independent-native-date-audit",
+      "detail": "data/people/date-audits/weishu/089.json is absent; people:dates:verify reports un-audited."
+    }
+  ],
+  "substantiveFindings": "Staging blob witness verified for source, extraction, and editorial inputs at 4394bd7. Full chapter Chinese read with English idiomatic/literal fields: 261 substantive units, 0 missing idiomatic, 0 missing literal. Retained promptVersion 7 extraction (133 people, 665 claims per work order) and accepted editorial repairs validate with zero proposed repairs and zero legacy temporal debt. Native date packet sealed at sha256:53c9fb0eed86e763e553c43200d2202584c38556e1fdc6d7cc6aae0bd7bd322d; triage scan reports zero automatic findings. No definite English omission or source-backed chronology contradiction requiring owner repair in this pass; undated and Western-interval claims remain for independent date review.",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book weishu --chapter 089",
+    "datesVerify": "npm run people:dates:verify -- --book weishu --chapter 089",
+    "datesPacket": "npm run people:dates:packet -- --book weishu --chapter 089 --out research/people/checkpoints/campaign-nov24-retained-staging/weishu-089/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; sealed production inputs unchanged; independent date audit still missing."
+}
