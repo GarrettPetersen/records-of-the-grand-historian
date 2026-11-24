@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "010"
+  },
+  "ownerAgentId": "bc-a4d773fe-11dd-4609-88c3-3741edd6232d",
+  "workerId": "cursor-nov24-retained-staging-w18-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "91fbf7a92e6848a2f0428da00134f2126a972d2e6d26ee240b7c64d95df2004d",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-liaoshi-010-6232d",
+  "extractionBytes": 205972,
+  "inputBlobWitness": {
+    "source": "e5c1c86ce495e8c13ffefc05ccd68e9d611bcc42",
+    "extraction": "596946c6a1fb6512651577da90dc78e07e029a03",
+    "editorial": "93d5973eebb12b2c6a4f70d389049c9e1e21529d"
+  },
+  "sealedInputs": {
+    "source": "sha256:ac6a24913c0a6fcc16741d5848e019e51726929698128dad9f23fb97df4be61f",
+    "extraction": "sha256:e84760910b8cecd81bf9eacd6a8c25c45ffb47ee5c937a56fa97b51d8ea2ec5b",
+    "editorial": "sha256:624329d8e5d11e8d0ddda1ff257371e15f28a688412bde576b0755c3621fc773"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-010/date-packet.json",
+    "contentSha256": "sha256:4d7b77ba15ebb51dfbc7fd55b9ec3759ea69dba2c79c65511c3a9b4083e34d89",
+    "packetSourceHash": "sha256:9a55d9f1621810046925066aa9f91b9f2eee7916db457759096f6c69c221d3fe",
+    "packetExtractionHash": "sha256:19ef2760b36cbe943913e22a54ca02fcc1239a2447c9f360dd1a1ec10779911b",
+    "dateHintChecks": 390,
+    "sourceUnits": 217,
+    "peopleInPacket": 108,
+    "prepareCommand": "npm run people:dates:packet -- --book liaoshi --chapter 010 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-010/date-packet.json"
+  },
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "e84760910b8cecd81bf9eacd6a8c25c45ffb47ee5c937a56fa97b51d8ea2ec5b",
+    "people": 108,
+    "claims": 584,
+    "promptVersion": 7
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 10 Annals 10: Shengzong 1",
+    "sourceTitleZh": "卷十 本紀第十: 聖宗一",
+    "chineseUnits": 217,
+    "translatedCount": 217,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReused": true,
+    "editorialReused": true,
+    "extractionPromptVersion": 7,
+    "editorialDecisionCount": 20,
+    "editorialAppliedInSource": 20,
+    "editorialAppliedFailures": 0,
+    "claimRetractions": 3,
+    "claimRevisions": 4,
+    "noExtractionRegeneration": true,
+    "noEditorialReReview": true
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book liaoshi --chapter 010",
+    "peopleValidateSummary": "Scoped person data validation passed for liaoshi/010: 1 extraction(s), 108 local people, 427 mentions, 964 claims, 0 proposed repair(s), 20 applied repair(s), 20 editorial decision(s), 3 claim retraction(s), 4 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s).",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book liaoshi --chapter 010",
+      "status": "un-audited",
+      "findings": null,
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "dateRepairProposals": [],
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part chapter inputs (no prior native date report). Git blob witnesses match dispatch pins; extraction content sha256 matches sourceExtractionSha256. Full chapter source read: 217 Chinese sentences with paired literal and idiomatic English on every unit; meta translatedCount 217 aligns. Accepted prompt v7 extraction and 20 applied editorial repairs reused without regeneration; all 20 accepted editorial after-forms verified in source. Scoped people:validate passed with zero proposed repairs and zero legacy temporal or alias-disposition debt. Fresh native date packet prepared at sealedNativeDatePacket hash (390 date/hint checks, 108 people); owner did not record or self-approve an independent date audit. No definite English omission, unsupported chronology contradiction, dangling evidence unit, or source-backed hold identified in this pass.",
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "nativeIndependentDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetSha256": "sha256:4d7b77ba15ebb51dfbc7fd55b9ec3759ea69dba2c79c65511c3a9b4083e34d89",
+      "recordCommand": "npm run people:dates:record -- --book liaoshi --chapter 010",
+      "verifyAfterApproval": "npm run people:dates:verify -- --book liaoshi --chapter 010",
+      "notes": "Independent reviewer must audit all packet items against Chinese/English source and extraction attestations; valid attestation may remain undated."
+    },
+    "chapterAndCanonicalIdentityReview": {
+      "required": true,
+      "status": "pending",
+      "notes": "Separate independent reviewer approves whole chapter closure and canonical identity evidence; owner pass does not substitute."
+    },
+    "independentReviewCompleted": false
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book liaoshi --chapter 010",
+    "datesVerify": "npm run people:dates:verify -- --book liaoshi --chapter 010",
+    "datesPacket": "npm run people:dates:packet -- --book liaoshi --chapter 010 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-010/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry generation, deploy, or merge."
+}
