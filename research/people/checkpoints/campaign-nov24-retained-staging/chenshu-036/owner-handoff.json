@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "chenshu",
+    "chapter": "036"
+  },
+  "ownerAgentId": "bc-433154af-e56e-454a-9678-f98f1041d2fb",
+  "worker": "cursor-nov24-retained-staging-w7-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "d8e152b3f4102228fa43a8fde4834976e2379fc12859fbc91feaeeef7b5f4bbf",
+  "stagingBase": "563c2b169c6545c78973ea44659fae65e4020601",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-chenshu-036-1d2fb",
+  "inputBlobWitness": {
+    "source": "3cd57c5d3555d4c9f30bb0e1c78e97c46fb9ef20",
+    "extraction": "877c5f76d49df3d8a0565a393a69e76e116ddd33",
+    "dateAudit": "ca769767d6762e306622808a5826faaa76224dc4",
+    "editorial": "a10bfd4c542776665a65b81dcc5eb1febbb88c1f"
+  },
+  "sealedInputs": {
+    "source": "sha256:89ed97904f5752ef98ae228e2788c6017a06b68c6e0b29fd48906f6d5b75791e",
+    "extraction": "sha256:ce48a9b5b79af4fde718b32dbee6916237af60d5c410c894c2665270de73216d",
+    "dateAudit": "sha256:ba987ced0395bb339586a640fe68c658f950f3a85c32b5425f1af60f3a54f1a0",
+    "editorial": "sha256:4f4cbc7c109e79cbbf471db0ff7ef94136f342df51b5971ace3c94e1a69fd9ce"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 129,
+    "translatedCount": 129,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "missingUnits": []
+  },
+  "validation": {
+    "peopleValidatePassed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book chenshu --chapter 036",
+    "peopleValidateSummary": "Scoped person data validation passed for chenshu/036: 1 extraction(s), 29 local people, 284 mentions, 284 claims, 0 proposed repair(s), 7 applied repair(s), 7 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "sealedDateAudit": {
+      "status": "research-blocked",
+      "contentSha256": "sha256:ba987ced0395bb339586a640fe68c658f950f3a85c32b5425f1af60f3a54f1a0",
+      "reviewedAt": "2026-09-23T05:07:17.992Z",
+      "summary": "Fresh complete audit of all 129 Chinese source units, 117 temporal or active-hint items, and 29 people. The curated corrections remove the false inherited intervals and recast the 579 Xie An tomb event as posthumous reception. Six deliberately preserved research holds remain unresolved, so this result is complete but research-blocked rather than approved.",
+      "findingCount": 6,
+      "affectedItems": 18,
+      "extractionHashSealed": "sha256:8512f1aea81947a553c668fee9ec617315bf3478ed58e2d826d3ea89bda11a0c",
+      "sourceHashSealed": "sha256:aa1fce3d0af36654f1d203a181829738f004c1c0f35dece6205928bb1e5fa996",
+      "preservedReportBytes": true,
+      "overwritten": false
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book chenshu --chapter 036",
+      "runtimeStatus": "stale",
+      "runtimeFindings": null,
+      "runtimeReviewedAt": null,
+      "packetExtractionHash": "sha256:0c1d710a6acfb74f3aef4e9d4b4fbfc912a999dac1d8e1235cb78dd93d6379af",
+      "packetSourceHash": "sha256:aa1fce3d0af36654f1d203a181829738f004c1c0f35dece6205928bb1e5fa996",
+      "sealedExtractionHashMatchesPacket": false,
+      "sealedSourceHashMatchesPacket": true,
+      "note": "Native verify reports stale because the sealed date-audit extractionHash does not match the current pinned extraction packet; report bytes are preserved unchanged."
+    },
+    "extractionCoverage": {
+      "editorialPassCompleted": true,
+      "note": "Scoped validation passed; no new extraction coverage gap found in owner pass."
+    }
+  },
+  "substantiveFindings": "Retained staging owner review at pinned blobs: Fresh complete audit of all 129 Chinese source units, 117 temporal or active-hint items, and 29 people. The curated corrections remove the false inherited intervals and recast the 579 Xie An tomb event as posthumous reception. Six deliberately preserved research holds remain unresolved, so this result is complete but research-blocked rather than approved.. People validation passed; English literal and idiomatic coverage complete on all Chinese units in scope. Sealed independent date report remains research-blocked with 18 distinct hold item IDs across 6 finding(s); all are source-qualified unknowns or non-local chronology—no concrete changed evidence requiring a new scoped chronology repair in this pass. people:dates:verify returns stale relative to current extraction fingerprint while preserving the historical report; host must reconcile via fresh independent date audit without rewriting sealed bytes. No definite English omission or mistranslation found; no canonical source, extraction, editorial, or date-audit edits.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "items": [
+        "claim-150",
+        "hints-p006",
+        "p006"
+      ],
+      "problem": "Qian Facheng is named in an episode around Chen Shuling, but the source supplies no Qian-owned Western date.",
+      "action": "Retain the source-specific unresolved chronology and research hint; do not infer a Western life or activity date without distinct primary evidence.",
+      "preserve": true
+    },
+    {
+      "items": [
+        "claim-151",
+        "hints-p007",
+        "p007"
+      ],
+      "problem": "Qian Jiqing is named in an episode around Chen Shuling, but the source supplies no Qian-owned Western date.",
+      "action": "Retain the source-specific unresolved chronology and research hint; do not infer a Western life or activity date without distinct primary evidence.",
+      "preserve": true
+    },
+    {
+      "items": [
+        "claim-153",
+        "hints-p009",
+        "p009"
+      ],
+      "problem": "The 579 action concerns Xie An’s old tomb; it is posthumous reception, not Xie An activity.",
+      "action": "Retain the source-specific unresolved chronology and research hint; do not infer a Western life or activity date without distinct primary evidence.",
+      "preserve": true
+    },
+    {
+      "items": [
+        "claim-154",
+        "hints-p010",
+        "p010"
+      ],
+      "problem": "The 579 mourning notice concerns another person, not a dated event owned by Wang Zheng.",
+      "action": "Retain the source-specific unresolved chronology and research hint; do not infer a Western life or activity date without distinct primary evidence.",
+      "preserve": true
+    },
+    {
+      "items": [
+        "claim-170",
+        "hints-p025",
+        "p025"
+      ],
+      "problem": "A Liang-era office description identifies Wei Can but does not establish a whole-dynasty activity interval.",
+      "action": "Retain the source-specific unresolved chronology and research hint; do not infer a Western life or activity date without distinct primary evidence.",
+      "preserve": true
+    },
+    {
+      "items": [
+        "claim-174",
+        "hints-p029",
+        "p029"
+      ],
+      "problem": "The Confucius quotation is undated in this chapter and does not establish BC 500 personal activity.",
+      "action": "Retain the source-specific unresolved chronology and research hint; do not infer a Western life or activity date without distinct primary evidence.",
+      "preserve": true
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book chenshu --chapter 036",
+    "validateDates": "npm run people:dates:verify -- --book chenshu --chapter 036"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging owner handoff only; no sealed input edits; independent final review and date re-audit remain pending while research holds persist."
+}
