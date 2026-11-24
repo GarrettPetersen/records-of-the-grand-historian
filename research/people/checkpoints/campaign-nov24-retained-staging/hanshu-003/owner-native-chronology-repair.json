@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-owner-native-chronology-repair",
+  "scope": {
+    "book": "hanshu",
+    "chapter": "003"
+  },
+  "ownerAgentId": "bc-171befa0-4583-4074-a86f-8c58c468382d",
+  "workerId": "cursor-nov24-retained-staging-w3-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "e6ad0ed95e8ca016f0e9ca8bd0bd83e8f77f90fbea7eefa56f8f5b486b70140c",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "priorOwnerRevision": "2be94a583a0ec3bfee032aa410aa500e3e7ea494",
+  "branch": "cursor/nov24-retained-owner-native-date-hanshu-003-8382d",
+  "ownerHandoff": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/hanshu-003/owner-handoff.json",
+    "sha256": "0bf1d3579110e4e5e9bd507a517c05b02cf5f0edb0698648e9a407c0d209e852"
+  },
+  "inputBlobWitness": {
+    "source": "5481db3914652060eb6ae0b1edf88586d587e1fe",
+    "extraction": "e55e0e69fdfc00ab889a435cb59f4d68a9f5efe7",
+    "dateAudit": "aa3461ba6d976cd6ccad9cd99279b4ca369dbef0",
+    "editorial": "dfdfc7727e0aedcee88e5e4a22697204cbd5f1df"
+  },
+  "pinnedAuditEvidence": {
+    "sha256": "ba00ffb3bc29ac1eef89a003b1b368b639983e5d8a2f492ee3da5b6be81dc84c",
+    "status": "research-blocked",
+    "auditReviewedAt": "2026-09-22T23:00:00.000Z",
+    "coveredItems": 8,
+    "findings": 2,
+    "bytesPreserved": true
+  },
+  "sealedPacket": {
+    "sourceHash": "sha256:5771fff3760992edca1a3343698d44f0c933fd656e8b23284eef0cbd67e8eb2f",
+    "extractionHash": "sha256:e48aa6be315afbfbdd63592d601ee79889940a048db93f0252c17878a5e1257b"
+  },
+  "verifiedFindings": [
+    {
+      "findingIndex": 0,
+      "items": ["claim-45", "claim-104", "hints-p005", "p005"],
+      "problem": "Liu Fei death retains Hanshu s0067 六年冬十月辛丑 vs Shiji 22 year-six month seven; BC 190–189 competing-witness interval.",
+      "sourceQuotes": [
+        {
+          "unit": "s0067",
+          "zh": "六年冬十月辛丑，齊悼惠王薨。"
+        }
+      ],
+      "auditAction": "Retain unresolved death and attestation; obtain source-critical evidence before emendation or approval."
+    },
+    {
+      "findingIndex": 1,
+      "items": ["claim-48", "claim-114", "hints-p014", "p014"],
+      "problem": "Cao Can death retains Hanshu jichou vs Shiji yichou with shared coarse 190 BC only.",
+      "sourceQuotes": [
+        {
+          "unit": "s0052",
+          "zh": "五年秋八月己丑，丞相平陽侯曹參薨。"
+        }
+      ],
+      "auditAction": "Retain unresolved source-qualified death; obtain evidence explaining cyclic-day discrepancy."
+    }
+  ],
+  "findingsDisposition": [
+    {
+      "findingIndex": 0,
+      "action": "no-extraction-edit",
+      "reason": "Death claim-45 and attestation claim-104 already carry unresolved: true, westernInterval BC 190–189, and explicit unresolvedReason matching the audit. No false point Western death date to remove.",
+      "affectedPersonIds": ["p005"],
+      "affectedAuditItems": ["claim-45", "claim-104", "hints-p005"]
+    },
+    {
+      "findingIndex": 1,
+      "action": "no-extraction-edit",
+      "reason": "Death claim-48 and attestation claim-114 retain shared 190 BC with unresolved finer day conflict; extraction does not silently emend Hanshu 己丑 to Shiji 乙丑.",
+      "affectedPersonIds": ["p014"],
+      "affectedAuditItems": ["claim-48", "claim-114", "hints-p014"]
+    }
+  ],
+  "nativeDateRepairProposal": null,
+  "nativeValidation": {
+    "command": "npm run people:dates:verify -- --book hanshu --chapter 003",
+    "passed": false,
+    "detail": "verify reports stale relative to rebuilt packet fingerprints while audit bytes remain pinned; no applyDateRepairProposal invoked because no false chronology rows identified.",
+    "supplemental": "npm run people:validate -- --book hanshu --chapter 003 (editorial r0005 authorization drift; outside date-repair scope but blocks chapter validation)"
+  },
+  "intactApprovals": {
+    "dateAuditFileUnchanged": true,
+    "researchBlockedItemChecksPreserved": ["claim-45", "claim-48", "claim-104", "claim-114", "hints-p005", "hints-p014"]
+  },
+  "definiteTranslationRepairs": [],
+  "residualHolds": [
+    {
+      "gate": "date-research-blocked",
+      "summary": "Fei and Cao death conflicts remain genuine source-critical research holds.",
+      "items": ["finding-0", "finding-1"]
+    },
+    {
+      "gate": "date-audit-fingerprint",
+      "summary": "people:dates:verify stale at pinned extraction; host must reconcile fingerprint or re-audit without rewriting pinned audit bytes."
+    },
+    {
+      "gate": "proof",
+      "summary": "Month/day emendation or point-date approval requires external witness beyond Hanshu/Shiji disagreement."
+    }
+  ],
+  "notes": "[CF-Pages-Skip] Chronology owner pass only; audit blob preserved."
+}
