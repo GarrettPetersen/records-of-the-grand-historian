@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "052"
+  },
+  "ownerAgentId": "bc-1176c967-b0aa-4174-b23d-85b5148ba688",
+  "workerId": "cursor-nov24-retained-staging-w18-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "9240a6aabe9b110e944f25aeda8d22dc1ff999b936ab64a46adaaf25ecb74913",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-xinwudaishi-052-ba688",
+  "auditDispatchState": "no-native-date-report",
+  "extractionBytes": 202529,
+  "inputBlobWitness": {
+    "source": "150432443849a66820ceb2cd412175e0341b2415",
+    "extraction": "699ec396fc7cf033556b97d2a56f545bb2fbdd04",
+    "editorial": "ada881574dcb0be52829136cbc6d0fc5498e712e"
+  },
+  "sealedInputs": {
+    "source": "sha256:0849146adbee01ac82b3e014ae1ff3f5dd35046e49fa476a3be20c46d3511608",
+    "extraction": "sha256:6f45803b12026ffa0b295ca6ea079fe9af4e3805959f614736bf5ec970713543",
+    "editorial": "sha256:b976e4401b8510f3031c865fb3aaba08c7c21a7949f692f1a3af1c0bc0236cd8"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 52 Miscellaneous Biographies 32: Du Zhongwei, Li Zhouzhen, Zhang Yanze",
+    "sourceTitleZh": "卷五十二 雜傳第四十: 杜重威 李守貞 張彥澤",
+    "sentenceCount": 184,
+    "chineseUnits": 184,
+    "translatedCount": 184,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "missingUnitSample": []
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "dispatchPeople": 96,
+    "dispatchClaims": 676,
+    "contentSha256": "sha256:6f45803b12026ffa0b295ca6ea079fe9af4e3805959f614736bf5ec970713543",
+    "gitBlob": "699ec396fc7cf033556b97d2a56f545bb2fbdd04",
+    "noReextraction": true
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "gitBlob": "ada881574dcb0be52829136cbc6d0fc5498e712e",
+    "contentSha256": "sha256:b976e4401b8510f3031c865fb3aaba08c7c21a7949f692f1a3af1c0bc0236cd8",
+    "appliedRepairs": 13,
+    "editorialDecisions": 13,
+    "noOwnerEditorialEdits": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-052/date-packet.json",
+    "contentSha256": "sha256:711494ad57e2dc3511473a0dfe69d4ea040c5d4f483ee5f6c2a38552b454db3f",
+    "command": "npm run people:dates:packet -- --book xinwudaishi --chapter 052 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-052/date-packet.json",
+    "itemCount": 443,
+    "peopleCount": 96,
+    "unitCount": 184,
+    "sourceHash": "sha256:f1b9d7c021e7b2f087a29629881f98c40a19cbae26432a459c3d21e6e0c3fb56",
+    "extractionHash": "sha256:81f805bd03acb20d271fbd0f392185c3f667402a9321fef7427d9e86e00d72db",
+    "preparedAt": "2026-11-24T18:19:50.380Z"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book xinwudaishi --chapter 052",
+    "peopleValidateSummary": "Scoped person data validation passed for xinwudaishi/052: 1 extraction(s), 96 local people, 764 mentions, 997 claims, 0 proposed repair(s), 13 applied repair(s), 13 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book xinwudaishi --chapter 052",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "nativeDateReportMissing": true,
+      "findings": null
+    },
+    "chronologyStatus": "no-native-date-report",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "candidateValidationCommands": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 052",
+    "datesVerify": "npm run people:dates:verify -- --book xinwudaishi --chapter 052",
+    "datesPacket": "npm run people:dates:packet -- --book xinwudaishi --chapter 052 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-052/date-packet.json",
+    "recordIndependentDateAudit": "npm run people:dates:record -- --report <independent-review.json>"
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and editorial inputs at pinned staging blobs. Full chapter source read via sentence-level literal and idiomatic coverage scan (184 Chinese units; meta reports 184 sentences, 184 translated). Existing extraction prompt v7 preserved without re-extraction; accepted editorial repairs reflected in source. Scoped people:validate passed. Native people:dates:packet sealed at sha256:711494ad57e2dc3511473a0dfe69d4ea040c5d4f483ee5f6c2a38552b454db3f for independent chronology review. No committed native date audit exists; people:dates:verify returns un-audited. No definite English omission, unsupported chronology contradiction, or schema hold found requiring owner repair in this pass. Valid undated attestations may remain for independent reviewer closure.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetSha256": "sha256:711494ad57e2dc3511473a0dfe69d4ea040c5d4f483ee5f6c2a38552b454db3f",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-052/date-packet.json",
+      "nextGate": "independent-native-date-audit-recorded-via-people-dates-record",
+      "notes": "Owner prepared candidate chronology packet only; does not self-approve independent date audit."
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending",
+      "nextGate": "independent-final-chapter-and-canonical-identity-review",
+      "notes": "Bounded canonical identity evidence review remains after date approval path is satisfied."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "authorEvidence": {
+    "method": "Witness-verified git blobs; full source English coverage scan; extraction and editorial preservation; people:validate; people:dates:packet; people:dates:verify un-audited declaration; spot-check of claims, aliases, and evidence unit references.",
+    "completedAt": "2026-11-24T18:19:50.380Z",
+    "localPeople": 96
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 052",
+    "datesVerify": "npm run people:dates:verify -- --book xinwudaishi --chapter 052",
+    "datesPacket": "npm run people:dates:packet -- --book xinwudaishi --chapter 052 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-052/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry generation, deploy, or merge."
+}

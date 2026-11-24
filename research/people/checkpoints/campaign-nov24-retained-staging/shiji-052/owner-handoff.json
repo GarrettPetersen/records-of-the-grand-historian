@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "052"
+  },
+  "ownerAgentId": "bc-1176c967-b0aa-4174-b23d-85b5148ba688",
+  "workerId": "cursor-nov24-retained-staging-w18-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "9240a6aabe9b110e944f25aeda8d22dc1ff999b936ab64a46adaaf25ecb74913",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-052-ba688",
+  "auditDispatchState": "no-native-date-report",
+  "extractionBytes": 199860,
+  "inputBlobWitness": {
+    "source": "0d792a0017bd7fa3b80fe90af383a2f4272ee65f",
+    "extraction": "ed0e395eba118df2051a97c1cd833c76eb58436d",
+    "editorial": "8bc432f446a8aa7a57e0986fb4d31ec680cf30f2"
+  },
+  "sealedInputs": {
+    "source": "sha256:a959d81ed8d8dbaa9213495fcf1ba804b11011e3b8a422f482fe4c059bced5b7",
+    "extraction": "sha256:f9467fa9fadee30ac6b9ab596819ac7ff4a321a8235a6a40140827ba0b1366e1",
+    "editorial": "sha256:28815973ca6755d36f280ae56c5d7e517ebc99a329f6b17f055ea0c934e5d3ed"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "House of Prince Daohui of Qi",
+    "sourceTitleZh": "齊悼惠王世家",
+    "sentenceCount": 207,
+    "chineseUnits": 207,
+    "translatedCount": 207,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "missingUnitSample": []
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "dispatchPeople": 122,
+    "dispatchClaims": 613,
+    "contentSha256": "sha256:f9467fa9fadee30ac6b9ab596819ac7ff4a321a8235a6a40140827ba0b1366e1",
+    "gitBlob": "ed0e395eba118df2051a97c1cd833c76eb58436d",
+    "noReextraction": true
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "gitBlob": "8bc432f446a8aa7a57e0986fb4d31ec680cf30f2",
+    "contentSha256": "sha256:28815973ca6755d36f280ae56c5d7e517ebc99a329f6b17f055ea0c934e5d3ed",
+    "appliedRepairs": 9,
+    "editorialDecisions": 11,
+    "noOwnerEditorialEdits": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-052/date-packet.json",
+    "contentSha256": "sha256:233f31fc81294e3f0eff2377ac13264837c40cdc0b7281044a6e48b96c6529fb",
+    "command": "npm run people:dates:packet -- --book shiji --chapter 052 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-052/date-packet.json",
+    "itemCount": 326,
+    "peopleCount": 122,
+    "unitCount": 207,
+    "sourceHash": "sha256:4dc29b7c4f8c943c7d022e2c00d30c04c66cf93118489201235997ca8f28c223",
+    "extractionHash": "sha256:d36714d67c14f6719e808c077d2e0ac4cf5a8f89c8cc3204a1d4e75d3fab4b9d",
+    "preparedAt": "2026-11-24T18:19:50.380Z"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book shiji --chapter 052",
+    "peopleValidateSummary": "Scoped person data validation passed for shiji/052: 1 extraction(s), 122 local people, 893 mentions, 1103 claims, 0 proposed repair(s), 9 applied repair(s), 11 editorial decision(s), 0 claim retraction(s), 2 claim revision(s), 3 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 052",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "nativeDateReportMissing": true,
+      "findings": null
+    },
+    "chronologyStatus": "no-native-date-report",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "candidateValidationCommands": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 052",
+    "datesVerify": "npm run people:dates:verify -- --book shiji --chapter 052",
+    "datesPacket": "npm run people:dates:packet -- --book shiji --chapter 052 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-052/date-packet.json",
+    "recordIndependentDateAudit": "npm run people:dates:record -- --report <independent-review.json>"
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and editorial inputs at pinned staging blobs. Full chapter source read via sentence-level literal and idiomatic coverage scan (207 Chinese units; meta reports 207 sentences, 207 translated). Existing extraction prompt v7 preserved without re-extraction; accepted editorial repairs reflected in source. Scoped people:validate passed. Native people:dates:packet sealed at sha256:233f31fc81294e3f0eff2377ac13264837c40cdc0b7281044a6e48b96c6529fb for independent chronology review. No committed native date audit exists; people:dates:verify returns un-audited. No definite English omission, unsupported chronology contradiction, or schema hold found requiring owner repair in this pass. Valid undated attestations may remain for independent reviewer closure.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetSha256": "sha256:233f31fc81294e3f0eff2377ac13264837c40cdc0b7281044a6e48b96c6529fb",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-052/date-packet.json",
+      "nextGate": "independent-native-date-audit-recorded-via-people-dates-record",
+      "notes": "Owner prepared candidate chronology packet only; does not self-approve independent date audit."
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending",
+      "nextGate": "independent-final-chapter-and-canonical-identity-review",
+      "notes": "Bounded canonical identity evidence review remains after date approval path is satisfied."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "authorEvidence": {
+    "method": "Witness-verified git blobs; full source English coverage scan; extraction and editorial preservation; people:validate; people:dates:packet; people:dates:verify un-audited declaration; spot-check of claims, aliases, and evidence unit references.",
+    "completedAt": "2026-11-24T18:19:50.380Z",
+    "localPeople": 122
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 052",
+    "datesVerify": "npm run people:dates:verify -- --book shiji --chapter 052",
+    "datesPacket": "npm run people:dates:packet -- --book shiji --chapter 052 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-052/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry generation, deploy, or merge."
+}
