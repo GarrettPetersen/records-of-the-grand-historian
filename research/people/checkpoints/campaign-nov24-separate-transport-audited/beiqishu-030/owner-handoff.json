@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "kind": "separate-transport-audited-source-owner-handoff",
+  "scope": {
+    "book": "beiqishu",
+    "chapter": "030"
+  },
+  "ownerAgentId": "bc-1cece8a1-2eac-4165-9087-3dea34232f43",
+  "workerId": "cursor-nov24-separate-transport-owner-1",
+  "campaign": "campaign-nov24-separate-transport-audited",
+  "idempotencyKey": "56afd5735d8f903d18ac8d496e81c7ebc50b6fd3d9b2db85aecad4b6ef0cf4c2",
+  "stagingBase": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-separate-transport-owner-beiqishu-030-232f43",
+  "inputBlobWitness": {
+    "source": "b5c9d1c16d55cb8fb657a95744f2245c84e71517",
+    "extraction": "1bd747d9542305526bcf3af4d8d3734e4a8bac63",
+    "dateAudit": "27ac83a42a4b3d90b42e46484d57a2ab5064144c",
+    "editorial": "d90d6c9695852a12a3f175bd1a3e0ef3b8528cbb"
+  },
+  "sealedInputs": {
+    "source": "sha256:56fd0b1b6bc727ff80cf144213ee3ed955b7ca3559e2a119f650a6bfa768c1b5",
+    "extraction": "sha256:ca3437de9077de0858734e7506bc767a892f47d2fb20c7b25451cae90d96623d",
+    "dateAudit": "sha256:a32bdb9fa353275e6885e964e21795d795876b5617fa370d050c88be0f6f33b7",
+    "editorial": "sha256:edf8261d20452574b5ce0c8be8a5f2d36fcd9096ff357b10bb962e4ee24cfc84"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book beiqishu --chapter 030",
+    "summary": "Scoped person data validation passed for beiqishu/030: 1 extraction(s), 85 local people, 690 mentions, 614 claims, 0 proposed repair(s), 7 applied repair(s), 8 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 225,
+      "translatedCount": 225,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "extractionValidate": "data/people/extractions/beiqishu/030.json: ok (85 people, 690 mentions, 614 claims, 594 candidates)",
+    "chronologyStatus": "audited",
+    "dateAuditSummary": "Complete independent audit of all 225 Chinese units, 197 temporal or active-hint items, and 85 people. Current chronology, ownership, conversions, and receptions are source-supported; no findings remain.",
+    "editorialDecisionCount": 8,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "datesVerify": "audited"
+  },
+  "substantiveFindings": "Sealed extraction, audited chronology, and applied editorial decisions align at pinned blobs. Owner pass found 2 definite supplemental English repair(s) where 贈 is still rendered as enfeoffment in source units outside the accepted editorial batch. Identity membership for 85 prepared cases remains for independent bounded dossier review across 5 transport parts.",
+  "distinctHolds": [
+    {
+      "kind": "english-translation-omission",
+      "unitId": "s0081",
+      "summary": "Definite 贈/enfeoffment mistranslation remains in sealed source at s0081; supplemental editorial application required.",
+      "citation": "贈開府。"
+    }
+  ],
+  "definiteTranslationRepairs": [
+    {
+      "scope": {
+        "book": "beiqishu",
+        "chapter": "030",
+        "unitId": "s0081",
+        "field": "literal"
+      },
+      "before": "He was posthumously enfeoffed as grand marshalate.",
+      "after": "He was posthumously granted the honor of opening the Grand Marshalate (kaifu).",
+      "reason": "贈開府 is a posthumous grant of the kaifu honor, not an enfeoffment.",
+      "sourceWitness": {
+        "citation": "贈開府。",
+        "excerpt": "贈開府。"
+      }
+    },
+    {
+      "scope": {
+        "book": "beiqishu",
+        "chapter": "030",
+        "unitId": "s0081",
+        "field": "idiomatic"
+      },
+      "before": "He was posthumously enfeoffed as grand marshalate.",
+      "after": "He was posthumously granted the honor of opening the Grand Marshalate (kaifu).",
+      "reason": "Both English fields misrender 贈 as enfeoffment.",
+      "sourceWitness": {
+        "citation": "贈開府。",
+        "excerpt": "贈開府。"
+      }
+    }
+  ],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 85,
+    "identityTransportParts": 5,
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "artifactRetention": "GitHub Actions artifact nov24-separate-transport-audited-chapter-packets",
+    "notes": "Native preliminary identity preparation passed; exact transport parts retained off-repo. Owner handoff is not independent identity approval."
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; full-sentence English/literal+idiomatic coverage scan; npm run people:validate; people:dates:verify; validate-people-extraction; retained independent date and editorial artifacts; no canonical extraction or source edits.",
+    "sourceTitle": "Volume 30 Biographies 22: Cui Xian; Gao Dezheng; Cui Ang",
+    "completedAt": "2026-11-24T14:53:56.428Z"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book beiqishu --chapter 030"
+  },
+  "notes": "[CF-Pages-Skip] Source-owner pass only; push owner-handoff without altering sealed inputs."
+}
