@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "kind": "split-transport-identity-owner-handoff",
+  "scope": {
+    "book": "houhanshu",
+    "chapter": "117"
+  },
+  "ownerAgentId": "bc-ba535de0-6357-4346-9b55-6a7365618ee9",
+  "campaignWorker": "cursor-nov24-current-master-5",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "116d26fec8ae43dc070a8f9d7a8be7e0525c57a7",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-new-master-owner-transports",
+    "commit": "9f68d0379d1f3010cf0d19be5664a1aa31a863b5",
+    "planFingerprint": "sha256:ed38472d3f4874fdf7edc025a5e08c0a8b08bc694d581fdff257c41f01879ffe",
+    "sourcePacketSha256": "sha256:67c0f0920707f98837ab791ba5984271bee1e897572ad0024129a4b72fe730bd",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "sha256:f4c25559151f968d9637ff4c553fd8eb084d1227168f66ff7b0a6f41f6182733",
+        "caseCount": 14
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "sha256:e9c99fc8beba4ed219103c6875e468986da9579c5059ba314af8edfdd990f3a8",
+        "caseCount": 14
+      },
+      {
+        "path": "transport-part-003.json",
+        "sha256": "sha256:769fc046b4ea26a873276c212cc099e074f1307f0b2652136ccb557f3711d636",
+        "caseCount": 28
+      }
+    ],
+    "preparationReceiptSha256": "sha256:33a8fea6758f5dab0284fa11facf4b4e4de183bc5540c506d953c1634afa2a92"
+  },
+  "sealedInputs": {
+    "source": "sha256:e1fa46f73cff0b76dacf1ea6d2918b4e83c92b2987d42c0af9cdbf2ee54de9ee",
+    "extraction": "sha256:76417994cba6f4e17c6a97c1b986765b1b64d6bdf6fa7dfea27839d368288b16",
+    "editorial": "sha256:66ddb61c91fd70b60fab0e475553166e2c52bc78693b3cbd303a611a65e4b5c6",
+    "dateAudit": "sha256:b1f26cca8a8aa54c08777ebc967d9ed4f4a534a0287784286559ec9608f5a98e"
+  },
+  "chronologyStatus": "audited (independent date audit on sealed extraction)",
+  "editorialStatus": "4 applied editorial decisions; no pending proposals",
+  "reviewCases": 56,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 56 cases retain preparation-proposed canonicalPersonId and membership fingerprints. 49 cases keep unresolvedIdentity true (26 with bounded retrieval overflow). No false-merge or wrong-actor contradiction found against sealed source. No canonical extraction or shared-registry edits.",
+  "ownerEvidenceSha256": "sha256:08af1653ef11603b8fff6fcb59a3b99d4c11acdbfad2e007c6fb1dee4c249da8",
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-nov24-current-master-transport/houhanshu-117/preparation-receipt.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-nov24-current-master-transport/houhanshu-117/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-nov24-current-master-transport/houhanshu-117/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/campaign-nov24-current-master-transport/houhanshu-117/lookup-receipt.json",
+    "transportPart001": "research/people/checkpoints/campaign-nov24-current-master-transport/houhanshu-117/transport-part-001.json",
+    "transportPart002": "research/people/checkpoints/campaign-nov24-current-master-transport/houhanshu-117/transport-part-002.json",
+    "transportPart003": "research/people/checkpoints/campaign-nov24-current-master-transport/houhanshu-117/transport-part-003.json"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book houhanshu --chapter 117",
+    "verifyTransportPart001": "sha256sum research/people/checkpoints/campaign-nov24-current-master-transport/houhanshu-117/transport-part-001.json",
+    "verifyTransportPart002": "sha256sum research/people/checkpoints/campaign-nov24-current-master-transport/houhanshu-117/transport-part-002.json",
+    "verifyTransportPart003": "sha256sum research/people/checkpoints/campaign-nov24-current-master-transport/houhanshu-117/transport-part-003.json"
+  },
+  "notes": "Owner evidence is not independent approval."
+}
