@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "ownerAgentId": "bc-ee5df8bd-f5f3-43f7-866f-9e5d6ab0b948",
+  "worker": "cursor-nov24-retained-staging-w12-o8",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "6fd4f5df71cc2d57874a6ea93ab243f4dc228ddca595a090893851873b7b0f16",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "phase": "dispatch_pending",
+  "independentApprovalIssued": false,
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "073"
+  },
+  "branchRef": "cursor/nov24-retained-staging-owner-xinwudaishi-073-0b948",
+  "inputBlobWitness": {
+    "source": "a433d3407b5f9796a3b04dfe8dce663180bd02c0",
+    "extraction": "0f91e9ec23786132bd8f3311c5df4d9d1cb1a361",
+    "editorial": "9ba16ce8a8157c3a723ebe234253c6b26cc3a32d"
+  },
+  "sealedInputs": {
+    "source": "sha256:b9e91b34b3a4278a01d363e3f1c90c0a4237c04df4623c4f0ba69f2da4af5144",
+    "extraction": "sha256:4778c255daf73dbb3b4738571e6555faa3a442b3dd5d2293ef2c90bb36500bfd",
+    "editorial": "sha256:893496aad54e85b7b26068151079b890abd6e9e23c4016edf36d2c4884de5489"
+  },
+  "dispatchAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "4778c255daf73dbb3b4738571e6555faa3a442b3dd5d2293ef2c90bb36500bfd",
+    "people": 35,
+    "claims": 231,
+    "promptVersion": 7
+  },
+  "inputReuse": {
+    "extraction": {
+      "reused": true,
+      "path": "data/people/extractions/xinwudaishi/073.json",
+      "bytes": 89816,
+      "editorialPassCompleted": true,
+      "appliedRepairsFromEditorial": true
+    },
+    "editorial": {
+      "reused": true,
+      "path": "data/people/editorial-decisions/xinwudaishi/073.json",
+      "decisionCount": 1
+    },
+    "dateAudit": {
+      "present": false,
+      "path": "data/people/date-audits/xinwudaishi/073.json",
+      "status": "missing-native-report"
+    }
+  },
+  "sourceCoverage": {
+    "title": {
+      "zh": "卷七十三 四夷附錄第二: 契丹",
+      "en": "Volume 73: Appendix on the Four Barbarians 2: Khitan 2",
+      "raw": "卷七十三 四夷附錄第二: 契丹 Volume 73: Appendix on the Four Barbarians 2: Khitan 2"
+    },
+    "sourceUrl": "https://chinesenotes.com/xinwudaishi/xinwudaishi073.html",
+    "englishCoverage": {
+      "sentenceCount": 189,
+      "translatedCount": 189,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "ownerSourceReview": "Read paired Chinese zh and English literal+idiomatic fields on every source unit; spot-checked claim evidence sentences against quotations. No definite English omission or source-contradiction requiring owner repair."
+  },
+  "sealedNativeDatePacket": {
+    "candidatePath": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-073/date-packet-candidate.json",
+    "contentSha256": "sha256:ca9ed646fc4d98812c1ecac384d80015e034a36a904b4783df50907544249a9b",
+    "itemCount": 91,
+    "peopleCount": 35,
+    "sourceUnitCount": 189,
+    "sourceHash": "sha256:70fe32d4e17dee5b24bf0b15425b4e9fbdf21a11e1939736aa6fe202ee0d5168",
+    "extractionHash": "sha256:5d7b23e8291f7eddca8cbfe034682f765f51d38c9f9159d636c13dd0d7ee3438",
+    "buildCommand": "npm run people:dates:packet -- --book xinwudaishi --chapter 073 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-073/date-packet-candidate.json"
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "ownerChangesRequired": false,
+  "ownerChangeRationale": "Pinned extraction and accepted editorial decisions pass scoped validation; no concrete chronology or translation contradiction found in owner pass. Native independent date audit file is absent—owner does not self-approve.",
+  "chronologyStatus": "un-audited",
+  "nativeValidation": {
+    "people:validate": {
+      "command": "npm run people:validate -- --book xinwudaishi --chapter 073",
+      "passed": true,
+      "summary": "Scoped person data validation passed for xinwudaishi/073: 1 extraction(s), 35 local people, 370 mentions, 347 claims, 0 proposed repair(s), 1 applied repair(s), 1 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "people:dates:verify": {
+      "command": "npm run people:dates:verify -- --book xinwudaishi --chapter 073",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    },
+    "datePacketBuild": {
+      "command": "npm run people:dates:packet -- --book xinwudaishi --chapter 073 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-073/date-packet-candidate.json",
+      "passed": true,
+      "itemCount": 91,
+      "peopleCount": 35,
+      "sourceUnitCount": 189
+    }
+  },
+  "remainingIndependentEvidence": {
+    "date": {
+      "gate": "independent-native-chronology-review",
+      "packetForReviewer": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-073/date-packet-candidate.json",
+      "packetSha256": "sha256:ca9ed646fc4d98812c1ecac384d80015e034a36a904b4783df50907544249a9b",
+      "recordCommand": "npm run people:dates:record -- --book xinwudaishi --chapter 073",
+      "verifyAfterRecord": "npm run people:dates:verify -- --book xinwudaishi --chapter 073",
+      "notes": "No data/people/date-audits file exists; owner prepared fresh sealed packet from current inputs only."
+    },
+    "identity": {
+      "gate": "independent-chapter-and-canonical-identity-review",
+      "notes": "Bounded dossier review against canonical evidence; owner handoff is not identity approval."
+    },
+    "editorial": "Accepted editorial decisions retained at pinned blob; no owner override."
+  },
+  "holds": [],
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 073",
+    "verifyDates": "npm run people:dates:verify -- --book xinwudaishi --chapter 073",
+    "buildDatePacket": "npm run people:dates:packet -- --book xinwudaishi --chapter 073 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-073/date-packet-candidate.json"
+  },
+  "reviewedAt": "2026-11-24T17:15:28.869Z",
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner evidence only; no canonical edits, registry build, deploy, or merge. Independent native date status still missing."
+}

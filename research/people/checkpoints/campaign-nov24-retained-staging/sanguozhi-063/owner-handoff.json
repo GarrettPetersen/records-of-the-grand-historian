@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "ownerAgentId": "bc-ee5df8bd-f5f3-43f7-866f-9e5d6ab0b948",
+  "worker": "cursor-nov24-retained-staging-w12-o8",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "6fd4f5df71cc2d57874a6ea93ab243f4dc228ddca595a090893851873b7b0f16",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "phase": "dispatch_pending",
+  "independentApprovalIssued": false,
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "scope": {
+    "book": "sanguozhi",
+    "chapter": "063"
+  },
+  "branchRef": "cursor/nov24-retained-staging-owner-sanguozhi-063-0b948",
+  "inputBlobWitness": {
+    "source": "40c35e3b293190d6d3a74f014167e59e2f1b8acc",
+    "extraction": "e940b51c138d5d9dff7f827922b58b0378fb879b",
+    "editorial": "0a027bb59d2c64d2c9e8072457dc2489138e586e"
+  },
+  "sealedInputs": {
+    "source": "sha256:44c87a615a6a76f0704c5924fb3dca7501c48daa4880b41be8a33bb64c9be81a",
+    "extraction": "sha256:f26e69118834e31c3429e11595f9ac2e031e45b34584eb86736a66b2397bab81",
+    "editorial": "sha256:abf9b8598c3a2c5f356113b572e1e723cf8a1f5d2ed80272809005a75d2b01d7"
+  },
+  "dispatchAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "f26e69118834e31c3429e11595f9ac2e031e45b34584eb86736a66b2397bab81",
+    "people": 51,
+    "claims": 278,
+    "promptVersion": 7
+  },
+  "inputReuse": {
+    "extraction": {
+      "reused": true,
+      "path": "data/people/extractions/sanguozhi/063.json",
+      "bytes": 89005,
+      "editorialPassCompleted": true,
+      "appliedRepairsFromEditorial": true
+    },
+    "editorial": {
+      "reused": true,
+      "path": "data/people/editorial-decisions/sanguozhi/063.json",
+      "decisionCount": 3
+    },
+    "dateAudit": {
+      "present": false,
+      "path": "data/people/date-audits/sanguozhi/063.json",
+      "status": "missing-native-report"
+    }
+  },
+  "sourceCoverage": {
+    "title": {
+      "zh": "卷六十三 吳書十八 吳範劉惇趙達傳",
+      "en": "Volume 63: Book of Wu 18: Biographies of Wu Fan, Liu Dun, and Zhao Da",
+      "raw": "卷六十三 吳書十八 吳範劉惇趙達傳 Volume 63: Book of Wu 18: Biographies of Wu Fan, Liu Dun, and Zhao Da"
+    },
+    "sourceUrl": "https://chinesenotes.com/sanguozhi/sanguozhi063.html",
+    "englishCoverage": {
+      "sentenceCount": 185,
+      "translatedCount": 185,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "ownerSourceReview": "Read paired Chinese zh and English literal+idiomatic fields on every source unit; spot-checked claim evidence sentences against quotations. No definite English omission or source-contradiction requiring owner repair."
+  },
+  "sealedNativeDatePacket": {
+    "candidatePath": "research/people/checkpoints/campaign-nov24-retained-staging/sanguozhi-063/date-packet-candidate.json",
+    "contentSha256": "sha256:5378afd77ab29de3f39e021a9d0e7fa88ef715d0f47d766cc3f870670fa39701",
+    "itemCount": 135,
+    "peopleCount": 51,
+    "sourceUnitCount": 185,
+    "sourceHash": "sha256:d6849880f82ad31368737b12e90628922ad93cbc57d203ecd81a59ced39824ea",
+    "extractionHash": "sha256:9b2fbe72c67e7f7824688edde4b84c39e416408ab1172f901d2bb001278b9ff4",
+    "buildCommand": "npm run people:dates:packet -- --book sanguozhi --chapter 063 --out research/people/checkpoints/campaign-nov24-retained-staging/sanguozhi-063/date-packet-candidate.json"
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "ownerChangesRequired": false,
+  "ownerChangeRationale": "Pinned extraction and accepted editorial decisions pass scoped validation; no concrete chronology or translation contradiction found in owner pass. Native independent date audit file is absent—owner does not self-approve.",
+  "chronologyStatus": "un-audited",
+  "nativeValidation": {
+    "people:validate": {
+      "command": "npm run people:validate -- --book sanguozhi --chapter 063",
+      "passed": true,
+      "summary": "Scoped person data validation passed for sanguozhi/063: 1 extraction(s), 51 local people, 421 mentions, 461 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "people:dates:verify": {
+      "command": "npm run people:dates:verify -- --book sanguozhi --chapter 063",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    },
+    "datePacketBuild": {
+      "command": "npm run people:dates:packet -- --book sanguozhi --chapter 063 --out research/people/checkpoints/campaign-nov24-retained-staging/sanguozhi-063/date-packet-candidate.json",
+      "passed": true,
+      "itemCount": 135,
+      "peopleCount": 51,
+      "sourceUnitCount": 185
+    }
+  },
+  "remainingIndependentEvidence": {
+    "date": {
+      "gate": "independent-native-chronology-review",
+      "packetForReviewer": "research/people/checkpoints/campaign-nov24-retained-staging/sanguozhi-063/date-packet-candidate.json",
+      "packetSha256": "sha256:5378afd77ab29de3f39e021a9d0e7fa88ef715d0f47d766cc3f870670fa39701",
+      "recordCommand": "npm run people:dates:record -- --book sanguozhi --chapter 063",
+      "verifyAfterRecord": "npm run people:dates:verify -- --book sanguozhi --chapter 063",
+      "notes": "No data/people/date-audits file exists; owner prepared fresh sealed packet from current inputs only."
+    },
+    "identity": {
+      "gate": "independent-chapter-and-canonical-identity-review",
+      "notes": "Bounded dossier review against canonical evidence; owner handoff is not identity approval."
+    },
+    "editorial": "Accepted editorial decisions retained at pinned blob; no owner override."
+  },
+  "holds": [],
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book sanguozhi --chapter 063",
+    "verifyDates": "npm run people:dates:verify -- --book sanguozhi --chapter 063",
+    "buildDatePacket": "npm run people:dates:packet -- --book sanguozhi --chapter 063 --out research/people/checkpoints/campaign-nov24-retained-staging/sanguozhi-063/date-packet-candidate.json"
+  },
+  "reviewedAt": "2026-11-24T17:15:28.864Z",
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner evidence only; no canonical edits, registry build, deploy, or merge. Independent native date status still missing."
+}
