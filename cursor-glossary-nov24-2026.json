@@ -176,7 +176,7 @@
    "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
   }
  ],
- "lastCheckedAt": "2026-11-24T07:38:58.390Z",
+ "lastCheckedAt": "2026-11-24T07:40:16.846Z",
  "lookup": {
   "authenticatedManifestVerified": true,
   "access": "read-only",
@@ -2593,9 +2593,9 @@
    "preflight": {
     "ref": "codex/cursor-glossary-nov24-2026-release-twenty-four-scoped-preflight",
     "workflowRevision": "d8a6b46cc603d5633c45f12ed459e20ec627f917",
-    "status": "in_progress",
+    "status": "completed",
     "runId": 45348463823,
-    "conclusion": null,
+    "conclusion": "failure",
     "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45348463823"
    }
   }
@@ -23734,7 +23734,10 @@
          "cases": 31
         }
        ],
-       "status": "dispatch_pending"
+       "status": "in_progress",
+       "runId": 45349487674,
+       "conclusion": null,
+       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45349487674"
       }
      }
     ],
@@ -23902,9 +23905,12 @@
       "ref": "codex/cursor-glossary-nov24-2026-songshu004-staging-source-current-runtime",
       "workflowRevision": "f396757a71f232578656687eb674818178c71e29",
       "source": "74bf7b59f83b12050dca2b48e83ca26b99caec3b",
-      "status": "dispatch_pending",
+      "status": "completed",
       "runtime": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
-      "unchangedStagingDataBase": "9dd20cd8ab5e3f70b6f377c0e109d8ccc3f4e14a"
+      "unchangedStagingDataBase": "9dd20cd8ab5e3f70b6f377c0e109d8ccc3f4e14a",
+      "runId": 45348782376,
+      "conclusion": "failure",
+      "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45348782376"
      }
     },
     "focusedReviewRepairWave": [
@@ -24191,7 +24197,7 @@
      "ref": "codex/cursor-glossary-nov24-2026-native-envelope-provenance",
      "workflowRevision": "110f6686cd17ec513826393b7d4a501c71f1c4ae",
      "source": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
-     "status": "dispatch_pending",
+     "status": "completed",
      "jobs": [
       {
        "key": "qingshigao/120",
@@ -24220,7 +24226,20 @@
        "authorHead": "bc09397f909cf48381f617c04ddcef59dee0fb13"
       }
      ],
-     "artifact": "native-envelope-receipts"
+     "artifact": "native-envelope-receipts",
+     "runId": 45348778695,
+     "conclusion": "failure",
+     "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45348778695",
+     "findings": [
+      {
+       "key": "qingshigao/120",
+       "reason": "Chenshu 002 p003 name witness 舜 not supported in s0010"
+      },
+      {
+       "key": "songshu/096",
+       "reason": "The accepted canonical dossier requires a primary identity-anchor witness"
+      }
+     ]
     },
     "qing027Certificate": {
      "ref": "codex/cursor-glossary-nov24-2026-qing027-witness-native-certificate",
@@ -24240,13 +24259,16 @@
       }
      ],
      "artifact": "qing-027-focused-native-certificate",
-     "status": "dispatch_pending",
+     "status": "completed",
      "authorHead": "77b6cf1c55ff116901b785629ee28abc27ba3210",
      "originalEvidence": "8bcbfb4c4024ea0c16293d8f533aad2a38882c66",
      "changed": [
       "sha256:1782d303b50e9bcecf6a8d55441c831b63e36c35fc39c62b138f06499455d3b6",
       "sha256:663e61e5a3062aced684896b94d0ea4dc547f7ac9b2a962d396a843e2c3c8ecd"
-     ]
+     ],
+     "runId": 45349023507,
+     "conclusion": "success",
+     "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45349023507"
     }
    },
    "replenishment": {
@@ -25082,7 +25104,133 @@
          "idempotencyKey": "4fa7edb6a6d4f457dde93abf581ce272acc5fed07fb341b1cd484e03b63f462a",
          "kind": "020",
          "runId": "run-89de9422-9a0a-4924-81ed-da74e00d45bb",
-         "observedAt": "2026-11-24T07:31:45.869Z"
+         "observedAt": "2026-11-24T07:31:45.869Z",
+         "capture": {
+          "head": "420f71af231effe11cf8731c3ba61a43fb0fbd87",
+          "status": "reports-captured-awaiting-native-proof",
+          "reports": [
+           {
+            "file": "research/people/checkpoints/jinshu020-native-identity-20261124/independent-review-part-001.json",
+            "sha256": "51f8a108188e1807634d063872a2ca0fdb3d0e2ccd26e6841c586ad4216ca813",
+            "cases": 4,
+            "approved": 4,
+            "holds": []
+           },
+           {
+            "file": "research/people/checkpoints/jinshu020-native-identity-20261124/independent-review-part-002.json",
+            "sha256": "1c2b4a5c8ceb9cb0bf0855ef0b082b67ffad933c5a948c1b56c1d345741a9924",
+            "cases": 2,
+            "approved": 2,
+            "holds": []
+           },
+           {
+            "file": "research/people/checkpoints/jinshu020-native-identity-20261124/independent-review-part-003.json",
+            "sha256": "ef4c70ca1db056dbaed1c899ab26cdf2f26b3c2e865c7519635ed24b1f8f01e2",
+            "cases": 3,
+            "approved": 3,
+            "holds": []
+           },
+           {
+            "file": "research/people/checkpoints/jinshu020-native-identity-20261124/independent-review-part-004.json",
+            "sha256": "bc51b084f17c5b955fe0280314bdc6c698ddc1be72eb3b606d895405600d7624",
+            "cases": 10,
+            "approved": 9,
+            "holds": [
+             "sha256:f545b4e2b1fd90c47e54df91b5be5ae4427530e02717e4af60f1ab20ca5d4d50"
+            ]
+           }
+          ],
+          "sourceAncestor": false,
+          "sourceVerification": "The report branch was recreated from a different Git base. Verified the unchanged sealed part checksums, same plan fingerprint, exact case IDs and independent reviewer identity."
+         }
+        },
+        "next": {
+         "status": "ready",
+         "sourceRef": "codex/cursor-glossary-nov24-2026-020-review-transport-second",
+         "sourceHead": "9380a503de96f3c04d39967250ea01e5c91118aa",
+         "path": "research/people/checkpoints/jinshu020-native-identity-20261124/",
+         "parts": [
+          {
+           "file": "transport-part-005.json",
+           "bytes": 359861,
+           "sha256": "2fb16783c4b0a374360ea908bbe2d4440e17ad6609cd05f91aa9715ee6599909",
+           "caseIds": [
+            "sha256:66aec3ba4b4f06d89fe7c7c33cbad4604058d8b7fdec421c7121665ea79dbd4f",
+            "sha256:d5239af7a0d4773175e9234c08c0cc0da939908886ac08e2bddfb3450cc875ec",
+            "sha256:33ebf2699ff00b2175cca9f732cbb72d8ad9545f016e92367e668ea788453465",
+            "sha256:b421d755b4fc42484c56ff1d7ac7e8e7f7e9286830c9ccdd5ed02e4b469476ac",
+            "sha256:1917330926ef92008559edee79ca2a05201621ef0a9e4098db2ff6816e4af82d",
+            "sha256:836d3faf0c7fd7c76fc2ae31f1ac45d4fa877bfacd41ed81bc3b0e96ae9cce1a",
+            "sha256:9d236947a8025d0d9985286e34c84d6e93d67820bd029faa27e7c5176a984df3",
+            "sha256:e1b1f66d972505533d5f8fb3e899127009d2f075f5789df911f8cf4f800292c1",
+            "sha256:1db7462fa2bd537e538f547a4cb0538a354b477b7a857e932bfb0f8bfd1fc043",
+            "sha256:60879a558689bbafc1c604268e81ab2a7eaec575d850167d9f66abd347894821"
+           ]
+          },
+          {
+           "file": "transport-part-006.json",
+           "bytes": 360975,
+           "sha256": "4bfc129794ce94632d019973b3a56a3e5079bbc9adc1d784c100d83a2323cd04",
+           "caseIds": [
+            "sha256:51968a03c27432ba7896a932dda6c2b8eda80347742015af49945241b2acaacd",
+            "sha256:45dc97bb63030d8248f832b06ce05674bb1be77fd42cbf120740853512baf0f2",
+            "sha256:3385f0932efb973ae8d62d90d63e3795fe80eadb7a889ff18d2bd59e29f9cb62",
+            "sha256:a0d537042da1d8079d9a0938e8f1b999633e4c5ef960d2ca699173ee8b2f336b",
+            "sha256:4bb79d2cfd4edf9dcd1d6df44a459455ad82539a036770cc7a3d2e4ba99c6f3e",
+            "sha256:48cedfa4f9398f8b81bdfe3834ce562ddb1ca3785339ec8e36b427b7dc23b995",
+            "sha256:71a26e1d18b634e964d370f1014e48449a9ca70861414687b3be767c91eb489d",
+            "sha256:3bf2548c1ad0b4a7dc7f803ad8373a5ecc64f5b69190c159dcdd27fe65e1884f",
+            "sha256:78022ab8b233cc5e0b14cb3efe67a81a858b585994863207f305a2dc53a4350c",
+            "sha256:02309a97f32e4ddc7b784c92395b32113b904699097dc2a51bb576cecbbdc510"
+           ]
+          },
+          {
+           "file": "transport-part-007.json",
+           "bytes": 390832,
+           "sha256": "cfe9441716cbbaa7429c6cb892a8faedd441d66bb1dbf3e9a57eb3dacba757f2",
+           "caseIds": [
+            "sha256:e669a4059667ef26044e27ce8abcf30ce87a05206d6575d1f591d2d109ffa66e",
+            "sha256:c1d796a0a44593d5843cc9b89a71346b31ddde20aed7a62896a55735037a1d71",
+            "sha256:2858642510bb2c8e6d447a2bd5ef5b90adf26094361660cfd1fbb3ded39a53a9",
+            "sha256:c8b575fa7186a7239cf39c26c1555bd3fbdf6cc7bde4f0ab62d32b92a3b0776c",
+            "sha256:8e10bff946decdfb050998b6c11cdf958a224d5fc37817f58340a16b0f029180",
+            "sha256:fd7a4c6432f28a488013eb665c0dbfb4b6e1ea6ec2fbddfa426d36d99f058491",
+            "sha256:1ae6c45da57788b4f8e9d7fab993a7512184edef8ce7cf4954dc3e6c700b30dc",
+            "sha256:b92ad06ff3f2cb33ffcb1ab884a07272c3534158c1f6b2ae28304682a191cd9f",
+            "sha256:0f8df2e14ff6b0bedba5523ab2f9ba4b9041af20e65f2f484bbbd2baf8c299cc",
+            "sha256:bc94e6409de8d17bfcb6895083ca37ead77ff4d011b528885c9ad5442dafb389",
+            "sha256:82d340d77727ebb84e40b0f740487079445bb227ed943f2ac8d7ab10b5818ffb",
+            "sha256:13e11465ac75027f233fc00052fcf4bdf9acc268f91433c56eacb944c6cd681f",
+            "sha256:6256982d29fbb3cb14118deb709b88f6b794b79ebce606a85981336ab18fc3d9",
+            "sha256:17f01c9154d2a8b9ad41fc063cf9bfa3ead28f06e9f18d78c13ff004f3fa58de",
+            "sha256:1fcbcf07a6c360de9857753a4d096fb8fd3cf8bd0ec8ee7f44b3b9067aaa713b",
+            "sha256:ab829eb7d807c995cebc08166fc8d9b0b91e5722551e36e962d25ba2685aee58",
+            "sha256:ddf5fb1271bdd58df48a67244c32381df49a42939551ab9ceb3a71484c86b3a0",
+            "sha256:e5eb8243ce70f851c19762eb3577e61d7a37df3cb138dc6b1302fb6425389c36",
+            "sha256:13310ed9fd47747ff6290a00f1073be1c65e4e511b7c9d3b4b869f46412a19a9",
+            "sha256:a991d2ce85af2f21c3bbe02b6691a78ba997debee643fabdd6264454dceb7b49"
+           ]
+          },
+          {
+           "file": "transport-part-008.json",
+           "bytes": 358394,
+           "sha256": "0fd8c9f267f64d7ba04703b1a18647e1de98192f0cf9d3982cc8da6374140e53",
+           "caseIds": [
+            "sha256:a6bd81f9e3f1c884bc74e87703de6b2545c356ee498c4ea4d5adf5f66e24172f",
+            "sha256:8c8cc9fb04351adc53e7b9710da8d6602c7ccb6d2fdac6f7916d0ed649aa94bd",
+            "sha256:e675ed314c966101faad3930ca4531200e12ad9e9c50b3c7b44519a5fc96b17b",
+            "sha256:e621ee2236eabecafe555bb876ea8070c39695c00feae61f05abe74a2aa305f9",
+            "sha256:aadda31da4d1c6469e636f07d0a9a027d863132b8bfa124c56407bdee42fc9ef",
+            "sha256:57722a892589b99e023f36a1542cc309946feedd0fa0fdf200b0de0e333d3396",
+            "sha256:b33c06710c15581c5613df5a855c2f68fb62fcee38f4c40daa422b7605f3524d",
+            "sha256:9e7f3e2b61bc9d7ab4b24e6a6a46adbad0d0e0bc2bf763ad592b2ac9326539b8",
+            "sha256:9c8bc8798b8d66a0251750cc5931fe4f7a86d245399fe4d5d9f2157fe2521395",
+            "sha256:0ee7bd16e9b841af59a7b2a72ad9d57ebb7359dffc20501e8cfc72154716581a"
+           ]
+          }
+         ],
+         "evidenceBranch": "cursor/jinshu020-native-identity-6ab1df-parts005-008",
+         "previousRun": "run-89de9422-9a0a-4924-81ed-da74e00d45bb"
         }
        }
       }
