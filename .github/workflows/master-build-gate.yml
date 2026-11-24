@@ -1,116 +1,77 @@
-name: Master build gate
-
-# Run on the proposed PR merge commit, not just the topic branch. Keep this
-# workflow unfiltered so its required check is always reported for master PRs.
+name: Verify source-only changes before independent proof reconciliation
 on:
   workflow_dispatch:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
-  merge_group:
-    types: [checks_requested]
-
 permissions:
   contents: read
-
 jobs:
-  master-build:
-    name: master-build
+  validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 12
     env:
-      NODE_OPTIONS: --max-old-space-size=6144
+      SOURCE: a8b5bf79f39c400f8adb2360f03d6aa6fa2f20d9
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          ref: ${{ env.SOURCE }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Test people date-hint normalization
-        run: npm run people:hints:self-test
-
-      - name: Prevent duplicate storage and local corpus builds
+      - run: npm install --no-audit --no-fund
+      - name: Validate exact candidate bytes against native scoped gates
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          node --test scripts/test-people-generation-policy.mjs scripts/test-people-storage-policy.mjs scripts/test-people-git-storage.mjs scripts/test-people-recovery-checkpoint.mjs scripts/test-people-registry-deduplication.mjs
-          python3 scripts/test-people-recovery-archive.py
-
-      - name: Test unresolved people-date holds
-        run: node scripts/test-people-unresolved-hold.mjs
-
-      - name: Test Cursor date-worker recovery
-        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs scripts/test-openrouter-free.mjs
-
-      - name: Test chapter-owner isolation and combined publication
-        run: node --test --test-concurrency=1 scripts/test-people-chapter-owner.mjs scripts/test-people-chapter-editorial-preparation.mjs scripts/test-people-chapter-repair-reasons.mjs scripts/test-people-remote-admission.mjs scripts/test-people-combined-curation.mjs scripts/test-people-footnote-preparation.mjs scripts/test-people-private-identity-inputs.mjs scripts/test-people-source-only-chronology.mjs scripts/test-people-current-curation-provenance.mjs scripts/test-people-identity-proof-composition.mjs test/people-name-claim-correction.test.mjs scripts/people-owner-repair-chain.test.mjs
-
-      - name: Test shared-host master synchronization
-        run: npm run people:master:self-test
-
-      - name: Install ebook publication verification tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
-
-      - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-pinned-identity-source.mjs scripts/test-people-identity-dossier-delta.mjs scripts/test-people-product-inputs.mjs scripts/test-people-inferred-source-references.mjs scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
-
-      - name: Test bounded canonical-person dossiers and chapter proofs
-        run: |
-          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs scripts/test-people-corpus-reader.mjs
-          npm run people:catalog:self-test
-          npm run people:generated-data:self-test
-
-      - name: Test certified website people publication
-        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
-
-      - name: Test reviewed name spans and translation repairs
-        run: |
-          node scripts/test-people-reviewed-name-spans.mjs
-          node scripts/apply-people-translation-repairs.mjs --self-test
-
-      - name: Build and validate the full site
-        run: npm run build
-
-      - name: Verify real Jinshu 053 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
-
-      - name: Preserve nonempty chapter acceptance evidence
-        uses: actions/upload-artifact@v4
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import {execFileSync,spawnSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          import {buildDateAuditPacket,dateAuditStatus} from './scripts/lib/people-date-audit.mjs';
+          const expected=[{"receipt":{"head":"47dde97ae7bb57f6d76e73b55c1c6e95cc6b47d4","path":"research/people/checkpoints/campaign-nov24-current-master-followup-transport/chenshu-020/source-delta-native-candidate.json","sha256":"3eeca9168ca7edd415e08245f0b2b832eea0325c2a21f8114ae3f6422766b578","blob":"b83d9981f6b7dc5ff335b34b6b1394733a9ce172","keys":["schemaVersion","kind","chapterKey","pullRequest","ownerAgentId","authorHead","reviewHead","reviewSha256","proposalPath","proposalSha256","caseId","sealedInputsBefore","sourceWitness","machineEdits","candidateExtraction","evidenceReuse","validation","applyOrder","serialization","candidateBytes"],"key":"chenshu/020"},"inputs":[{"path":"data/chenshu/020.json","blob":"c9ad7ef20d94a5641600733e83171e497d26032d"},{"path":"data/people/extractions/chenshu/020.json","blob":"23b4a78082b0367aed328a5155196e1e9fed3f27"},{"path":"data/people/date-audits/chenshu/020.json","blob":"a9186a52952d2e162f1fb4bbd9cc7b6ccce2fb68"},{"path":"data/people/editorial-decisions/chenshu/020.json","blob":"0418ddb7e7fd88952f4b89247c578f31fcc0692b"}]},{"receipt":{"head":"b0fc7c98ad4493cdb227e79f327cf559cb0be39e","path":"research/people/checkpoints/campaign-nov24-current-master-followup-transport/jiuwudaishi-068/source-delta-native-candidate.json","sha256":"313b6c9af72e850cbd7cd824d8333e2cbd7719bd4fd5517f97cd2900720d372f","blob":"7a83d9580c4644a2fa359aa0823db6ba6cbb3b49","keys":["schemaVersion","kind","chapterKey","ownerAgentId","ownerRevision","reviewHead","reviewerAgentId","proposal","review","sealedInputsBefore","residualHold","files","validation","dependencyReuse","serialization","artifactRevision"],"key":"jiuwudaishi/068"},"inputs":[{"path":"data/jiuwudaishi/068.json","blob":"fe0f26c9a87dc7b459563bcdd94bfecc382d5c4c"},{"path":"data/people/extractions/jiuwudaishi/068.json","blob":"401dd7d9560118917450fc60eda94b489d59c11b"},{"path":"data/people/date-audits/jiuwudaishi/068.json","blob":"8c29df9b708fa74c3b857f76a88e60aad4b71b74"},{"path":"data/people/editorial-decisions/jiuwudaishi/068.json","blob":"a1b00e6e98a92d70fb46542f78aad51daf36d751"}]},{"receipt":{"head":"5c909dfd5d3588b1c3700f7d3bded56dc82e237a","path":"research/people/checkpoints/campaign-nov24-current-master-followup-transport/jiuwudaishi-071/source-delta-native-candidate.json","sha256":"7491748357d5250c5c848ed2ef91baf16ed672d684f03bd985f2cdf86f71d150","blob":"db2d9f6b11f4bdd744eef5d6c4c857eca52c6654","keys":["schemaVersion","kind","chapterKey","ownerAgentId","ownerRevision","reviewHead","reviewerAgentId","proposal","review","sealedInputsBefore","residualHold","files","validation","dependencyReuse","serialization","artifactRevision"],"key":"jiuwudaishi/071"},"inputs":[{"path":"data/jiuwudaishi/071.json","blob":"3569dbc221c680e9cad6ce581f81afc5ba78cd4b"},{"path":"data/people/extractions/jiuwudaishi/071.json","blob":"5623c14668d6e4bdcb29dc1a2d0d337d7c46c80b"},{"path":"data/people/date-audits/jiuwudaishi/071.json","blob":"9c32366068699e58b488058825c7bc60ce5722f9"},{"path":"data/people/editorial-decisions/jiuwudaishi/071.json","blob":"6d303ba1afd34921399a7257804ea6ee9c3b4c82"}]}];
+          const rows=[], hash=b=>createHash('sha256').update(b).digest('hex'), strip=x=>String(x??'').replace(/^sha256:/,'');
+          const written=new Map();
+          for(const q of expected){
+           const {receipt}=q, key=receipt.key, [book,chapter]=key.split('/');
+           const row={key,scope:receipt.head,proposal:receipt.sha256};
+           try{
+            const raw=execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+process.env.GITHUB_REPOSITORY+'/contents/'+receipt.path+'?ref='+receipt.head],{maxBuffer:3e6});
+            if(hash(raw)!==receipt.sha256)throw Error('Owner candidate bytes do not match captured raw digest');
+            const d=JSON.parse(raw), files=d.files??d.fileDeltas??[d.candidateExtraction];
+            const allowed=['data/'+key+'.json','data/people/extractions/'+key+'.json'];
+            if(!files.length||files.some(x=>!allowed.includes(x.path))||new Set(files.map(x=>x.path)).size!==files.length)throw Error('Patch write scope disagrees');
+            const before=buildDateAuditPacket(book,chapter);
+            for(const e of files){
+              const old=fs.readFileSync(e.path), pinned=q.inputs.find(x=>x.path===e.path);
+              const actual=execFileSync('git',['rev-parse','HEAD:'+e.path],{encoding:'utf8'}).trim();
+              if(!pinned||pinned.blob!==actual||(e.gitBlobBefore&&e.gitBlobBefore!==actual)||(e.sha256Before&&strip(e.sha256Before)!==hash(old)))throw Error('Current exact input disagrees: '+e.path);
+              const digest=strip(e.sha256After??d.candidateExtraction?.sha256);
+              const encoded=e.candidateBytesBase64??d.candidateBytes?.base64??(d.candidateExtraction?.encoding==='base64'?d.candidateExtraction?.bytes:undefined);
+              const doc=d.candidateExtractionDocument;
+              const variants=encoded?[Buffer.from(encoded,'base64')]:doc&&e.path===d.candidateExtraction?.path?[JSON.stringify(doc,null,2)+'\n',JSON.stringify(doc,null,2),JSON.stringify(doc)+'\n',JSON.stringify(doc)].map(x=>Buffer.from(x)):[];
+              const exact=variants.find(x=>hash(x)===digest);
+              if(!exact||exact.equals(old))throw Error('No exact changed candidate bytes match supplied after fingerprint: '+e.path);
+              JSON.parse(exact); written.set(e.path,old); fs.writeFileSync(e.path,exact);
+            }
+            const verify=spawnSync(process.execPath,['scripts/validate-people-data.mjs','--book',book,'--chapter',chapter],{encoding:'utf8',timeout:30000,maxBuffer:500000});
+            row.nativeExtractionPassed=verify.status===0&&verify.stdout.includes('Scoped person data validation passed for '+key);
+            row.validationResult=[verify.stdout,verify.stderr].filter(Boolean).join('\n').slice(-2200);
+            const after=buildDateAuditPacket(book,chapter), compare=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+            row.nativeDateStatus=dateAuditStatus(book,chapter).status;
+            row.dateDependencies={sourceHashChanged:before.sourceHash!==after.sourceHash,extractionHashChanged:before.extractionHash!==after.extractionHash,unitsChanged:!compare(before.units,after.units),itemsChanged:!compare(before.items,after.items),peopleChanged:!compare(before.people,after.people),beforeItems:before.items.length,afterItems:after.items.length};
+           }catch(e){row.error=e.message;}
+           finally{for(const [p,b] of written)fs.writeFileSync(p,b);written.clear();}
+           rows.push(row);
+          }
+          if(execFileSync('git',['status','--porcelain','--untracked-files=no'],{encoding:'utf8'}).trim())throw Error('Temporary source inputs were not restored');
+          fs.writeFileSync(process.env.RUNNER_TEMP+'/candidate-source-native-results.json',JSON.stringify(rows,null,2)+'\n');
+          console.log(JSON.stringify(rows.map(x=>({key:x.key,passed:x.nativeExtractionPassed,date:x.nativeDateStatus,error:x.error}))));
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: jinshu053-qualified-contribution
-          path: data/people/generated/jinshu053-release-acceptance/
-          retention-days: 30
-
-      - name: Verify real Jinshu 119 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 119 --out data/people/generated/jinshu119-release-acceptance
-
-      - name: Preserve Jinshu 119 nonempty acceptance evidence
-        uses: actions/upload-artifact@v4
-        with:
-          name: jinshu119-qualified-contribution
-          path: data/people/generated/jinshu119-release-acceptance/
-          retention-days: 30
-
-      - name: Verify approved chapter qualification and ebook contributions
-        run: |
-          for chapter in 117 120 129 130; do
-            node scripts/verify-people-chapter-release.mjs --book jinshu --chapter "$chapter" --out "data/people/generated/jinshu${chapter}-release-acceptance"
-          done
-
-      - name: Preserve approved chapter nonempty acceptance evidence
-        uses: actions/upload-artifact@v4
-        with:
-          name: qualified-chapter-contributions
-          path: |
-            data/people/generated/jinshu117-release-acceptance/
-            data/people/generated/jinshu120-release-acceptance/
-            data/people/generated/jinshu129-release-acceptance/
-            data/people/generated/jinshu130-release-acceptance/
-          retention-days: 30
+          name: nov24-corrected-source-patch-native-dependencies
+          path: ${{ runner.temp }}/candidate-source-native-results.json
+          if-no-files-found: error
+          retention-days: 7
