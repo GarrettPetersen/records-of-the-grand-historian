@@ -1,0 +1,203 @@
+{
+  "schemaVersion": 1,
+  "kind": "source-hold-delta-proposal",
+  "chapterKey": "beiqishu/048",
+  "ownerAgentId": "bc-903d3892-ff92-4352-9793-5f42d1111401",
+  "provenance": {
+    "ownerBranch": "cursor/beiqishu-048-followup-owner-1401",
+    "ownerHead": "0107fa524719783a7aeacf652638376adfb3bc84",
+    "reviewHead": "1f262a5ce682e64e6bf44371de9d55a8555876e5",
+    "reviewerAgentId": "bc-6dfa5c15-d808-456d-9087-59fb8bf452a8",
+    "pullRequest": 5601,
+    "independentReviewParts": [
+      "research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-048/independent-identity-report-part-003.json"
+    ],
+    "additionalEvidence": [
+      {
+        "path": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-048/lookup-receipt.json",
+        "gitBlob": "7383144a3e33c522f310dcd8556200ebb0ad6d64",
+        "sha256": "sha256:dedc7f6743f63f6f8074024cb4bd5d0648bf5c5300c3a7aca6bf4839e6acd6fa"
+      }
+    ]
+  },
+  "sealedInputs": {
+    "source": {
+      "path": "data/beiqishu/048.json",
+      "sha256": "sha256:dcb05f15ba928669a4aef9bd2fd088fccbe64a914cf52743a11d9128a0eebc5f",
+      "gitBlob": "02e1a135bc00f6a2bfb380be1c02bf689d395ee0"
+    },
+    "extraction": {
+      "path": "data/people/extractions/beiqishu/048.json",
+      "sha256": "sha256:cfe1926d88a090339b8f20bdbbf83dfbc8751c91f724fc23c0cc0d9519c67924",
+      "gitBlob": "573bfda7b7d39c964a54b4e3ddf9e857886684cd"
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/beiqishu/048.json",
+      "sha256": "sha256:5fa48e96107a3f5707127bf1846a1f79b915a1c93758afddd096b3674eb4ae6a",
+      "gitBlob": "c62cde14a933b8d863cd1b5101a157175d0f1c2f"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/beiqishu/048.json",
+      "sha256": "sha256:9f511fa25b9f9bbecd6ea3e3c517b48361ef41c5c7aa7ee63b088b63c781d5ae",
+      "gitBlob": "5c4c7a9d33fa13b2aa10dec7d491e68375c9cb05"
+    }
+  },
+  "holdDeltas": [
+    {
+      "caseId": "sha256:ff4c70223d32f751de17a7bc2ce4cd324923f92e03b1ffd9cdd91bfc9779d442",
+      "independentVerdict": "hold",
+      "canonicalPersonId": "per_838XBG4G6BATMF86NED1",
+      "localId": "beiqishu:048:p058",
+      "diagnosis": "Local person p058 carries blocking Chinese 孝靜帝母 with zero sealed primary mentions. Unit s0081 attests only 父僧敬 as 魏孝靜帝之舅 (maternal uncle of Emperor Xiaojing); the text does not name 母, 孝靜帝母, or any mother surface. The owner retain-proposal quoted 孝靜帝 alone, which witnesses the emperor on the same line, not this mother record. Minting 孝靜帝母 as a quotable identity invents a Chinese name span where the source supports only the uncle–nephew kinship and an entailed unnamed mother.",
+      "sourceWitness": {
+        "book": "beiqishu",
+        "chapter": "048",
+        "unitId": "s0081",
+        "zh": "父僧敬，即魏孝靜帝之舅，位至司空。",
+        "enLiteral": "His father Sengjing was the maternal uncle of Emperor Xiaojing of Wei and rose in office to Minister of Works.",
+        "enIdiomatic": "His father Sengjing was the maternal uncle of Emperor Xiaojing of Wei and rose to Minister of Works."
+      },
+      "independentPrimaryWitness": {
+        "unitId": "s0081",
+        "quote": "魏孝靜帝之舅",
+        "note": "Valid for 舅 kinship to 魏孝靜帝; does not name the mother."
+      },
+      "ownerDispositionError": "owner-evidence.json retain-proposal used quote 孝靜帝 on s0081 for p058; that substring identifies the emperor (p057), not Mother of Emperor Xiaojing.",
+      "operations": [
+        {
+          "op": "remove-person",
+          "id": "p058",
+          "beforeName": [
+            "Mother of Emperor Xiaojing",
+            "孝靜帝母",
+            null
+          ],
+          "reason": "No verbatim primary Chinese or English name surface for this mother; descriptive label 孝靜帝母 is inference-only and must not be certifiable."
+        },
+        {
+          "op": "strip-related",
+          "id": "p055",
+          "removed": [
+            "p058"
+          ]
+        },
+        {
+          "op": "strip-related",
+          "id": "p056",
+          "removed": [
+            "p058"
+          ]
+        },
+        {
+          "op": "strip-related",
+          "id": "p057",
+          "removed": [
+            "p058"
+          ]
+        },
+        {
+          "op": "remove-claim-target",
+          "subject": "p057",
+          "predicate": "family-relationship",
+          "personId": "p058",
+          "relation": "child-of",
+          "evidenceUnit": "s0081",
+          "beforeSummary": "p057 child-of p058 with kinshipTerm 母",
+          "after": "removed"
+        },
+        {
+          "op": "remove-claim-target",
+          "subject": "p056",
+          "predicate": "family-relationship",
+          "personId": "p058",
+          "relation": "sibling-of",
+          "evidenceUnit": "s0081",
+          "beforeSummary": "p056 sibling-of p058 inferred from 舅",
+          "after": "removed"
+        },
+        {
+          "op": "strip-intermediaries",
+          "subject": "p056",
+          "predicate": "family-relationship",
+          "target": "p057",
+          "removed": [
+            "p058"
+          ],
+          "afterSummary": "Retain explicit p056 kin-of p057 as maternal uncle (舅) on s0081 without fabricated intermediary person vertex."
+        },
+        {
+          "op": "remove-claim-subject",
+          "subject": "p058",
+          "predicate": "name",
+          "before": {
+            "kind": "descriptive-kinship",
+            "en": "Mother of Emperor Xiaojing",
+            "zh": "孝靜帝母"
+          },
+          "certainty": "strongly-inferred",
+          "evidence": [
+            "s0081"
+          ]
+        },
+        {
+          "op": "remove-claim-subject",
+          "subject": "p058",
+          "predicate": "sex",
+          "evidence": [
+            "s0081"
+          ]
+        },
+        {
+          "op": "remove-claim-subject",
+          "subject": "p058",
+          "predicate": "attestation",
+          "beforeSourceDateText": "魏孝靜帝之舅",
+          "certainty": "strongly-inferred",
+          "evidence": [
+            "s0081"
+          ],
+          "reason": "Attestation text describes uncle relation, not a datable mother identity."
+        },
+        {
+          "op": "remove-claim-subject",
+          "subject": "p058",
+          "predicate": "role",
+          "roleId": "royal-family-member",
+          "evidence": [
+            "s0081"
+          ]
+        },
+        {
+          "op": "remove-claim-subject",
+          "subject": "p058",
+          "predicate": "role",
+          "roleId": "family-member",
+          "evidence": [
+            "s0081"
+          ]
+        }
+      ],
+      "translationRepairs": [],
+      "identityDependencies": {
+        "preserveLocalIds": [
+          "beiqishu:048:p055",
+          "beiqishu:048:p056",
+          "beiqishu:048:p057"
+        ],
+        "preserveCanonicalRecords": "Accepted membership and dossier uncertainty for per_838XBG4G6BATMF86NED1 may remain at registry scope; do not certify chapter-local p058 or invent Chinese mention spans. Do not alter p056/p057 primary witnesses on s0081.",
+        "crossChapterNote": "Unnamed mother of Xiaojing may stay unresolved cross-chapter; this delta removes only the false local named vertex."
+      },
+      "chronologyImpact": "Sealed date-audit rows for p058 and hints-p058 become stale after apply; p056/p057 attested intervals on s0081 unchanged.",
+      "holdRequiredUntilApply": true,
+      "holdRequiredAfterApply": false,
+      "rationaleAfterApply": "Chapter extraction will no longer assert a certifiable Mother of Emperor Xiaojing with blocking zh 孝靜帝母; 舅 and 魏孝靜帝 remain source-grounded on s0081. Independent identity certification can proceed for remaining locals without inventing a mother name span."
+    }
+  ],
+  "unaffectedRecords": "Checkpoint-only proposal; canonical source and extraction bytes unchanged on this commit.",
+  "validation": {
+    "preApplyCommand": "npm run people:validate -- --book beiqishu --chapter 048",
+    "preApplyPassed": true,
+    "preApplySummary": "Scoped person data validation passed on pinned extraction (65 local people); proposal artifact only.",
+    "postApplyNote": "Host applies operations independently, then re-runs scoped validation and identity review."
+  }
+}
