@@ -1,0 +1,934 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "104"
+  },
+  "ownerAgentId": "bc-2acd7ab0-2745-4988-92ca-eb4560079ce1",
+  "workerId": "cursor-nov24-retained-staging-w8-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "99443532967d988baf5510bf0ff20211bdb5a1922f6ce4f770f86d73a6700928",
+  "stagingBase": "563c2b169c6545c78973ea44659fae65e4020601",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-104-79ce1",
+  "inputBlobWitness": {
+    "source": "dbebae721a5de2d3d20397b1516c7e840b792b5d",
+    "extraction": "979120882b38790255c4c6967fffd0ec9f0dfaa3",
+    "dateAudit": "92136ec0523d4401f39117c9e6e48c9cf4604004",
+    "editorial": "c61e9d776c0b6648fde24cad63fa64d3113effa0"
+  },
+  "sealedInputs": {
+    "source": "sha256:33f3383bb7e579e20e7baaef01100347aa06b76f7513a502e068579fbdc4c76c",
+    "extraction": "sha256:faed71cc4efd90110ede9bce1e1e61a4f0f318254e5825fa804cdddb73bc4cc7",
+    "dateAudit": "sha256:8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40",
+    "editorial": "sha256:41b5d7ccaa15e98991db971c2de3753ba6c642379d56f658ccb7d1507c3cbde2"
+  },
+  "nativeAuditState": {
+    "status": "research-blocked",
+    "contentSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40",
+    "affectedDistinctItems": 70,
+    "findingGroups": 70,
+    "workOrderAffectedItems": 70,
+    "preservedReportBytes": true,
+    "dateAuditSourceHash": "sha256:8183903225065ad9bff9bf0eca5750d3433b0dc4f380c284860f78cbbce06281",
+    "dateAuditExtractionHash": "sha256:61257e3723cae048591cacd4fd4af32ec6d1ef4ad68e272966aeb84aea0790d6",
+    "reviewedAt": "2026-09-23T13:28:49.518Z",
+    "summary": "Fresh independent review after curation: all 136 Chinese units, 76 records, and 32 people were checked against the current hashes. Six explicitly worded death records remain supported as source facts; the other 70 date and hint records retain research holds because the chapter gives no independently verifiable Western-date endpoints. No source fact, including explicit death manner, is lost."
+  },
+  "sourceCoverage": {
+    "sentenceCount": 136,
+    "translatedCount": 136,
+    "bothFieldsComplete": true,
+    "missingUnits": [],
+    "extractionBytes": 65659,
+    "localPeople": 32,
+    "metaTitle": {
+      "zh": "田叔列傳",
+      "en": "Biography of Tian Shu",
+      "raw": "《田叔列傳》 Biography of Tian Shu"
+    }
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book shiji --chapter 104",
+    "summary": "Scoped person data validation passed for shiji/104: 1 extraction(s), 32 local people, 336 mentions, 293 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 136,
+      "translatedCount": 136,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "chronologyStatus": "research-blocked",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 104",
+      "status": "research-blocked",
+      "findings": 70,
+      "counts": {
+        "research-blocked": 1
+      }
+    },
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "extractionIntegrity": {
+      "sourceHashMatchesAudit": false,
+      "extractionHashMatchesAudit": false
+    }
+  },
+  "substantiveFindings": "Owner verified git blob witnesses and SHA-256 audit receipts, reread pinned Chinese units and extraction people/mentions/claims/evidence, and confirmed independent date-audit bytes remain intact. Scoped people:validate passed; people:dates:verify returns research-blocked (70 held item IDs, 70 native finding group(s)). No concrete changed evidence requires new scoped chronology proposals—retain native source-specific holds and documented unknowns. All accepted editorial repairs are already reflected in pinned source. chapterReady is false until audited chronology.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "id": "finding-1",
+      "itemIds": [
+        "claim-1"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-1 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-2",
+      "itemIds": [
+        "claim-2"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-2 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-3",
+      "itemIds": [
+        "claim-3"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-3 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-4",
+      "itemIds": [
+        "claim-4"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-4 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-5",
+      "itemIds": [
+        "claim-5"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-5 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-6",
+      "itemIds": [
+        "claim-6"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-6 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-7",
+      "itemIds": [
+        "claim-7"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-7 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-8",
+      "itemIds": [
+        "claim-8"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-8 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-9",
+      "itemIds": [
+        "claim-9"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-9 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-10",
+      "itemIds": [
+        "claim-10"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-10 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-11",
+      "itemIds": [
+        "claim-11"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-11 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-12",
+      "itemIds": [
+        "claim-12"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-12 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-13",
+      "itemIds": [
+        "claim-13"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-13 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-14",
+      "itemIds": [
+        "claim-14"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-14 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-15",
+      "itemIds": [
+        "claim-15"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-15 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-16",
+      "itemIds": [
+        "claim-16"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-16 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-17",
+      "itemIds": [
+        "claim-17"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-17 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-18",
+      "itemIds": [
+        "claim-18"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-18 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-19",
+      "itemIds": [
+        "claim-19"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-19 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-20",
+      "itemIds": [
+        "claim-20"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-20 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-21",
+      "itemIds": [
+        "claim-21"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-21 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-22",
+      "itemIds": [
+        "claim-22"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-22 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-23",
+      "itemIds": [
+        "claim-23"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-23 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-24",
+      "itemIds": [
+        "claim-24"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-24 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-25",
+      "itemIds": [
+        "claim-25"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-25 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-26",
+      "itemIds": [
+        "claim-26"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-26 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-27",
+      "itemIds": [
+        "claim-27"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-27 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-28",
+      "itemIds": [
+        "claim-28"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-28 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-29",
+      "itemIds": [
+        "claim-29"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-29 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-30",
+      "itemIds": [
+        "claim-30"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-30 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-31",
+      "itemIds": [
+        "claim-31"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-31 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-32",
+      "itemIds": [
+        "claim-32"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-32 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-33",
+      "itemIds": [
+        "claim-33"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-33 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-34",
+      "itemIds": [
+        "claim-34"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-34 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-35",
+      "itemIds": [
+        "claim-35"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-35 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-36",
+      "itemIds": [
+        "claim-36"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-36 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-37",
+      "itemIds": [
+        "claim-37"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-37 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-38",
+      "itemIds": [
+        "claim-38"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: claim-38 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-39",
+      "itemIds": [
+        "hints-p001"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p001 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-40",
+      "itemIds": [
+        "hints-p002"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p002 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-41",
+      "itemIds": [
+        "hints-p003"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p003 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-42",
+      "itemIds": [
+        "hints-p004"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p004 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-43",
+      "itemIds": [
+        "hints-p005"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p005 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-44",
+      "itemIds": [
+        "hints-p006"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p006 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-45",
+      "itemIds": [
+        "hints-p007"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p007 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-46",
+      "itemIds": [
+        "hints-p008"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p008 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-47",
+      "itemIds": [
+        "hints-p009"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p009 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-48",
+      "itemIds": [
+        "hints-p010"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p010 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-49",
+      "itemIds": [
+        "hints-p011"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p011 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-50",
+      "itemIds": [
+        "hints-p012"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p012 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-51",
+      "itemIds": [
+        "hints-p013"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p013 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-52",
+      "itemIds": [
+        "hints-p014"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p014 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-53",
+      "itemIds": [
+        "hints-p015"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p015 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-54",
+      "itemIds": [
+        "hints-p016"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p016 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-55",
+      "itemIds": [
+        "hints-p017"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p017 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-56",
+      "itemIds": [
+        "hints-p018"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p018 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-57",
+      "itemIds": [
+        "hints-p019"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p019 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-58",
+      "itemIds": [
+        "hints-p020"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p020 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-59",
+      "itemIds": [
+        "hints-p021"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p021 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-60",
+      "itemIds": [
+        "hints-p022"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p022 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-61",
+      "itemIds": [
+        "hints-p023"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p023 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-62",
+      "itemIds": [
+        "hints-p024"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p024 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-63",
+      "itemIds": [
+        "hints-p025"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p025 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-64",
+      "itemIds": [
+        "hints-p026"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p026 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-65",
+      "itemIds": [
+        "hints-p027"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p027 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-66",
+      "itemIds": [
+        "hints-p028"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p028 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-67",
+      "itemIds": [
+        "hints-p029"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p029 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-68",
+      "itemIds": [
+        "hints-p030"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p030 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-69",
+      "itemIds": [
+        "hints-p031"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p031 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    },
+    {
+      "id": "finding-70",
+      "itemIds": [
+        "hints-p032"
+      ],
+      "people": [],
+      "problem": "Unsupported Western chronology: hints-p032 has contextual Chinese evidence but no direct verified Western-date endpoint.",
+      "action": "Preserve this as a source-specific research hold; do not infer or expand a personal interval without independent chronological evidence.",
+      "treatment": "retain-research-blocked",
+      "preservedAuditSha256": "8f6640703d66dccc2874dc952810e243175ac61a8a411ef0c3862b1137257d40"
+    }
+  ],
+  "distinctHoldItemIds": [
+    "claim-1",
+    "claim-2",
+    "claim-3",
+    "claim-4",
+    "claim-5",
+    "claim-6",
+    "claim-7",
+    "claim-8",
+    "claim-9",
+    "claim-10",
+    "claim-11",
+    "claim-12",
+    "claim-13",
+    "claim-14",
+    "claim-15",
+    "claim-16",
+    "claim-17",
+    "claim-18",
+    "claim-19",
+    "claim-20",
+    "claim-21",
+    "claim-22",
+    "claim-23",
+    "claim-24",
+    "claim-25",
+    "claim-26",
+    "claim-27",
+    "claim-28",
+    "claim-29",
+    "claim-30",
+    "claim-31",
+    "claim-32",
+    "claim-33",
+    "claim-34",
+    "claim-35",
+    "claim-36",
+    "claim-37",
+    "claim-38",
+    "hints-p001",
+    "hints-p002",
+    "hints-p003",
+    "hints-p004",
+    "hints-p005",
+    "hints-p006",
+    "hints-p007",
+    "hints-p008",
+    "hints-p009",
+    "hints-p010",
+    "hints-p011",
+    "hints-p012",
+    "hints-p013",
+    "hints-p014",
+    "hints-p015",
+    "hints-p016",
+    "hints-p017",
+    "hints-p018",
+    "hints-p019",
+    "hints-p020",
+    "hints-p021",
+    "hints-p022",
+    "hints-p023",
+    "hints-p024",
+    "hints-p025",
+    "hints-p026",
+    "hints-p027",
+    "hints-p028",
+    "hints-p029",
+    "hints-p030",
+    "hints-p031",
+    "hints-p032"
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 104",
+    "validateDates": "npm run people:dates:verify -- --book shiji --chapter 104"
+  },
+  "completedAt": "2026-11-24T17:00:03.835Z",
+  "notes": "[CF-Pages-Skip] Retained-staging owner handoff only; sealed inputs and date-audit bytes unchanged."
+}
