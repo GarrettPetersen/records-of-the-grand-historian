@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "100"
+  },
+  "ownerAgentId": "bc-f7cb81ae-3fc7-4cae-92d0-36013bc0945d",
+  "workerId": "cursor-nov24-retained-staging-w10-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "892a491c64e2d709f2f81f9d3b925676866762d3c9d6243dc51b67d3f5d63644",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-100-0945d",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:9a0d62e66c585e476da5b2fd4eba501a6450452977bd21631c9efa3a71b1b4ff",
+    "people": 31,
+    "claims": 177,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "7b9761353dc92d3903cfc62531d9f20db8e0537e",
+    "extraction": "22fb036e05cb0b5a2a7ea21595ef0d61f13836b0",
+    "editorial": "21bdc4efde101bc78d46a512adaf1dbeb1dc1c24"
+  },
+  "sealedContentSha256": {
+    "source": "sha256:cb4b17ec16ece6c17ebe0edd8d1b4188e178382913822384a668d0e24ad78e3b",
+    "extraction": "sha256:9a0d62e66c585e476da5b2fd4eba501a6450452977bd21631c9efa3a71b1b4ff",
+    "editorial": "sha256:bc56e6676f14431a32b1031138370eb506bafa213697b5fe0b60580f1d7e02ca"
+  },
+  "datePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-100/date-packet.json",
+    "contentSha256": "sha256:d81585069e6114e0548ca05dca726021c324d2de3e10bd1f0d569bd0db8e8f82",
+    "packetSourceHash": "sha256:b857de08122c0a607a83d0486ca0d1356be62edebbcbcfd458eb9d73a32ddd8c",
+    "packetExtractionHash": "sha256:879ad38bbde02327423a6f1ac3eaa6391d8921cd3318ef9ef8d425a4570a33af",
+    "itemCount": 96,
+    "peopleInPacket": 31,
+    "unitCount": 110
+  },
+  "sourceCoverage": {
+    "titleEn": "Biographies of Ji Bu and Luan Bu",
+    "titleZh": "季布欒布列傳",
+    "sentenceCount": 110,
+    "translatedCount": 110,
+    "englishComplete": true,
+    "bothFieldsOnUnits": true
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "gitBlob": "22fb036e05cb0b5a2a7ea21595ef0d61f13836b0",
+    "contentSha256": "sha256:9a0d62e66c585e476da5b2fd4eba501a6450452977bd21631c9efa3a71b1b4ff",
+    "bytes": 60360,
+    "canonicalEdits": false
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "gitBlob": "21bdc4efde101bc78d46a512adaf1dbeb1dc1c24",
+    "contentSha256": "sha256:bc56e6676f14431a32b1031138370eb506bafa213697b5fe0b60580f1d7e02ca",
+    "acceptedDecisionCount": 4,
+    "repairsReflectedInSource": true,
+    "claimRetractions": 0,
+    "claimRevisions": 0
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book shiji --chapter 100",
+      "passed": true,
+      "summary": "Scoped person data validation passed for shiji/100: 1 extraction(s), 31 local people, 341 mentions, 289 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 100",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    },
+    "datePacketBuild": {
+      "command": "npm run people:dates:packet -- --book shiji --chapter 100 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-100/date-packet.json",
+      "completed": true
+    }
+  },
+  "substantiveFindings": "Ji Bu and Luan Bu biographies: thirty-one people, 177 claims; four accepted editorial repairs (including 郅都 as Zhi Du and literal/idiomatic fixes) reflected in source. Packet holds 96 chronology checks. Person references and evidence units align on spot-check; no false-merge signal in chapter-local validation.",
+  "remainingIndependentEvidence": {
+    "nativeIndependentDateAudit": {
+      "required": true,
+      "completed": false,
+      "reason": "No data/people/date-audits record; people:dates:verify reports un-audited. Owner prepared sealed date-packet only; does not self-approve.",
+      "packetSha256": "sha256:d81585069e6114e0548ca05dca726021c324d2de3e10bd1f0d569bd0db8e8f82",
+      "minimumContinuation": "Independent reviewer records full native date audit via people:dates:record against packet at sha256:d81585069e6114e0548ca05dca726021c324d2de3e10bd1f0d569bd0db8e8f82 without altering pinned extraction or editorial blobs."
+    },
+    "canonicalIdentityReview": {
+      "required": true,
+      "completed": false,
+      "reason": "Chapter-scoped validation passed; corpus-wide merge/split identity review remains outside this owner pass."
+    }
+  },
+  "distinctHolds": [
+    {
+      "kind": "independent-native-date-audit",
+      "detail": "Candidate chronology sealed in date-packet; await separate source reviewer approval."
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentApprovalIssued": false,
+  "ownerChangesRequired": false,
+  "completedAt": "2026-11-24T17:08:03.913Z",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 100",
+    "verifyDates": "npm run people:dates:verify -- --book shiji --chapter 100",
+    "buildDatePacket": "npm run people:dates:packet -- --book shiji --chapter 100 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-100/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter owner pass: reuse extraction and editorial; prepare date-packet; no registry, deploy, or merge."
+}
