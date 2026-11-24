@@ -30,6 +30,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - run: npm install --no-audit --no-fund
       - name: Record exact independent report with native validators
         env:
           GH_TOKEN: ${{ github.token }}
