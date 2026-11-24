@@ -86,7 +86,8 @@
     "mechanicalChecks": [
       "All 112 multi-character Chinese numerals parsed and matched against Arabic numerals in the idiomatic field: 0 mismatches.",
       "The same 112 numerals matched against English number words/digits in the literal field: 0 mismatches (the only unmatched token is 十一月 rendered as the ordinal 'eleventh civil month' in s0019, which is correct).",
-      "Accepted repairs songshi:078:r0001/r0002 are present verbatim in s0119 (idiomatic '10,552', literal 'ten thousand five hundred fifty-two')."
+      "Accepted repairs songshi:078:r0001/r0002 are present verbatim in s0119 (idiomatic '10,552', literal 'ten thousand five hundred fifty-two').",
+      "Every unit aligned against the Siku Quanshu Wenyuange text of 宋史 卷78 (Kanripo KR2a0032 commit 144d5640186b8e519673e5603a18667e55b1f449, file sha256 c33dc992d3a411b75a3fda7803433fb53467b56ae11592c0040de59776de701d) after variant-character normalization. Differences are glyph variants (汎/泛, 乗/乘, 歴/曆, 黄/黃) except s0176, which is repaired, and s0134/s0178, which are recorded as observations."
     ]
   },
   "existingWorkInventory": {
@@ -148,27 +149,148 @@
     },
     "deterministicErrors": [],
     "notes": [
-      "The native extraction validator rebuilds the packet from the current chapter, so a pass confirms the extraction fingerprint is current."
+      "The native extraction validator rebuilds the packet from the current chapter, so a pass confirms the extraction fingerprint is current.",
+      "Validators were run against the unchanged staging inputs; the proposed repair has not been applied (host work after editorial review)."
     ]
   },
-  "substantiveFindings": [],
-  "definiteTranslationRepairs": [],
+  "substantiveFindings": [
+    {
+      "id": "songshi:078:F1",
+      "severity": "definite-translation-defect",
+      "summary": "In s0176 both English fields translate the corrupt received character 積 in 盈加縮積; the Siku edition and the procedure's parallel applications read 盈加縮減 (\"subtract for deficit\").",
+      "affectedUnits": [
+        "s0176"
+      ],
+      "resolution": "definiteTranslationRepairs (2 field repairs)"
+    },
+    {
+      "id": "songshi:078:F2",
+      "severity": "dependency",
+      "summary": "Applying the English repair changes the extraction chapterFingerprint/unitDigests and the date-audit sourceHash (which hashes zh, en and literal), so dateAuditStatus will report the zero-item audit as stale.",
+      "resolution": "Host re-fingerprints the extraction with the production applier and the final independent reviewer re-records the zero-item date audit against the amended chapter. Do not copy the old report or change its hashes."
+    }
+  ],
+  "definiteTranslationRepairs": [
+    {
+      "unit": {
+        "id": "s0176",
+        "kind": "paragraph-sentence",
+        "blockIndex": 95,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "zh": "以差日、差度盈加縮積其星定合泛用積，為其星定合定積、定星。",
+      "field": "literal",
+      "before": "with the difference in days and degrees, excess add and deficit accumulate to that star's fixed-conjunction general application accumulation — that is the star's fixed-conjunction fixed accumulation and fixed star.",
+      "after": "with the difference in days and degrees, excess add and deficit subtract to that star's fixed-conjunction general application accumulation — that is the star's fixed-conjunction fixed accumulation and fixed star.",
+      "reason": "Received 盈加縮積 has 積 for 減: the Siku text of this procedure reads 以差日差度盈加縮減其星定合汎用積. 積 (\"accumulate\") is not an operation that pairs with 加; every parallel application in this procedure pairs 加 with 減 (s0173 盈減縮加 for the outer planets; s0179 盈加縮減 for retrograde conjunction). Both English fields translate the corrupt character (\"deficit accumulate\" / \"accumulating for deficit\").",
+      "confidence": "high",
+      "defectClass": "corrupt-source-mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0176",
+          "excerpt": "盈加縮積"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0173",
+          "excerpt": "盈減縮加"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0179",
+          "excerpt": "以差度盈加縮減"
+        },
+        {
+          "source": "external",
+          "title": "宋史 卷七十八 志第三十一 律曆十一 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0032/144d5640186b8e519673e5603a18667e55b1f449/KR2a0032_078.txt",
+          "repository": "kanripo/KR2a0032",
+          "commit": "144d5640186b8e519673e5603a18667e55b1f449",
+          "fileSha256": "sha256:c33dc992d3a411b75a3fda7803433fb53467b56ae11592c0040de59776de701d",
+          "accessedAt": "2026-11-24T16:25:00Z",
+          "excerpt": "金水二星順合者以平合行差除其日盈縮分為距合差日以盈縮分加之為距合差度以差日差度盈加縮減其星定合汎用積",
+          "sourceHash": "sha256:83fba8cd902334ce037a05c2bc23745100f6a0d82f5ee539005aad388228f15f"
+        }
+      ],
+      "proposalKey": "songshi:078:owner-nov24:01"
+    },
+    {
+      "unit": {
+        "id": "s0176",
+        "kind": "paragraph-sentence",
+        "blockIndex": 95,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "zh": "以差日、差度盈加縮積其星定合泛用積，為其星定合定積、定星。",
+      "field": "idiomatic",
+      "before": "apply the difference in days and degrees, adding for excess and accumulating for deficit to the star's fixed-conjunction general application accumulation, to obtain the star's fixed-conjunction fixed accumulation and fixed star.",
+      "after": "apply the difference in days and degrees, adding for excess and subtracting for deficit to the star's fixed-conjunction general application accumulation, to obtain the star's fixed-conjunction fixed accumulation and fixed star.",
+      "reason": "Received 盈加縮積 has 積 for 減: the Siku text of this procedure reads 以差日差度盈加縮減其星定合汎用積. 積 (\"accumulate\") is not an operation that pairs with 加; every parallel application in this procedure pairs 加 with 減 (s0173 盈減縮加 for the outer planets; s0179 盈加縮減 for retrograde conjunction). Both English fields translate the corrupt character (\"deficit accumulate\" / \"accumulating for deficit\").",
+      "confidence": "high",
+      "defectClass": "corrupt-source-mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0176",
+          "excerpt": "盈加縮積"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0173",
+          "excerpt": "盈減縮加"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0179",
+          "excerpt": "以差度盈加縮減"
+        },
+        {
+          "source": "external",
+          "title": "宋史 卷七十八 志第三十一 律曆十一 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0032/144d5640186b8e519673e5603a18667e55b1f449/KR2a0032_078.txt",
+          "repository": "kanripo/KR2a0032",
+          "commit": "144d5640186b8e519673e5603a18667e55b1f449",
+          "fileSha256": "sha256:c33dc992d3a411b75a3fda7803433fb53467b56ae11592c0040de59776de701d",
+          "accessedAt": "2026-11-24T16:25:00Z",
+          "excerpt": "金水二星順合者以平合行差除其日盈縮分為距合差日以盈縮分加之為距合差度以差日差度盈加縮減其星定合汎用積",
+          "sourceHash": "sha256:83fba8cd902334ce037a05c2bc23745100f6a0d82f5ee539005aad388228f15f"
+        }
+      ],
+      "proposalKey": "songshi:078:owner-nov24:02"
+    }
+  ],
+  "repairBatchNotes": {
+    "count": 2,
+    "units": 1,
+    "chineseUnitsChanged": 0,
+    "routing": "Worker-authored repair: route into the active editorial application as a new review alongside the retained schema-3 decisions (r0001/r0002); a separate reviewer must accept, revise or reject it. The host assigns the native ID (next free: songshi:078:r0003)."
+  },
   "scopedChronologyOrIdentityChanges": [],
   "distinctHolds": [],
   "nonBlockingObservations": [
-    {
-      "unit": "s0176",
-      "field": "zh",
-      "text": "以差日、差度盈加縮積其星定合泛用積",
-      "observation": "The received text reads 盈加縮積 where the parallel procedures (s0173, s0179) use 盈加縮減/盈減縮加; 積 may be a transmission error for 減. Both English fields faithfully render the received character ('excess add and deficit accumulate' / 'accumulating for deficit').",
-      "action": "No repair proposed: the English is not a mistranslation of the received source, and a source emendation would not resolve a people/chronology gap. Recorded only so the final reviewer can see it was considered."
-    },
     {
       "unit": "s0097",
       "field": "zh",
       "text": "木星周率：四百七十九萬八千五百二十六、秒九十二？",
       "observation": "The Chinese ends with a full-width question mark, a scrape/punctuation artifact; both English fields correctly render the numbers.",
       "action": "No change; not a translation omission and not a people gap."
+    },
+    {
+      "unit": "s0178",
+      "field": "zh",
+      "text": "以減盈縮減之分，為距合差度",
+      "observation": "Siku reads 以減盈縮積之分. Neither reading pairs cleanly with the parallels s0172/s0175 (以盈縮分減之/加之), and the English renders the received text literally.",
+      "action": "No repair; no reading is definite."
+    },
+    {
+      "unit": "s0134",
+      "field": "zh",
+      "text": "即其星其段入其月經朔日數及分",
+      "observation": "Siku reads 經朔月數; the received 日數 (days since the mean new moon) is what the procedure computes (s0133 不盡，為入月已來日數).",
+      "action": "Received text and English retained."
     }
   ],
   "boundedLookup": {
@@ -176,13 +298,15 @@
     "reason": "zero-person chapter; no canonical lookup needed"
   },
   "chapterReady": {
-    "ready": true,
-    "outcome": "zero-person review (data-qualified, not a nonempty published chapter)",
-    "nextGate": "one final independent check of the complete current chapter (source, both English fields, zero-person extraction, retained editorial decisions and current date audit)",
-    "reason": "All 189 units reviewed; no person, mention or chronology is present; both accepted numeral repairs are applied; the independent date audit is current against the unchanged source and extraction; no substantive source change, translation defect, identity or chronology amendment is needed.",
+    "ready": false,
+    "outcome": "zero-person chapter with one scoped English amendment",
+    "blocker": "one worker-authored English repair (s0176, both fields) needs independent editorial acceptance and host application; afterwards the zero-item date audit must be natively re-recorded because its sourceHash covers the English fields",
+    "nextGate": "independent review of the s0176 repair together with the one final independent chapter check (zero-person confirmation, retained r0001/r0002, date-audit re-record)",
+    "supersedes": "commit 378829a56e on this branch, which declared the chapter ready before the Siku alignment found s0176",
     "preservedProofs": [
-      "data/people/editorial-decisions/songshi/078.json blob 64d02534492cd3419343b3f905716dc613092969",
-      "data/people/date-audits/songshi/078.json blob 029af5175c4836a8cb8796ee9f1ea03c2bfecbaf"
+      "data/people/editorial-decisions/songshi/078.json blob 64d02534492cd3419343b3f905716dc613092969 (r0001/r0002 retained verbatim)",
+      "data/people/date-audits/songshi/078.json blob 029af5175c4836a8cb8796ee9f1ea03c2bfecbaf (retained as history; substantively unaffected: zero items, zero people)",
+      "extraction candidateDispositions (147, unchanged)"
     ],
     "canonicalWrites": "none"
   }
