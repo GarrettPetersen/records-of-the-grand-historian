@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "111"
+  },
+  "ownerAgentId": "bc-7c291193-59e6-437c-83d8-347d70592046",
+  "workerId": "cursor-nov24-retained-staging-w6-o2",
+  "model": "composer-2.5",
+  "idempotencyKey": "6deb790d5e4dede6dcc2c93f9b519a7b9dc1a8998b671b13529264b7fb44ec60",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-111-92046",
+  "inputBlobWitness": {
+    "source": "dfa0796a1d752d5e00101382fe5986131dc67e01",
+    "extraction": "97ae27d5b49eac0b91cbff179a7f4ff7fb5f937a",
+    "dateAudit": "8ab2940b661ca284ab455e754adca756d3025eb2",
+    "editorial": "0ce98952bbe406254c95141dba8aafd5f5316b9e"
+  },
+  "sealedInputContentSha256": {
+    "source": "sha256:5d71733ccd3a4310e4d16ef5087a1c0de5310b9313eb2a2c61f7493455e00132",
+    "extraction": "sha256:ad08c96337b43d07633caa89d6e5904a8861362468b006535dea2df6654d5528",
+    "dateAudit": "sha256:35917976e93c9a1bc444d87a9dd094e1809e1a8d92fc0da8b732c920eab76825",
+    "editorial": "sha256:c371f3886b4e55196887bd2cc23524f21f73e56ff5db9b3e48875e181faa1896"
+  },
+  "inputWitnessMismatches": [],
+  "auditRecord": {
+    "state": "research-blocked",
+    "sha256": "35917976e93c9a1bc444d87a9dd094e1809e1a8d92fc0da8b732c920eab76825",
+    "affectedItems": 11,
+    "findings": 1,
+    "preservedReportBytes": true,
+    "reportFileStatus": "research-blocked",
+    "reviewedAt": "2026-09-24T00:46:14.504Z",
+    "summary": "Fresh independent canonical Chinese source-date audit after residual curation ccc1ce974ce72daa6b36f4d4e32856bc8734f56d. All 250 Chinese units, 85 temporal or active-hint items, and 37 people were checked. The residual repair is correct: Ji Zhenyi’s s0031 event now says exactly 「三年」, not the preceding heading 「唐熙元年」. Four source-faithful unresolved contexts remain: Ji Zhenyi’s unverified reign identity and the three 「雍正中」 contexts for Wang Jingqi, Zha Siting, and the Yongzheng Emperor. No Western years or life-wide ranges were invented, so this chapter is research-blocked rather than approved."
+  },
+  "sourceCoverage": {
+    "chineseUnits": 250,
+    "translatedCount": 250,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 76241,
+    "localPeople": 37
+  },
+  "validation": {
+    "peopleValidatePassed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 111",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/111: 1 extraction(s), 37 local people, 90 mentions, 409 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s), 2 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerifyCommand": "npm run people:dates:verify -- --book qingshigao --chapter 111",
+    "dateAuditFileStatus": "research-blocked",
+    "dateAuditScopedVerifyStatus": "stale",
+    "datesVerifyExitNonZero": true,
+    "extractionHashAlignedWithAudit": false,
+    "sourceHashAlignedWithAudit": true,
+    "editorialProposalCount": 6,
+    "editorialDecisionCount": 6,
+    "blockedClaimIds": [
+      "claim-79",
+      "claim-92",
+      "claim-93",
+      "claim-94",
+      "hints-p011",
+      "hints-p012",
+      "hints-p013"
+    ],
+    "blockedPersonIds": [
+      "p005",
+      "p011",
+      "p012",
+      "p013"
+    ],
+    "blobWitnessVerified": true
+  },
+  "substantiveFindings": "Retained staging owner pass on sealed inputs: Fresh independent canonical Chinese source-date audit after residual curation ccc1ce974ce72daa6b36f4d4e32856bc8734f56d. All 250 Chinese units, 85 temporal or active-hint items, and 37 people were checked. The residual repair is correct: Ji Zhenyi’s s0031 event now says exactly 「三年」, not the preceding heading 「唐熙元年」. Four source-faithful unresolved contexts remain: Ji Zhenyi’s unverified reign identity and the three 「雍正中」 contexts for Wang Jingqi, Zha Siting, and the Yongzheng Emperor. No Western years or life-wide ranges were invented, so this chapter is research-blocked rather than approved. Independent date report remains research-blocked with 11 held item(s) in 1 native finding(s). people:validate passed on current extraction without new repairs. No definite English omission identified beyond already-applied editorial decisions (6 applied). Scoped people:dates:verify returns stale because extractionHash in the retained audit no longer matches the current packet fingerprint; report bytes were not rewritten.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [
+    {
+      "kind": "host-reaudit-required",
+      "dependency": "extractionHash",
+      "sealedExtractionBlobWitness": "97ae27d5b49eac0b91cbff179a7f4ff7fb5f937a",
+      "auditReportExtractionHash": "sha256:2ea69244fecaf1602d782e5288a2af6eb2cef784d6d51d3244fdd44ccc07795e",
+      "currentPacketExtractionHash": "sha256:a7e7eba0253a39ccdff0a28d21fa3f944907f79e313ab5dba4b0df92760729e6",
+      "nativeClaimChanges": [],
+      "reason": "Current sealed extraction blob is witnessed, but the retained independent date report’s extractionHash does not match the packet built from that blob. No claim before/after edits are proposed; the retained research-blocked report bytes stay authoritative until a fresh independent audit."
+    }
+  ],
+  "distinctHolds": [
+    {
+      "id": "finding-1",
+      "items": [
+        "claim-79",
+        "p005",
+        "claim-92",
+        "claim-93",
+        "claim-94",
+        "hints-p011",
+        "hints-p012",
+        "hints-p013",
+        "p011",
+        "p012",
+        "p013"
+      ],
+      "problem": "Ji Zhenyi’s corrected 「三年」 event and the three 「雍正中」 contexts are now source-faithful unresolved chronology holds. Their source wording does not independently establish a precise Western year or life-wide activity range, and unresolved temporal containers cannot pass date approval.",
+      "action": "Retain all four holds unless reliable, source-linked research establishes the governing reign or a narrower dated event. Do not replace them with a full reign interval, an invented point year, or a person-wide activity range.",
+      "preserved": true
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained staging chapter-owner handoff only; sealed inputs unchanged.",
+  "completedAt": "2026-11-24T16:44:06.926Z"
+}
