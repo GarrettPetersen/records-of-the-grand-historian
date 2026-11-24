@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "kind": "separate-transport-audited-source-owner-handoff",
+  "scope": {
+    "book": "houhanshu",
+    "chapter": "031"
+  },
+  "ownerAgentId": "bc-1cece8a1-2eac-4165-9087-3dea34232f43",
+  "workerId": "cursor-nov24-separate-transport-owner-1",
+  "campaign": "campaign-nov24-separate-transport-audited",
+  "idempotencyKey": "56afd5735d8f903d18ac8d496e81c7ebc50b6fd3d9b2db85aecad4b6ef0cf4c2",
+  "stagingBase": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-separate-transport-owner-houhanshu-031-232f43",
+  "inputBlobWitness": {
+    "source": "e5d9e4e6a33422a663dc1acdf5102fb9ecadfec8",
+    "extraction": "ff86abeb3cf2033a140b1b240fe293a3c17dc411",
+    "dateAudit": "48a703041da416d618d472b1f3e754f2258219ca",
+    "editorial": "d7083857099ac4d7571ebaaf2d46efce8125768f"
+  },
+  "sealedInputs": {
+    "source": "sha256:23fd8b429028f8e7c6dfb81b6511cb83e1b9563dcde45492d2818f5b5f46ef1a",
+    "extraction": "sha256:78c7ce23a25c05ffbd89459835d7167b7bf6e173593d7586680bab6213d4b4d8",
+    "dateAudit": "sha256:3b101a2d78b6dc0f04a59de087f12abb8ab747774aa992626d1aa7819294bde4",
+    "editorial": "sha256:a62a9fc1d1eba722ae5cd25e2dbadd16ecec3ec8fafca1ae648ed73c07e9e75e"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book houhanshu --chapter 031",
+    "summary": "Scoped person data validation passed for houhanshu/031: 1 extraction(s), 87 local people, 412 mentions, 563 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 234,
+      "translatedCount": 234,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "extractionValidate": "data/people/extractions/houhanshu/031.json: ok (87 people, 412 mentions, 563 claims, 379 candidates)",
+    "chronologyStatus": "audited",
+    "dateAuditSummary": "Final independent canonical audit after the Huan Tan source-reanchor and tomb-reference curation. All 234 Chinese units, all 187 temporal or active-hint items, and all 87 people were checked. Claims 173–176 are now anchored to their actual dated Chinese contexts; the prior Yuanhe tomb-sacrifice life attestation has been removed, and current claim 177 is a distinct Cheng-era attestation for another person. No unresolved chronology holds or remaining source-ownership defects were found.",
+    "editorialDecisionCount": 3,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "datesVerify": "audited"
+  },
+  "substantiveFindings": "Chapter source, accepted extraction, audited chronology, and applied editorial repairs align at pinned blobs. Full-sentence English coverage is complete; no new definite English omission, chronology defect, or extraction coverage gap found in source-owner pass. Identity membership for 87 prepared cases remains for independent bounded dossier review across 5 transport parts.",
+  "distinctHolds": [],
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 87,
+    "identityTransportParts": 5,
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "artifactRetention": "GitHub Actions artifact nov24-separate-transport-audited-chapter-packets",
+    "notes": "Native preliminary identity preparation passed; exact transport parts retained off-repo. Owner handoff is not independent identity approval."
+  },
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; full-sentence English/literal+idiomatic coverage scan; npm run people:validate; people:dates:verify; validate-people-extraction; retained independent date and editorial artifacts; no canonical extraction or source edits.",
+    "sourceTitle": "Volume 28a: Biographies of Huan Tan; Feng Yan",
+    "completedAt": "2026-11-24T14:53:57.250Z"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book houhanshu --chapter 031"
+  },
+  "notes": "[CF-Pages-Skip] Source-owner pass only; push owner-handoff without altering sealed inputs."
+}
