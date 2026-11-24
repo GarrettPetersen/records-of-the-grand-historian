@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "ownerAgentId": "bc-159f19bf-4834-45ac-9043-8f3fc66a8383",
+  "workerId": "cursor-nov24-retained-staging-w3-o5",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "b4a5420aa3ab9df71518b8dd5351ccd62355859a0f047e1008b6a18567e84703",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "105"
+  },
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-105-a8383",
+  "inputBlobWitness": {
+    "source": "c6c62818743b6fa4a4f1a1eb2632c795b3f6c7c6",
+    "extraction": "f1c873cd2ba1072e6c7ce47fe000c2dac9709f9b",
+    "dateAudit": "41b9fdec519dfad495f3de57be9c6aedb734d05b",
+    "editorial": "16aa921533a191c43ca5bb5c7cd1d725f6d23404"
+  },
+  "sealedInputs": {
+    "source": "sha256:2e100588465c65cd94f3645e5f4703e1140f539b612359b64841eb8f5cd495c5",
+    "extraction": "sha256:360b47077eab44d4da71d33e1b31ec6d0568c62c4c29438a68863d1875aed3c3",
+    "dateAudit": "sha256:1b1f851983ce79a0567c70a51442e18f043b00318ed2b7bbb5e02922fe64583e",
+    "editorial": "sha256:0f636c902b5a3e62f07b9f010e1a62afa933c3c43cfc26b7333be4e13799d2b0"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 417,
+    "translatedCount": 417,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingUnits": [],
+    "fullEnglishCoverage": true
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book qingshigao --chapter 105",
+    "summary": "Scoped person data validation passed for qingshigao/105: 1 extraction(s), 5 local people, 17 mentions, 56 claims, 0 proposed repair(s), 7 applied repair(s), 7 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 417,
+      "translatedCount": 417,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "chronologyStatus": "research-blocked",
+    "dateAuditSummary": "Complete independent audit of all 417 Chinese units, 32 temporal or active-hint checks, and five people. Explicit Qing regnal-year institutional events are supported. 乾隆朝 is a reign-period phrase, not an event in AD 1748, and the Confucius identification supplies no life-date interval in this chapter. No source or canonical extraction was edited.",
+    "dateAuditReviewedAt": "2026-09-24T01:00:00Z",
+    "editorialDecisionCount": 7,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "datesVerify": "research-blocked"
+  },
+  "substantiveFindings": "Pinned blobs verified. Carriages-and-dress treatise: five people, full English on 417 units, seven applied editorial repairs. Explicit Qing regnal institutional events supported; 乾隆朝 reign-phrase and Confucius identification holds remain per audit. Owner found no definite new English repair or extraction gap.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "kind": "chronology-research-blocked",
+      "status": "research-blocked",
+      "source": "data/people/date-audits/qingshigao/105.json",
+      "summary": "Reign-period and identification holds; explicit regnal-year institutional events supported.",
+      "findingCount": 2
+    }
+  ],
+  "chapterReady": false,
+  "nextGate": "chronology-research-resolution-or-independent-final-review",
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 105",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 105"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging owner pass only; sealed inputs unchanged. Chronology remains research-blocked at pinned audit; chapter not ready for final independent check until audited status or scoped holds resolved."
+}
