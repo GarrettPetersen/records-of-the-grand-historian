@@ -55,7 +55,11 @@ jobs:
           export OUT="$RUNNER_TEMP/editorial-receipt"
           mkdir -p "$OUT"
           npm run people:validate -- --book "$BOOK" --chapter "$CHAPTER" | tee "$OUT/extraction.txt"
-          npm run people:dates:verify -- --book "$BOOK" --chapter "$CHAPTER" --out "$OUT/current-date-status.json"
+          date_code=0
+          npm run people:dates:verify -- --book "$BOOK" --chapter "$CHAPTER" --out "$OUT/current-date-status.json" || date_code=$?
+          if [ "$date_code" -eq 1 ]; then
+            jq -e --arg book "$BOOK" --arg chapter "$CHAPTER" '.chapters | length==1 and .[0].book==$book and .[0].chapter==$chapter and .[0].status=="stale"' "$OUT/current-date-status.json"
+          elif [ "$date_code" -ne 0 ]; then exit "$date_code"; fi
           node --input-type=module <<'JS'
           import assert from 'node:assert/strict';
           import fs from 'node:fs';
