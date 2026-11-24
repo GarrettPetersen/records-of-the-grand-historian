@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-people-lookup-receipt",
+  "scope": {
+    "book": "xintangshu",
+    "chapter": "012"
+  },
+  "reviewer": {
+    "agentId": "bc-633e0883-fd3f-4215-b764-d30fea93e045",
+    "name": "cursor-nov24-independent-xintangshu-012"
+  },
+  "transportSha256": "f5718dc678e4d4fa80469ac02c116c91facb0a2952ede85c6c0a54f375c9a178",
+  "planFingerprint": "sha256:e876c7a2dbaaf718152a263037d164d811adcbb6e7c6242d8f20575550530a06",
+  "queries": [
+    {
+      "route": "/v1/manifest",
+      "purpose": "Confirm live lookup generation before optional header reads",
+      "generation": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+      "note": "Live lookup revision differs from transport registryProvenance revision 110c2f92; sealed transport dossiers and units are authoritative for this review."
+    },
+    {
+      "route": "/v1/people/per_03YXFAC06VBJ2HKHVJDN",
+      "purpose": "Header confirmation for Confucius canonical id (overflow case)",
+      "blockingNameKeys": ["zh:孔宣父", "zh:仲尼"]
+    },
+    {
+      "route": "/v1/search",
+      "query": "zh:神農",
+      "purpose": "Spot-check Shennong header index; empty result on simplified key does not prove separation",
+      "total": 0,
+      "truncated": false
+    }
+  ],
+  "conclusion": "Lookup used only for bounded header confirmation. Membership, witnesses, and verdicts are drawn from sealed transport-packet.json primary Chinese and retained anchor locals.",
+  "notIdentityApproval": true
+}
