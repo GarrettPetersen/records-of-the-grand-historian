@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "kind": "audited-identity-independent-repair-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "026"
+  },
+  "pullRequest": 5525,
+  "authorBranch": "cursor/qingshigao-026-audited-owner-1de5",
+  "authorAgentId": "bc-5782b067-a4f3-49a7-936b-07d6064d1de5",
+  "ownerWorkerId": "cursor-nov24-audited-recovery-5",
+  "independentReport": {
+    "path": "research/people/checkpoints/campaign-audited-transport-20261124/qingshigao-026/independent-identity-report.json",
+    "commit": "5afd385170c326c3bfc3e126466dc36515541af8",
+    "sha256": "412e0b9108f24797aaa858b5a390320dbe8fdfbfa45a9e2a840462dba1023d5b"
+  },
+  "independentReviewer": {
+    "agentId": "bc-d87b091d-c936-494f-9db1-5efd7458ca08",
+    "name": "cursor-nov24-independent-qingshigao-026"
+  },
+  "sealedInputsUnchanged": {
+    "source": "sha256:09eca67a2741d6622d2048b29426f3dc6233b45e7e86000cf9ccfd229b571666",
+    "extraction": "sha256:d47f9d57c9d414346320653b679639a454a7e3150b00b14c5992b123fac0df8a",
+    "editorial": "sha256:74b07caa15308cd97aa460ec98a53f3d909275f1603638144e17e16bfea93312",
+    "dateAudit": "sha256:981c555058d1d0b3154398122f59b55fd84ab14c64410ab303b7e08657994501"
+  },
+  "addressedHold": {
+    "caseId": "sha256:5b619c6e607e721ab4b3431d368d411c5ba83ce1ac7df037d27c4b2ab64c540f",
+    "localPerson": "qingshigao:026:p001",
+    "independentVerdict": "hold"
+  },
+  "defect": "Prior owner-evidence treated extraction claim.zh (司馬遷/司馬/遷) as primary Chinese witnesses at s0001; sealed source text contains 《史記·天官書》 only (no personal-name graphs). Extraction mention m0001 is English-only at s0001.",
+  "sealedChapterWitness": {
+    "unitId": "s0001",
+    "quote": "史記·天官書",
+    "unitTextExcerpt": "歷代天文誌，自《史記·天官書》後，唯晉、隋兩誌，備述天體、儀象、星占，唐、宋加詳，皆未盡也。",
+    "sourceSha256": "sha256:09eca67a2741d6622d2048b29426f3dc6233b45e7e86000cf9ccfd229b571666"
+  },
+  "ownerResponse": {
+    "action": "align-independent-hold",
+    "supplementArtifact": "owner-evidence-sima-qian-hold-alignment.json",
+    "membershipUnchanged": true,
+    "canonicalPersonId": "per_04CJ00AGP2A1MKD6AZ81",
+    "anchorWitness": {
+      "localId": "beishi:088:p058",
+      "unitId": "s0142",
+      "quote": "馬遷"
+    }
+  },
+  "optionalFutureRepair": {
+    "notApplied": true,
+    "summary": "Bounded extraction repair could add a zh title-reference mention for 史記·天官書 and downgrade personal-name claims to unresolved or remove inferred 司馬遷 until a zh surface exists; would change extraction sha256:d47f9d57… only.",
+    "wouldChangeHashes": ["extraction"]
+  },
+  "preservedApprovals": 16,
+  "nextStepForSameReviewer": "Re-read only case sha256:5b619c6e… against owner-evidence-sima-qian-hold-alignment.json; sixteen approve verdicts in independent-identity-report.json remain untouched."
+}
