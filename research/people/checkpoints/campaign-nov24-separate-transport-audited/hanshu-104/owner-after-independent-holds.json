@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-after-independent-holds",
+  "chapterKey": "hanshu/104",
+  "ownerAgentId": "bc-31959fae-132e-4d10-86f7-24a41b42d3ab",
+  "ownerRevision": "1fdfbc739a0c6e3b64fe5ff7b2d85cfd1ed7f63c",
+  "ownerBranch": "cursor/nov24-separate-transport-owner-hanshu-104-42d3ab",
+  "pr": 5708,
+  "sourceReviewHead": "b1c22f5c6e0d678245d37e472f13098a3cb86bbe",
+  "ref": "cursor/nov24-exact-witness-owner-hanshu-104",
+  "stage": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "idempotencyKey": "ce8598f141276e9e3e68b8502957483eca00ecda2ee51b964260137d158cd999",
+  "transport": "ea6e25bb787ee7198f23b44e5b7124459e1a542d",
+  "inputBlobs": {
+    "source": { "path": "data/hanshu/104.json", "dispatchGitBlob": "8ff99418e2e22c6942a15355836d388dce63afd1", "matches": true },
+    "extraction": { "path": "data/people/extractions/hanshu/104.json", "dispatchGitBlob": "8ee0b3fcccea4fc18bf89be9430fb5c313711eeb", "matches": true },
+    "dateAudit": { "path": "data/people/date-audits/hanshu/104.json", "dispatchGitBlob": "b3988323ab9ecd5df8e0514477431804f43068c8", "matches": true },
+    "editorial": { "path": "data/people/editorial-decisions/hanshu/104.json", "dispatchGitBlob": "ce60c795f08c9e617c3ff3630e81b8473d28d6e6", "matches": true }
+  },
+  "reportsVerified": [
+    { "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/hanshu-104/independent-identity-report-part-001.json", "sha256": "fddb1fb04e3e04ca3d856ad2f7d72bf2bd36544da30f102a7579f496610a3259", "verified": true },
+    { "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/hanshu-104/independent-identity-report-part-002.json", "sha256": "ae81617da954b7dd7988734590769f0390cc53864492721f3e5194c906cbeaad", "verified": true },
+    { "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/hanshu-104/independent-identity-report-part-003.json", "sha256": "792aa55334db3f97c8699f2b6cebd6dc62412eabc297834f43d20cd0f5a37638", "verified": true },
+    { "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/hanshu-104/independent-identity-report-part-004.json", "sha256": "72dfbb0b81aa209801839ba475eb2afa91787c4f328669dd347b40ad2d23c2e8", "verified": true },
+    { "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/hanshu-104/independent-identity-report-part-005.json", "sha256": "11087aa19101e5dcda9a7b2a91335394baae2d295b7ad8923d920c0aab276c26", "verified": true }
+  ],
+  "cases": [
+    {
+      "caseId": "sha256:4b8e336fe4cb07167cc50e7ae7ea29a9b04777326fef4d239c93e8d2e96c2c37",
+      "localId": "hanshu:104:p026",
+      "ownerDisposition": "held-host-witness-binding",
+      "identityStatus": "source-supported unnamed father of Chen Zun (陳遵)",
+      "sourceCitations": [
+        { "unit": "hanshu:104:s0162", "zh": "遵少孤，與張竦伯松俱為京兆史。" },
+        { "unit": "hanshu:104:s0297", "zh": "祖父遂，字長子，宣帝微時與有故，相隨博弈，數負進。" }
+      ],
+      "ownerFinding": "Father is entailed by 遵少孤 plus named grandfather 祖父遂; no unit names the father. Valid as reviewed uncertain identity pending grandfather-grandson witness rule."
+    },
+    {
+      "caseId": "sha256:5b2b660e30e6f59ad6ea28a5f329f2e6d017614a28b604f8e4ba0b3be6b42e31",
+      "localId": "hanshu:104:p021",
+      "ownerDisposition": "block-merge-pending-anchor-repair",
+      "identityStatus": "Hanshu Wei Qing 衛青 (s0026 衛、霍改節; s0092 衛將軍) must not share canonical with beiqishu:048:p029",
+      "sourceCitations": [
+        { "unit": "hanshu:104:s0026", "zh": "故樓船將軍楊僕與故丞相韓曾子順德侯慶底誅，衛、霍改節，稱謹上書，無救於禍。" },
+        { "unit": "beiqishu:048:s0043", "zh": "文略嘗大遺魏收金，請為其父作佳傳，收論尒朱榮比韋、彭、伊、霍，蓋由是也。" }
+      ],
+      "ownerFinding": "Anchor 韋 on beiqishu:048:s0043 is 豕韋 (Wei clan label in a classical comparison set), not 衛青. Retain Hanshu locals under a separate Wei Qing canonical until anchor is repaired or split."
+    }
+  ],
+  "proposedChanges": [
+    {
+      "id": "hanshu-104-wei-qing-false-merge-hold",
+      "kind": "identity-split-required",
+      "caseId": "sha256:5b2b660e30e6f59ad6ea28a5f329f2e6d017614a28b604f8e4ba0b3be6b42e31",
+      "target": "data/people/extractions/hanshu/104.json",
+      "before": { "membership": "transport proposes merge into canonical anchored at beiqishu:048:p029" },
+      "after": { "membership": "keep hanshu:104:p021 (and bundled Hanshu 104 Wei Qing locals) separate; unresolvedIdentity=true until anchor repair on beiqishu:048:p029" },
+      "affectedPersonIds": ["hanshu:104:p021"],
+      "dependencies": {
+        "identity": "curated keep-separate or repair beiqishu:048 anchor; no Hanshu extraction row change in this pass",
+        "chronology": "unchanged",
+        "evidence": "Wei Shou compares Erzhu Rong to 豕韋, 大彭, 伊尹, 霍光 — 韋 is not a personal name for Wei Qing"
+      },
+      "operations": []
+    }
+  ],
+  "nativeValidation": {
+    "extractionUnchanged": true,
+    "canonicalFilesEdited": false
+  },
+  "heldCases": [
+    {
+      "caseId": "sha256:4b8e336fe4cb07167cc50e7ae7ea29a9b04777326fef4d239c93e8d2e96c2c37",
+      "localId": "hanshu:104:p026",
+      "status": "host-native-witness-binding-required",
+      "reason": "Grandfather-grandson intermediary (祖父…孫) not in admissible inferred-kin paths; kinship locator s0162/s0297 is not a name witness.",
+      "proposedHostFix": "Reviewed witness rule for father inferred from 少孤 + named grandfather, or represent kinship without separate local.",
+      "witnessUnits": ["s0162", "s0297"]
+    },
+    {
+      "caseId": "sha256:5b2b660e30e6f59ad6ea28a5f329f2e6d017614a28b604f8e4ba0b3be6b42e31",
+      "localId": "hanshu:104:p021",
+      "status": "concrete-false-merge",
+      "reason": "Cross-chapter canonical anchor misidentifies 韋 in a classical comparison as Wei Qing 衛青.",
+      "proposedHostFix": "Repair beiqishu:048:p029 anchor or split clusters before approving Hanshu Wei Qing transport membership."
+    }
+  ]
+}
