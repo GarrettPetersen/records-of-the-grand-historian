@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "kind": "separate-transport-audited-source-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "034"
+  },
+  "ownerAgentId": "bc-8b552cba-a56f-4b55-8194-bc17c4abf8a7",
+  "workerId": "cursor-nov24-separate-transport-owner-3",
+  "campaign": "campaign-nov24-separate-transport-audited",
+  "idempotencyKey": "bdde53dce4429462d8bd2f123045e6d124b0096fda3a995724e72df206679311",
+  "stagingBase": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-separate-transport-owner-jiuwudaishi-034-abf8a7",
+  "inputBlobWitness": {
+    "source": "9fcc75e14ba4f7d76cc638bb40368b648d22aa60",
+    "extraction": "8d71904267941b481da3ab2a18f0868b177edeec",
+    "dateAudit": "1597d845ec527262778ece40eb447b0f74981d9c",
+    "editorial": "bd0ac12a8b47d41bd8a9df87491170ab09cb9959"
+  },
+  "sealedInputs": {
+    "source": "sha256:592838361d90cfbd9ec20827946e4d21979e3d7917cdc873010cddb2e340ddae",
+    "extraction": "sha256:832bacf8fc9260c0547b31148e55895fba9e95e76e0cdc3841b13268829d8e02",
+    "dateAudit": "sha256:d3715f0984dbf7c813fee9a3822b2e724c70f14934b1024ed1950f119fbace2b",
+    "editorial": "sha256:5247ebc61dfb4fe66422a3b17eb2c772f706aafca0fddc9d3827532ea3d917d6"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jiuwudaishi --chapter 034",
+    "summary": "Scoped person data validation passed for jiuwudaishi/034: 1 extraction(s), 140 local people, 580 mentions, 1746 claims, 0 proposed repair(s), 29 applied repair(s), 29 editorial decision(s), 0 claim retraction(s), 4 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 238,
+      "translatedCount": 238,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": [],
+      "danglingEvidenceUnits": 0,
+      "editorialRepairsReflectedInSource": true
+    },
+    "chronologyStatus": "audited",
+    "dateAuditSummary": "Reviewed 238 units, 515 checks, and 140 people.",
+    "editorialDecisionCount": 25,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book jiuwudaishi --chapter 034",
+      "status": "audited",
+      "findings": 0
+    }
+  },
+  "substantiveFindings": "Full Chinese chapter read against sealed extraction, accepted applied editorial repairs, and audited chronology at pinned blobs. All 238 units carry paired literal and idiomatic English; accepted editorial text repairs are present in source. Local person rows, claim evidence units, and name/person references align with primary citations; no dangling evidence, unsupported chronology, false merge signal, or new definite English omission found in this source-owner pass.",
+  "distinctHolds": [],
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 99,
+    "identityTransportParts": 6,
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "artifactRetention": "GitHub Actions artifact nov24-separate-transport-audited-chapter-packets",
+    "notes": "99 prepared identity review case(s) in 6 sealed transport part(s); owner handoff is not independent identity approval."
+  },
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; full-sentence English/literal+idiomatic coverage scan; npm run people:validate and people:dates:verify; editorial source reflection check; chapter-local person and evidence spot-check; no canonical extraction or source edits; no local corpus registry generation.",
+    "sourceTitle": "Volume 34 Book of Later Tang 10: Zhuangzong Annals 8",
+    "completedAt": "2026-11-24T14:53:29.371Z",
+    "peopleLookupNote": "Bounded corpus dossier lookup deferred to CI-sealed registry generation; chapter-scoped validation and evidence inspection completed without local catalog rebuild per LOCAL_DISK_STRATEGY."
+  },
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jiuwudaishi --chapter 034"
+  },
+  "notes": "[CF-Pages-Skip] Source-owner pass only; push owner-handoff without altering sealed inputs."
+}
