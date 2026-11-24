@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "kind": "audited-identity-evidence-repair-handoff",
+  "scope": { "book": "shiji", "chapter": "064" },
+  "pullRequest": 5521,
+  "authorBranch": "cursor/shiji-064-audited-owner-94c2",
+  "ownerAgentId": "bc-47648f6a-9ca6-438d-9cd5-6f14a61294c2",
+  "ownerWorkerId": "cursor-github-nov24-cross-2",
+  "independentReport": {
+    "path": "research/people/checkpoints/campaign-audited-transport-20261124/shiji-064/independent-identity-report.json",
+    "commit": "5ac284fffb0d2fedc59fa6100082bcf29cf62e0a",
+    "sha256": "ccf9f20a3ba2600b615c41fde522e3a72d9e3db63c08dd4a6aefec9135855f9b",
+    "preservedUnchanged": true
+  },
+  "sealedInputsUnchanged": {
+    "source": "sha256:91f640750a8485859c8ce63d7d7b3565af65278ebb3e5cc93c86f27b97fc7566",
+    "extraction": "sha256:c7b34a259d7a3352f86d387d40d80ae22d42bcd17cfd2a93911a135116376447",
+    "editorial": "sha256:48a42cf0fd2fbfe7f477b222288cd56863ccf4ed594cee129500205d2c638dcb",
+    "dateAudit": "sha256:43b148f4618aba142b141f95aad850f1c6b79c3a18d464346b479f9a381aaf66",
+    "transportSha256": "ac6f5972b63c072b4802cd6f956c9732c0f80d92433b52a3a31a1cdab3320a93"
+  },
+  "nativeGateFinding": "Witness does not support shiji:064:p013 in s0047, quote 曾孫和.",
+  "repairs": [
+    {
+      "caseId": "sha256:877426c6cfb082376639035b75e70daecb04b5b979b5c9b9b7d69924cb45a97d",
+      "localPerson": "shiji:064:p013",
+      "defect": "Owner quote 曾孫和 is a substring naming 和 (p016) as Chang's great-grandson, not a Chinese personal-name surface for the inferred parent between p012 and p016.",
+      "sealedPrimaryWitness": {
+        "unitId": "s0047",
+        "quote": "至常曾孫和",
+        "unitTextExcerpt": "至常曾孫和，因自立為齊威王，用兵行威，大放穰苴之法，而諸侯朝齊。"
+      },
+      "disposition": "concrete-hold-witness-realignment",
+      "ownerResponse": {
+        "action": "withdraw-invalid-quote",
+        "retainMembership": true,
+        "unresolvedAttribution": "Source supports two anonymous male kin placeholders (p012, p013) only via the 至常曾孫和 genealogy spine; no quotable name for either.",
+        "supplementArtifact": "owner-evidence-witness-repair-supplement.json",
+        "pairedLocalPerson": "shiji:064:p012",
+        "pairedCaseId": "sha256:d469caa6f27c8496b5833b8c4c8492e3c1b6beb062979c00133a437cc5e68464"
+      },
+      "extractionPatchRequired": false,
+      "notes": "Independent reviewer approved retain-proposal on kin-path grounds; native primary-witness gate still rejects 曾孫和 and 至常曾孫 for persons without zh name keys."
+    }
+  ],
+  "relatedArtifacts": [
+    "owner-primary-witness-diagnosis.json",
+    "owner-evidence-witness-correction-supplement.json"
+  ],
+  "nextStepForCoordinator": "Attach independent-identity-report.json at commit 5ac284ff unchanged; re-run native witness validation against supplement only for case sha256:877426… and paired p012 case."
+}
