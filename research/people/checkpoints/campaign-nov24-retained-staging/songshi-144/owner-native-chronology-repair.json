@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-owner-native-chronology-repair",
+  "scope": {
+    "book": "songshi",
+    "chapter": "144"
+  },
+  "ownerAgentId": "bc-171befa0-4583-4074-a86f-8c58c468382d",
+  "workerId": "cursor-nov24-retained-staging-w3-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "e6ad0ed95e8ca016f0e9ca8bd0bd83e8f77f90fbea7eefa56f8f5b486b70140c",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "priorOwnerRevision": "6afdd6b243840a5f501436e8b387c267e3ec9319",
+  "branch": "cursor/nov24-retained-owner-native-date-songshi-144-8382d",
+  "ownerHandoff": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/songshi-144/owner-handoff.json",
+    "sha256": "2ac4cf75dc4a6d4db2cddea318258fcf49c9258c0bdd983919e59832f2c1bd97"
+  },
+  "inputBlobWitness": {
+    "source": "f8af080581892163b78f4be6c21ec77c019c5d0b",
+    "extraction": "6f55a1e3207c39954c0efc7eb4e0858580133809",
+    "dateAudit": "4605e9976a5f18c496d562c3fb84009f9506c95f",
+    "editorial": "f6b7a54fbf16b6a52d23f2187cfecff26fbfb952"
+  },
+  "pinnedAuditEvidence": {
+    "sha256": "86cea810c3b8e20f93cffcff7866e8bee70a636c47778b71f03c87fdcf4387bb",
+    "status": "research-blocked",
+    "auditReviewedAt": "2026-09-23T22:00:00Z",
+    "coveredItems": 7,
+    "findings": 2,
+    "bytesPreserved": true,
+    "note": "Pinned audit file unchanged; this artifact does not alter date-audits/songshi/144.json."
+  },
+  "sealedPacket": {
+    "sourceHash": "sha256:e9818a104722dc348bad375de53debe5da539123e9b308af23db5c8861b58e80",
+    "extractionHash": "sha256:b1b589961b8caca183dd3e8c7b604b77528ac87d86cd637130bc766d9c585576"
+  },
+  "verifiedFindings": [
+    {
+      "findingIndex": 0,
+      "items": ["claim-53", "hints-p001", "p001"],
+      "problem": "太平興國初 remains an undated early-reign context without point Western year approval.",
+      "sourceQuotes": [
+        {
+          "unit": "s0014",
+          "zh": "太宗太平興國初，增主輦二十四人，改服高腳襆頭；"
+        }
+      ],
+      "auditAction": "Retain this exact source-linked research hold and obtain a suitable dated witness before narrowing or approving it."
+    },
+    {
+      "findingIndex": 1,
+      "items": ["claim-64", "claim-66", "hints-p007", "p007"],
+      "problem": "高宗將迎韋太后 remains undated in its own source passage.",
+      "sourceQuotes": [
+        {
+          "unit": "s0128",
+          "zh": "高宗將迎韋太后於郊，因製常行儀仗，用黃麾仗二千二百六十五人。"
+        }
+      ],
+      "auditAction": "Retain these exact source-linked research holds and verify whether a dated independent witness establishes this specific welcome event before approval."
+    }
+  ],
+  "findingsDisposition": [
+    {
+      "findingIndex": 0,
+      "action": "scoped-native-repair",
+      "reason": "claim-53 attestation and hints-p001 already mark 太平興國初 unresolved, but dependent claim-86 event-participation on the same s0014 text still attaches westernYear AD 976. That contradicts the retained hold; remove the point Western year via date-context repair only.",
+      "affectedPersonIds": ["p001"],
+      "affectedAuditItems": ["claim-53", "hints-p001", "claim-86"],
+      "intactItems": ["claim-53", "hints-p001"]
+    },
+    {
+      "findingIndex": 1,
+      "action": "no-extraction-edit",
+      "reason": "claim-64, claim-66, hints-p007, and p007 attestation rows already retain 高宗將迎韋太后 as unresolved without a reign-wide Western interval; sealed audit confirms removal of unsupported interval. No false date or hint to replace.",
+      "affectedPersonIds": ["p007", "p008"],
+      "affectedAuditItems": ["claim-64", "claim-66", "hints-p007"]
+    }
+  ],
+  "nativeDateRepairProposal": {
+    "sourceHash": "sha256:e9818a104722dc348bad375de53debe5da539123e9b308af23db5c8861b58e80",
+    "extractionHash": "sha256:b1b589961b8caca183dd3e8c7b604b77528ac87d86cd637130bc766d9c585576",
+    "changes": [
+      {
+        "kind": "date-context",
+        "id": "claim-86",
+        "personId": "p001",
+        "unitIds": ["s0014"],
+        "reason": "Finding claim-53 and hints-p001 withhold point Western years for 太平興國初 on s0014; claim-86 still attaches AD 976 to the same source phrase on the same unit, contradicting the retained unresolved attestation.",
+        "before": {
+          "sourceDate": {
+            "text": "太平興國初"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 976,
+            "precision": "year"
+          }
+        },
+        "after": {
+          "sourceDate": {
+            "text": "太平興國初"
+          },
+          "unresolved": true,
+          "unresolvedReason": "太平興國初 is an undated early-reign context; the source does not establish a point Western year."
+        }
+      }
+    ]
+  },
+  "nativeValidation": {
+    "command": "node scripts/lib/people-date-workflow.mjs applyDateRepairProposal (dry-run via owner pass)",
+    "reproduce": "import { buildDateAuditPacket, applyDateRepairProposal } from scripts; applyDateRepairProposal(stored, proposal, buildDateAuditPacket('songshi','144'))",
+    "passed": true,
+    "detail": "applyDateRepairProposal succeeded on sealed extraction at pinned hashes; candidate keeps 107 claims; claim-86 dateContext no longer carries westernYear AD 976."
+  },
+  "intactApprovals": {
+    "dateAuditFileUnchanged": true,
+    "supportedItemChecksRetained": "All itemChecks with verdict supported, including claim-86 until host accepts repair and reruns independent audit, remain as pinned bytes.",
+    "editorialAndSourceUnchanged": true
+  },
+  "definiteTranslationRepairs": [],
+  "residualHolds": [
+    {
+      "gate": "date-research-blocked",
+      "summary": "Chapter date audit stays research-blocked at pinned sha256 until independent re-audit after any staged repair acceptance.",
+      "items": ["finding-0", "finding-1", "pinned-audit-86cea810"]
+    },
+    {
+      "gate": "proof",
+      "summary": "No outside chronology introduced for 太平興國初 or 高宗將迎韋太后; AD 976 cannot be reattached without new dated witness."
+    }
+  ],
+  "notes": "[CF-Pages-Skip] Proposal only; host-native validate/apply and independent re-audit required."
+}
