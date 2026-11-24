@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "scope": { "book": "shiji", "chapter": "027" },
+  "ownerAgentId": "bc-340a6bc1-9a52-4e4e-88fd-a75cb8c3b429",
+  "independentEditorialArtifact": {
+    "path": "research/people/checkpoints/shiji-027-independent-editorial-20261124/independent-editorial-decisions.json",
+    "commit": "f783a8c3338690d0c0db8577b852a45c11bd811c",
+    "sha256": "0c9775b27d121ac28435c35889687c64bc4421eb8b8c35a5dd49bd8512791a20",
+    "reviewerAgentId": "bc-846df7da-16df-49e5-b4ac-eef19ac70d51",
+    "runId": "run-b2b395c3-a7e5-4fc7-90df-f7c4f7c7a512"
+  },
+  "appliedRepairs": ["r0001", "r0002", "r0004", "r0005", "r0006", "r0007"],
+  "rejectedRepairs": ["r0003"],
+  "canonicalEditorialPath": "data/people/editorial-decisions/shiji/027.json",
+  "preApplyInputs": {
+    "source": "sha256:18c86c1f94acb8eb54843afd89c5d0ba091d70a7f3c7a5af46f80604edfda8b4",
+    "extraction": "sha256:fd48b3c65c3da7ebb2b4955401d0607bfec389ad76794faab9a5d86628113375"
+  },
+  "postApplyInputs": {
+    "source": "sha256:48599c14522453f7139b833d0af93169536cc4037a72b751afd22ea57f723ac2",
+    "extraction": "sha256:ceb2e02ef6d55dabb9dd10652fff8d8268911a7dd08788eb30b8d0d742d13d91",
+    "dateAuditBytesUnchanged": "sha256:676ccc96a39bef0f5eecf5fb992f0d017d54e0a6b5bc3c6fc60178ca2406837d",
+    "editorialDecisions": "sha256:0c9775b27d121ac28435c35889687c64bc4421eb8b8c35a5dd49bd8512791a20"
+  },
+  "nativeCoverageDelta": {
+    "mentionsBefore": 69,
+    "mentionsAfter": 70,
+    "note": "Revised English on s0011/s0779 introduced scanner mentions; two candidates classified at apply (Mount Hua=place, Dipper=not-a-name)."
+  },
+  "dateAudit": {
+    "preservedFile": true,
+    "peopleDatesVerifyStatus": "stale",
+    "reason": "sourceHash/extractionHash in sealed audit no longer match post-editorial bytes; prior audited report retained unchanged per owner instruction—no false re-audit."
+  },
+  "identityGates": {
+    "editorialApplyClearedProposals": true,
+    "remainingBlockers": ["date-audit stale vs current extraction", "s0168 idiomatic defect (followup proposal only)", "bounded identity review not recorded"]
+  },
+  "candidateApplyDispositions": [
+    {
+      "id": "shiji:027:cand_38a7dffec36ea48c",
+      "reason": "place",
+      "basis": "華 in s0011 is Mount Hua; consistent with accepted editorial r0001–r0002"
+    },
+    {
+      "id": "shiji:027:cand_5eec58ebf3af94b8",
+      "reason": "not-a-name",
+      "basis": "斗秉 in s0779 is Dipper handle asterism, not a person"
+    }
+  ]
+}
