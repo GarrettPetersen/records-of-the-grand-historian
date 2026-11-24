@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "kind": "audited-transport-identity-owner-handoff",
+  "scope": {
+    "book": "liangshu",
+    "chapter": "024"
+  },
+  "ownerAgentId": "bc-b1b4cecc-160a-4940-add4-09b11b527691",
+  "campaignWorker": "cursor-nov24-audited-recovery-1",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "4fb37f54d87fb2a0788d1c6b03014b46071d6254",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-audited-owner-transport",
+    "commit": "92a27d3c8d2ce5fd4ec58c08e081d401bd5534d6",
+    "transportSha256": "03dc3eec737b6dd85de48e46a6c12ac02e161712e0f417b65374bd64a8ff744b",
+    "transportBytes": 301108,
+    "planFingerprint": "sha256:7121a2b660de815fe87f0e4c829507c5cd81167599d838b5beeb81a527215e25",
+    "sourcePacketSha256": "fce6c04c5dfa2d2b25f253d63cae163c5d74a3e473dfd1e066a699bbe0e9f55d"
+  },
+  "sealedInputs": {
+    "source": "sha256:0549cc2937406ebbd8b6945106871fab2a7453c1246291c2d3637e38531f43f9",
+    "extraction": "sha256:c0f42f14896eb23d782c42123c31da83b38dcee4cecf7b8dda4abf6bb12f489e",
+    "editorial": "sha256:75d1d79ea367fda3bcba78a574c388f573431fd87b7f03bbdef61ed610bf3d6b",
+    "dateAudit": "sha256:c8e578f0b7a80de37fb73a37fc0cb64e0f01d2fc514e22ef43842eac4457c924"
+  },
+  "reviewCases": 34,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "ownerEvidenceSha256": "sha256:562ee3025f3ad5a91f6b0af0fb0c1a512e044b494fd9af8cc0b3616eb33f1b2e",
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-audited-transport-20261124/liangshu-024/preparation-receipt.json",
+    "transportPacket": "research/people/checkpoints/campaign-audited-transport-20261124/liangshu-024/transport-packet.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-audited-transport-20261124/liangshu-024/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-audited-transport-20261124/liangshu-024/validation-receipt.json"
+  },
+  "reproduce": {
+    "verifyTransport": "git show 92a27d3c8d2ce5fd4ec58c08e081d401bd5534d6:research/people/checkpoints/campaign-audited-transport-20261124/liangshu-024/transport-packet.json | sha256sum",
+    "validateChapter": "npm run people:validate -- --book liangshu --chapter 024"
+  },
+  "notes": "34 cases from audited transport; owner evidence is not independent approval. No identity-review.json in this PR."
+}
