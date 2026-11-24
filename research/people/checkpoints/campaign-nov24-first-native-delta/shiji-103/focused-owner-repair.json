@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "kind": "focused-native-date-owner-repair",
+  "scope": {
+    "book": "shiji",
+    "chapter": "103"
+  },
+  "ownerAgentId": "bc-91341f68-c5ae-4372-9bbe-1e1dde5b2ee2",
+  "idempotencyKey": "096da44c47360abb7e2427d126c2fd163cbd40190ac6453d673320b5571f428c",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "branchRef": "cursor/nov24-first-native-date-delta-w1-b2ee2",
+  "independentReviewer": {
+    "agentId": "bc-e53c6341-fd43-44a8-a663-0361e6614b47",
+    "reportPath": "research/people/checkpoints/campaign-nov24-first-independent-date/shiji-103/independent-date-report.json",
+    "reportRevision": "ab8b76b7044f9bb01a9cccb9a8acd27740f612d5",
+    "reportSha256": "sha256:5617944e42ef8874fa3bf8b3da6ad7e39246a486f6a3ff09b31570594183227e",
+    "status": "needs-revision",
+    "findingsAddressed": 2,
+    "itemRepairs": 27
+  },
+  "inputBlobWitness": {
+    "source": "767411f2483a5a92b8733ebccfa3837f44c33775",
+    "extraction": "0f137ce29018fd67240de847d44da7e0d140784c",
+    "editorial": "21b8a818699c5e6b8e5812cff9f820eb9839ee01"
+  },
+  "sealedInputs": {
+    "source": "sha256:sha256:dd0363b499129cee754ae81682cdc53a3c4791cda41dc747c82ff7c6ff3825dd",
+    "extraction": "sha256:sha256:12f398af7170d224ac240cccfbd71adcd7170dbe4b740452b79f1baa16b5cc79",
+    "editorial": "sha256:sha256:5e84ca42edec0e750868af1277f706caf8b6836e018fbadfd6aef38c24d10f3c"
+  },
+  "priorPacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-103/date-packet.json",
+    "sha256": "sha256:bbe61e90d980e6471d438c366266f9cf79921d9f8e961dd2898862aab6dc0b88",
+    "extractionHash": "sha256:20dc4c841471c9344619e2ea474508cd8e9b45695294d1eee127c8979cbd05f1",
+    "sourceHash": "sha256:6675956b28398d8098612b9b3b39e008bbe2ecf84dfa3d8a73d5bd9a15d81971"
+  },
+  "candidateArtifacts": {
+    "extraction": {
+      "path": "research/people/checkpoints/campaign-nov24-first-native-delta/shiji-103/candidate-extraction.json",
+      "contentSha256": "sha256:267250c6b6fbbb3378ed0c9a2192826f0dbbbfa60b8d310836d7a5ea5cccc882",
+      "extractionHash": "sha256:edfb39468568eb8d8bce5597844c2e9c4c90d11283a2a2ede039315b9756f7bb"
+    },
+    "datePacket": {
+      "path": "research/people/checkpoints/campaign-nov24-first-native-delta/shiji-103/candidate-date-packet.json",
+      "contentSha256": "sha256:ebba02a3be291baed6c2ce38e17303026a471e7ed6e6116029a1ab5aad388c5d",
+      "itemCount": 114,
+      "sourceHash": "sha256:6675956b28398d8098612b9b3b39e008bbe2ecf84dfa3d8a73d5bd9a15d81971",
+      "extractionHash": "sha256:edfb39468568eb8d8bce5597844c2e9c4c90d11283a2a2ede039315b9756f7bb"
+    },
+    "repairProposal": {
+      "path": "research/people/checkpoints/campaign-nov24-first-native-delta/shiji-103/date-repair-proposal.json",
+      "changeCount": 27
+    },
+    "preservedReport": {
+      "path": "research/people/checkpoints/campaign-nov24-first-native-delta/shiji-103/preserved-independent-date-report.json",
+      "contentSha256": "sha256:5617944e42ef8874fa3bf8b3da6ad7e39246a486f6a3ff09b31570594183227e"
+    }
+  },
+  "changedItemIds": [
+    "claim-188",
+    "claim-191",
+    "claim-195",
+    "claim-199",
+    "claim-202",
+    "claim-203",
+    "claim-204",
+    "claim-205",
+    "claim-206",
+    "claim-207",
+    "claim-208",
+    "claim-210",
+    "claim-214",
+    "claim-219",
+    "claim-220",
+    "claim-221",
+    "claim-222",
+    "claim-223",
+    "claim-227",
+    "claim-228",
+    "claim-229",
+    "claim-230",
+    "claim-231",
+    "claim-232",
+    "claim-236",
+    "claim-238",
+    "claim-239"
+  ],
+  "findingResolution": {
+    "finding0": {
+      "problem": "Additional rows retain unsupported Western conversions on owned evidence.",
+      "addressed": [
+        "claim-188",
+        "claim-191",
+        "claim-195",
+        "claim-199",
+        "claim-202",
+        "claim-203",
+        "claim-204",
+        "claim-205",
+        "claim-206",
+        "claim-207",
+        "claim-208",
+        "claim-210",
+        "claim-214",
+        "claim-219",
+        "claim-220",
+        "claim-221",
+        "claim-222",
+        "claim-223",
+        "claim-227",
+        "claim-228",
+        "claim-229",
+        "claim-230",
+        "claim-231",
+        "claim-232",
+        "claim-236",
+        "claim-238",
+        "claim-239"
+      ],
+      "method": "Remove westernYear; use source-quoted qualitative attestations or explicit undatedSourceAttestation on owned units."
+    },
+    "finding1": {
+      "problem": "Person-level chronology aggregates failed item or hint checks.",
+      "addressed": "Deferred to independent delta review after item repairs; person hints retained where other dated claims still support activity ranges.",
+      "remaining": "Independent reviewer must re-run personChecks on candidate packet."
+    }
+  },
+  "definiteTranslationRepairs": [],
+  "holds": [],
+  "independentApprovalIssued": false,
+  "nativeValidation": {
+    "validateExtraction": "npm run people:validate -- --book shiji --chapter 103 (against candidate bytes via staging packet build)",
+    "buildPacket": "npm run people:dates:packet -- --book shiji --chapter 103 --out /agent/repos/records-of-the-grand-historian/research/people/checkpoints/campaign-nov24-first-native-delta/shiji-103/candidate-date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Scoped date-repair candidate only; canonical data/ paths unchanged."
+}
