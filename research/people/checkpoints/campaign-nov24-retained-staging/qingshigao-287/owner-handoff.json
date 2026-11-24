@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "287"
+  },
+  "ownerAgentId": "bc-b585c677-50e2-4498-8a7a-17ede91ba200",
+  "workerId": "cursor-nov24-retained-staging-w14-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "f3db1dc54896eb00c3dad671fd67a16aed046330b461f0a29863b12a01be253c",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-287-ba200",
+  "extractionBytes": 107051,
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:60ab90f80f246cfcbd087b4bfce1cdae808b38ebf441f7cfa1153ce43005eee3",
+    "people": 49,
+    "claims": 351,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "e6ddcbaa22541e4cdd06cfc2f2d9249e06d22c58",
+    "extraction": "8dc83f4adfab6d15cd4b7a53878c25e44ad27dd6",
+    "editorial": "154b5070318d90fc93c131e72260b96e0d476b25"
+  },
+  "sealedInputs": {
+    "source": "sha256:f1f7d45ffb6f1005ca29479ba2cce5678ca797e89c6126abbbfd2d2022dea693",
+    "extraction": "sha256:60ab90f80f246cfcbd087b4bfce1cdae808b38ebf441f7cfa1153ce43005eee3",
+    "editorial": "sha256:190dd37f5d9bbd4cf2b73c2a2d17cd23d892a0c86c4449041560248010c88187"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 287 Biographies 74: Tong Guo Wei, Ma Qi, A Ling A, Kui Xu, E Lundai",
+    "chineseUnits": 195,
+    "translatedCount": 195,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "claimEvidenceUnitsVerified": true,
+    "allEvidenceUnitIdsResolve": true
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReextracted": false,
+    "promptVersion": 7,
+    "editorialSelfApproved": false,
+    "acceptedEditorialRepairsAppliedInSource": true,
+    "editorialAppliedCount": 1,
+    "ownerExtractionEdits": false,
+    "ownerEditorialEdits": false
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-287/date-packet.json",
+    "contentSha256": "sha256:1b2325fd4e6fe8b7c3852399d960f5dcb1a20c7d5728ec6e0dfda496b0c698eb",
+    "packetSourceHash": "sha256:c9747961be1cc55fe4597c25f4485a90ea5abeee1348fac5c5a794f8bdb78198",
+    "packetExtractionHash": "sha256:1d0ef23149c9fa4d935de5b48ee9e6b687f2a5dd491ae8bd0ff77d3ad6ef46b4",
+    "preparationCommand": "npm run people:dates:packet -- --book qingshigao --chapter 287 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-287/date-packet.json",
+    "summary": "240 date/hint checks, 49 people, 196 source units"
+  },
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 287",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/287: 1 extraction(s), 49 local people, 450 mentions, 528 claims, 0 proposed repair(s), 1 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 287",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentDateApproval": true
+  },
+  "candidateValidationCommands": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 287",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 287",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 287 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-287/date-packet.json",
+    "independentDateAudit": "npm run people:dates:run -- --book qingshigao --chapter 287 --run --model <reviewer-model>"
+  },
+  "substantiveFindings": "Git blob witness matches work-order pins at staging 20b8d0e3. Full chapter Chinese read with paired literal and idiomatic English on every unit carrying Chinese text. Reused prompt-v7 extraction and accepted editorial repairs without re-extraction; all claim evidence unit IDs resolve in source. Legacy temporal debt zero. Native date packet sealed for independent reviewer; owner did not record people:dates:record and did not self-approve chronology. No definite English omission, concrete chronology contradiction, or extraction coverage gap found in owner pass.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "completed": false,
+      "missingArtifact": "data/people/date-audits/qingshigao/287.json",
+      "sealedPacketSha256": "sha256:1b2325fd4e6fe8b7c3852399d960f5dcb1a20c7d5728ec6e0dfda496b0c698eb",
+      "reviewerInstructions": "Independent reviewer reads full source, sealed date packet, and current extraction at pinned hashes; records approval via people:dates:record only after complete coverage with zero unresolved findings."
+    },
+    "identityReview": {
+      "required": true,
+      "ownerCompleted": false,
+      "notes": "Corpus identity resolution gates apply separately; owner pass retained extraction identities without bounded dossier review."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; candidate chronology packet and handoff without altering sealed inputs or claiming completion."
+}

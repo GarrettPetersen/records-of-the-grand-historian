@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "390"
+  },
+  "ownerAgentId": "bc-b585c677-50e2-4498-8a7a-17ede91ba200",
+  "workerId": "cursor-nov24-retained-staging-w14-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "f3db1dc54896eb00c3dad671fd67a16aed046330b461f0a29863b12a01be253c",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-390-ba200",
+  "extractionBytes": 107241,
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:a315d05f03cf8c997180281b5371c86fcc8f75fad54036865560ed303fcb7c7c",
+    "people": 63,
+    "claims": 295,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "7fc28312cfc7811c29997f5e280a4b9ed40ccf37",
+    "extraction": "76dd0c40840e92b3ffdc24ba03aafcc21791bea4",
+    "editorial": "6b6e58010e1b5ed66018774cfd406552feeabe16"
+  },
+  "sealedInputs": {
+    "source": "sha256:7b3879aaa5f10fff696948f42b09054c54d9582d9d521871ac80bc98cc4af50a",
+    "extraction": "sha256:a315d05f03cf8c997180281b5371c86fcc8f75fad54036865560ed303fcb7c7c",
+    "editorial": "sha256:89ac6ece165ae195fc92db79635d16439264ba6d5b158b71f30265c528f5d1ce"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 390 Biographies 177: Jia Zhen, Zhou Zupei, Zhu Fengbiao, Dan Maoqian",
+    "chineseUnits": 180,
+    "translatedCount": 180,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "claimEvidenceUnitsVerified": true,
+    "allEvidenceUnitIdsResolve": true
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReextracted": false,
+    "promptVersion": 7,
+    "editorialSelfApproved": false,
+    "acceptedEditorialRepairsAppliedInSource": true,
+    "editorialAppliedCount": 4,
+    "ownerExtractionEdits": false,
+    "ownerEditorialEdits": false
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-390/date-packet.json",
+    "contentSha256": "sha256:a96ae8d4a7350ab108ac8269793d4b3e72c98ceabeb812d4a57434a315eaa4d2",
+    "packetSourceHash": "sha256:8a245471dea32d98d41385a0f92ec95a4577141289df5257b218b9824b477c4e",
+    "packetExtractionHash": "sha256:9256a084c50752df58385e90dc33c4a707033aa9784886104dc72f4bef72c651",
+    "preparationCommand": "npm run people:dates:packet -- --book qingshigao --chapter 390 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-390/date-packet.json",
+    "summary": "248 date/hint checks, 63 people, 180 source units"
+  },
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 390",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/390: 1 extraction(s), 63 local people, 233 mentions, 506 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 3 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 390",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentDateApproval": true
+  },
+  "candidateValidationCommands": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 390",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 390",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 390 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-390/date-packet.json",
+    "independentDateAudit": "npm run people:dates:run -- --book qingshigao --chapter 390 --run --model <reviewer-model>"
+  },
+  "substantiveFindings": "Git blob witness matches work-order pins at staging 20b8d0e3. Full chapter Chinese read with paired literal and idiomatic English on every unit carrying Chinese text. Reused prompt-v7 extraction and accepted editorial repairs without re-extraction; all claim evidence unit IDs resolve in source. Legacy temporal debt zero. Native date packet sealed for independent reviewer; owner did not record people:dates:record and did not self-approve chronology. No definite English omission, concrete chronology contradiction, or extraction coverage gap found in owner pass.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "completed": false,
+      "missingArtifact": "data/people/date-audits/qingshigao/390.json",
+      "sealedPacketSha256": "sha256:a96ae8d4a7350ab108ac8269793d4b3e72c98ceabeb812d4a57434a315eaa4d2",
+      "reviewerInstructions": "Independent reviewer reads full source, sealed date packet, and current extraction at pinned hashes; records approval via people:dates:record only after complete coverage with zero unresolved findings."
+    },
+    "identityReview": {
+      "required": true,
+      "ownerCompleted": false,
+      "notes": "Corpus identity resolution gates apply separately; owner pass retained extraction identities without bounded dossier review."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; candidate chronology packet and handoff without altering sealed inputs or claiming completion."
+}

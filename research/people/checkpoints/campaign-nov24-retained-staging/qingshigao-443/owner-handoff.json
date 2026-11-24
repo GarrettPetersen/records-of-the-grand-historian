@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "443"
+  },
+  "ownerAgentId": "bc-b585c677-50e2-4498-8a7a-17ede91ba200",
+  "workerId": "cursor-nov24-retained-staging-w14-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "f3db1dc54896eb00c3dad671fd67a16aed046330b461f0a29863b12a01be253c",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-443-ba200",
+  "extractionBytes": 107170,
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:df076ccb1f8019141d7f68330fe73bf88756d5d4906fb35e60322b5776c88ff3",
+    "people": 51,
+    "claims": 316,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "9e158e58141e1f123e03c83938b29e94198685e3",
+    "extraction": "08653e4ccce7b695dc03dd935d67fe75a0fa2507",
+    "editorial": "d940237b3beaf0104aa51b9297dcc5a0d8322b38"
+  },
+  "sealedInputs": {
+    "source": "sha256:494efed3acc2971b4cc63b53d43093a22cd72d95d882c51251ae69975ddc7448",
+    "extraction": "sha256:df076ccb1f8019141d7f68330fe73bf88756d5d4906fb35e60322b5776c88ff3",
+    "editorial": "sha256:bfdf37f8d77c2bfad9ca1eab4088c9126d7f49e76e5887bddaef0cc86553e519"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 443 Biographies 230: Sun Jianai, Zhang Baixi, Tang Jingchong, Yu Shimei, Shen Jiaben",
+    "chineseUnits": 223,
+    "translatedCount": 223,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "claimEvidenceUnitsVerified": true,
+    "allEvidenceUnitIdsResolve": true
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReextracted": false,
+    "promptVersion": 7,
+    "editorialSelfApproved": false,
+    "acceptedEditorialRepairsAppliedInSource": true,
+    "editorialAppliedCount": 5,
+    "ownerExtractionEdits": false,
+    "ownerEditorialEdits": false
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-443/date-packet.json",
+    "contentSha256": "sha256:d6f714dfe757ef90031eb435bf3c67edb21f2e1f388dbfa5a616c5bfb96708b1",
+    "packetSourceHash": "sha256:eec392902c44bcce5ce104b6fba75cba5cea75a79b0f55fa32e0559bf77851d7",
+    "packetExtractionHash": "sha256:e8bc924143916a4c773be5b2b8434b9c571f72648b75b425311bee7a604410d8",
+    "preparationCommand": "npm run people:dates:packet -- --book qingshigao --chapter 443 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-443/date-packet.json",
+    "summary": "168 date/hint checks, 51 people, 224 source units"
+  },
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 443",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/443: 1 extraction(s), 51 local people, 267 mentions, 513 claims, 0 proposed repair(s), 5 applied repair(s), 5 editorial decision(s), 0 claim retraction(s), 2 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 443",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentDateApproval": true
+  },
+  "candidateValidationCommands": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 443",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 443",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 443 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-443/date-packet.json",
+    "independentDateAudit": "npm run people:dates:run -- --book qingshigao --chapter 443 --run --model <reviewer-model>"
+  },
+  "substantiveFindings": "Git blob witness matches work-order pins at staging 20b8d0e3. Full chapter Chinese read with paired literal and idiomatic English on every unit carrying Chinese text. Reused prompt-v7 extraction and accepted editorial repairs without re-extraction; all claim evidence unit IDs resolve in source. Legacy temporal debt zero. Native date packet sealed for independent reviewer; owner did not record people:dates:record and did not self-approve chronology. No definite English omission, concrete chronology contradiction, or extraction coverage gap found in owner pass.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "completed": false,
+      "missingArtifact": "data/people/date-audits/qingshigao/443.json",
+      "sealedPacketSha256": "sha256:d6f714dfe757ef90031eb435bf3c67edb21f2e1f388dbfa5a616c5bfb96708b1",
+      "reviewerInstructions": "Independent reviewer reads full source, sealed date packet, and current extraction at pinned hashes; records approval via people:dates:record only after complete coverage with zero unresolved findings."
+    },
+    "identityReview": {
+      "required": true,
+      "ownerCompleted": false,
+      "notes": "Corpus identity resolution gates apply separately; owner pass retained extraction identities without bounded dossier review."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; candidate chronology packet and handoff without altering sealed inputs or claiming completion."
+}
