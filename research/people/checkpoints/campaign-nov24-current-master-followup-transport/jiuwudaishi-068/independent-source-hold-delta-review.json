@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "chapterKey": "jiuwudaishi/068",
+  "reviewerAgentId": "bc-e05440ad-a0f9-4f16-b4e8-8e6197c3c9f1",
+  "ownerAgentId": "bc-903d3892-ff92-4352-9793-5f42d1111401",
+  "ownerRevision": "6071bc4142671ca8b79cd0b3f5daf5089649ecea",
+  "proposalSha256": "sha256:3c5f3871d9eaef97768e91ce20a40164b23cab178dfc6a31e276767840bad139",
+  "provenance": {
+    "priorIndependentReviewCommit": "8e93f17a49ac7729d6b5269aa7addd42264515f3",
+    "priorHoldReport": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/jiuwudaishi-068/independent-identity-report-part-002.json",
+    "proposalPath": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/jiuwudaishi-068/source-hold-delta-proposal.json"
+  },
+  "sealedInputsVerified": {
+    "source": "fe0f26c9a87dc7b459563bcdd94bfecc382d5c4c",
+    "extraction": "401dd7d9560118917450fc60eda94b489d59c11b",
+    "dateAudit": "8c29df9b708fa74c3b857f76a88e60aad4b71b74",
+    "editorial": "a1b00e6e98a92d70fb46542f78aad51daf36d751"
+  },
+  "decisions": [
+    {
+      "caseId": "sha256:369f50d5bbbe49da9b58ac38e3057c1e404bc87644f788d8e821922da7848b91",
+      "canonicalPersonId": "per_48WNXH3B0D2CJDTKB9FP",
+      "localId": "jiuwudaishi:068:p003",
+      "verdict": "approve-operations",
+      "priorIndependentVerdict": "hold",
+      "alignmentWithPriorHold": "Owner diagnosis matches independent hold at 8e93f17a49: English-only Emperor Yizong on s0002 without Han sovereign surface; not a source-text contradiction but extraction and idiomatic over-attribution.",
+      "operationsApproved": [
+        "remove-person:p003",
+        "remove-claim-subject:p003:name",
+        "remove-claim-subject:p003:title-reference:en:Emperor Yizong:s0002",
+        "remove-claim-subject:p003:sex",
+        "remove-claim-subject:p003:attestation:咸通中",
+        "remove-claim-subject:p003:role:ruler",
+        "translationRepair:s0002:idiomatic"
+      ],
+      "operationsRejected": [],
+      "sourceEvidence": {
+        "book": "jiuwudaishi",
+        "chapter": "068",
+        "unitId": "s0002",
+        "zhWitness": "父逢，咸通中為秘書監，以才名著於時。",
+        "zhWitnessVerifiedAt": "6071bc4142671ca8b79cd0b3f5daf5089649ecea:data/jiuwudaishi/068.json",
+        "englishFields": {
+          "literal": {
+            "before": "His father Feng, during the Xiantong reign period served as Director of the Palace Library, and was renowned in his time for literary talent.",
+            "after": "His father Feng, during the Xiantong reign period served as Director of the Palace Library, and was renowned in his time for literary talent.",
+            "changeRequired": false,
+            "note": "Literal translation already tracks 咸通中 without naming 懿宗; no idiomatic sovereign insertion."
+          },
+          "idiomatic": {
+            "before": "His father Feng served as Director of the Palace Library under Emperor Yizong and was widely celebrated for his gifts as a writer.",
+            "after": "His father Feng, during the Xiantong reign period served as Director of the Palace Library, and was widely celebrated in his time for his gifts as a writer.",
+            "changeRequired": true,
+            "verifiedAgainstChinese": true
+          }
+        },
+        "extractionBeforeVerified": {
+          "p003PreferredName": ["Emperor Yizong", null, null],
+          "p003NameClaim": { "kind": "title", "en": "Emperor Yizong", "evidence": ["s0002"] },
+          "p003AttestationSourceDate": "咸通中",
+          "p002AttestationOnSameUnit": "咸通中",
+          "p002OfficeOnSameUnit": "秘書監"
+        },
+        "inferenceNotContradiction": "咸通中 correctly contextualizes father Feng’s service (p002 attestation and office on s0002 already carry AD 860–874). Minting p003 from idiomatic English alone is descriptive inference, not a conflicting primary reading."
+      },
+      "dependencyImpact": {
+        "chronology": {
+          "staleAfterApply": ["date-audit rows for p003", "hints-p003 active-date hints"],
+          "preserved": "p002 咸通中 attestation, office, and western interval on s0002 remain the sole person-linked chronology for that unit."
+        },
+        "identity": {
+          "chapterLocal": "Removes unsupported jiuwudaishi:068:p003; does not merge, split, or edit accepted Yizong dossiers in other chapters (anchor jiuwudaishi:007:p047 unchanged).",
+          "transportPlan": "Case sha256:369f50d5… drops with p003; host must refresh identity transport (78 chapter-local targets) before chapter identity certification.",
+          "unaffectedCases": "Other 78 independent approve rows and owner retain-proposals untouched."
+        },
+        "translation": "Only s0002 idiomatic English changes; Chinese unit text unchanged.",
+        "editorial": "No editorial-decisions/jiuwudaishi/068.json rows reference p003 at ownerRevision."
+      },
+      "holdDisposition": {
+        "holdRequiredUntilApply": true,
+        "remainingHoldAfterApprovedApply": false,
+        "repairPath": "After host applies approved operations and idiomatic repair, the concrete over-attribution hold is satisfied; no further identity hold on this case unless extraction reintroduces a Chinese-named ruler on s0002.",
+        "independentIdentityReReview": "Bounded identity re-review required post-apply on refreshed plan only (not full 79-case re-audit of unaffected persons)."
+      }
+    }
+  ],
+  "summary": {
+    "casesDecided": 1,
+    "operationsApproved": 7,
+    "operationsRejected": 0,
+    "remainingHolds": 0
+  },
+  "reviewedAt": "2026-11-24T10:52:00.000Z"
+}
