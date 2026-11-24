@@ -40,7 +40,7 @@
   "Cursor displays reset date only; verify exact reset time before new dispatch",
   "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
  ],
- "nextAction": "Wait for exact staging certificates and the Cloudflare release while the next cohort prepares from current master.",
+ "nextAction": "Verify both exact staging projections with authoritative production validator, then promote only certificates that pass. Continue checking the first deployment and collecting the second review cohort.",
  "pullRequests": [
   {
    "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -176,7 +176,7 @@
    "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
   }
  ],
- "lastCheckedAt": "2026-11-24T09:09:15.683Z",
+ "lastCheckedAt": "2026-11-24T09:11:08.666Z",
  "lookup": {
   "authenticatedManifestVerified": true,
   "access": "read-only",
@@ -27284,6 +27284,35 @@
         "productionTestBlob": "3d4ec7b4645808b5c759a8850c5a0cfea7c8702a",
         "status": "dispatch-planned",
         "artifact": "jinshu028-composed-current-staging-native-tests"
+       },
+       "productionRuntimeProjection": {
+        "master": "a8b5bf79f39c400f8adb2360f03d6aa6fa2f20d9",
+        "stage": "79ae4c4de6c6739c3dc12f011c3b789dba50e3c1",
+        "source": "0e6650af12d72a4cc45576b906dc3c4c3ce4493f",
+        "ref": "codex/cursor-glossary-nov24-2026-jinshu028-staging-current-native-runtime",
+        "workflowRevision": "bf6d9080add2941b711eac77aedd37f1ed998ff6",
+        "artifact": "jinshu028-staging-current-native-runtime",
+        "runtime": [
+         {
+          "path": "scripts",
+          "mode": "040000",
+          "type": "tree",
+          "sha": "b89258a819368ad9928d81722fff6c78604636f4"
+         },
+         {
+          "path": "package.json",
+          "mode": "100644",
+          "type": "blob",
+          "sha": "f3d842941ed4f33a1671ef087e4b77403280168e"
+         },
+         {
+          "path": "data/people/storage-policy.json",
+          "mode": "100644",
+          "type": "blob",
+          "sha": "9bbcc01b605ededd33dd872133e3a758f01edee9"
+         }
+        ],
+        "status": "dispatch-planned"
        }
       }
      },
@@ -34528,11 +34557,11 @@
            "certificateBlob": "075a35537cbc3a57e6b794934ff249683bd7a82c"
           }
          ],
-         "status": "in_progress",
+         "status": "completed",
          "artifact": "nov24-seven-validated-identity-proofs-on-staging",
          "runId": 45361330693,
          "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45361330693",
-         "conclusion": null,
+         "conclusion": "failure",
          "attachments": [
           {
            "key": "nanqishu/008",
@@ -34576,7 +34605,41 @@
            "attachedHead": "ff3d7cfa0cac572c71e749975efaaa6be89d2214",
            "certificateBlob": "075a35537cbc3a57e6b794934ff249683bd7a82c"
           }
-         ]
+         ],
+         "productionRuntimeProjection": {
+          "master": "a8b5bf79f39c400f8adb2360f03d6aa6fa2f20d9",
+          "stage": "79ae4c4de6c6739c3dc12f011c3b789dba50e3c1",
+          "source": "2f4bf5b5e17aa9a91ca657ab2e5e1ef1848db43b",
+          "ref": "codex/cursor-glossary-nov24-2026-seven-staging-current-native-runtime",
+          "workflowRevision": "2c141e7ebf8c8f8860f37d8617e8f7e07847a9a0",
+          "artifact": "nov24-seven-staging-current-native-runtime",
+          "runtime": [
+           {
+            "path": "scripts",
+            "mode": "040000",
+            "type": "tree",
+            "sha": "b89258a819368ad9928d81722fff6c78604636f4"
+           },
+           {
+            "path": "package.json",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "f3d842941ed4f33a1671ef087e4b77403280168e"
+           },
+           {
+            "path": "data/people/storage-policy.json",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "9bbcc01b605ededd33dd872133e3a758f01edee9"
+           }
+          ],
+          "status": "dispatch-planned"
+         },
+         "diagnostic": "All seven staged scopes passed extraction and chronology. The staging branch lacked the current production canonical validator module. Project the exact current production runtime onto these isolated staged data inputs, following the previous Songshu promotion procedure.",
+         "auditArtifact": {
+          "id": 14905361309,
+          "digest": "sha256:b01a5d6573cf759fd7cc50ab88e47f6c94c3ee35e8ca33ad81c3c316019db825"
+         }
         }
        },
        "ownerRepairs": {
