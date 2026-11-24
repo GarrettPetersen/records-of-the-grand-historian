@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "411"
+  },
+  "ownerAgentId": "bc-8d95fe00-c958-4dba-a0ed-f89018cb6423",
+  "workerId": "cursor-nov24-retained-staging-w16-o9",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "095c02aa689f5d8c203e522dd89a54af50128f00a50a6d166ed82ceb82419a72",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-411-b6423",
+  "audit": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "workOrderPeople": 88,
+    "workOrderClaims": 521
+  },
+  "inputBlobWitness": {
+    "source": "6b6ed45b0f083efd2add9d1cbb5844915878cb25",
+    "extraction": "1cde5301e3fae38282b3448a3f89815edbcdba1e",
+    "editorial": "5e75b81fe750e3cfaa30a3cf20842e695871c6f2"
+  },
+  "sealedInputs": {
+    "source": "sha256:3ca2938892c3d4ff742aa5505bd21a8cdd614566d733a87235547176c02e4601",
+    "extraction": "sha256:9b4b5be3647d4e2bcca41c4357918715c42f2e2dd4c6ff0a064044236257a424",
+    "editorial": "sha256:6c2de4c3f403bf0f37415a8b6b52f9e5e179dc9e8ece9394fb0869937e7c26b4"
+  },
+  "extractionBytes": 161569,
+  "sourceCoverage": {
+    "sourceTitle": "Volume 411 Biographies 198: Li Hongzhang",
+    "sentenceCountMeta": 269,
+    "translatedCountMeta": 269,
+    "chineseUnits": 269,
+    "translatedCount": 269,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "missingEnglishUnitIds": []
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-411/date-packet.json",
+    "sha256": "sha256:c2807804b47ec9d9f48cd3c6d675a60beea1bc1c4cb864c020245be5ba1fc7b8",
+    "sourceHash": "sha256:863510bc6e11759c3213217f669b3289f39e8b0423e1b56098f8e39609a090d4",
+    "extractionHash": "sha256:962a43641b2d39224f99c54b9135789dd9a0bbef0e19cf33a62617c9ff8706a5",
+    "itemCount": 325,
+    "peopleCount": 88,
+    "canonicalSourceHash": "sha256:863510bc6e11759c3213217f669b3289f39e8b0423e1b56098f8e39609a090d4",
+    "canonicalExtractionHash": "sha256:962a43641b2d39224f99c54b9135789dd9a0bbef0e19cf33a62617c9ff8706a5",
+    "unitCount": 271
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 411",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/411: 1 extraction(s), 88 local people, 387 mentions, 798 claims, 0 proposed repair(s), 3 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 411",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "output": "> records-of-the-grand-historian@1.0.0 people:dates:verify\n> node scripts/people-date-audit.mjs verify --book qingshigao --chapter 411\n\n{\n  \"total\": 1,\n  \"counts\": {\n    \"un-audited\": 1\n  },\n  \"chapters\": [\n    {\n      \"book\": \"qingshigao\",\n      \"chapter\": \"411\",\n      \"status\": \"un-audited\",\n      \"auditVersion\": 1\n    }\n  ]\n}"
+    },
+    "chronologyStatus": "pending-independent-native-date-audit",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "editorialDecisionCount": 4,
+    "notIndependentApproval": true
+  },
+  "editorialAndExtractionReuse": {
+    "extractionReused": true,
+    "editorialReused": true,
+    "extractionPromptVersion": 7,
+    "ownerExtractionEdits": false,
+    "ownerEditorialEdits": false
+  },
+  "substantiveFindings": "Sealed three-part inputs at pinned staging blobs; extraction and editorial reused without owner edits. Chapter source: 269 Chinese sentences with 0 missing English pair(s); meta reports 269/269 translated. Scoped extraction: 88 people, 521 claims at work-order hash. No native date-audit file; people:dates:verify un-audited. Fresh date packet sealed at sha256:c2807804b47ec9d9… with 325 temporal items. Owner does not issue independent date approval.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "mechanism": "Independent reviewer runs native date audit against sealedNativeDatePacket and records with people:dates:record",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-411/date-packet.json",
+      "packetSha256": "sha256:c2807804b47ec9d9f48cd3c6d675a60beea1bc1c4cb864c020245be5ba1fc7b8",
+      "status": "missing",
+      "packetCanonicalExtractionHash": "sha256:962a43641b2d39224f99c54b9135789dd9a0bbef0e19cf33a62617c9ff8706a5",
+      "packetCanonicalSourceHash": "sha256:863510bc6e11759c3213217f669b3289f39e8b0423e1b56098f8e39609a090d4"
+    },
+    "identity": "No cross-chapter identity merge/split in owner scope; chapter extraction at pinned hash awaits date gate before publication readiness."
+  },
+  "candidateValidationCommands": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 411",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 411",
+    "datePacket": "npm run people:dates:packet -- --book qingshigao --chapter 411 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-411/date-packet.json",
+    "dateRecord": "npm run people:dates:record -- --report <independent-review-report.json>"
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentDateApprovalIssued": false,
+  "independentIdentityApprovalIssued": false,
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry, deploy, or merge.",
+  "fingerprintScheme": {
+    "gitBlobContentSha256": "Witness hashes in sealedInputs are SHA-256 of exact pinned git blob bytes (work-order sourceExtractionSha256 for extraction).",
+    "nativeDatePacketSha256": "Packet sourceHash/extractionHash are sha256(JSON.stringify(...)) per buildDateAuditPacket in scripts/lib/people-date-audit.mjs; independent audit must pin packet file sha256 in sealedNativeDatePacket."
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 411",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 411",
+    "datePacket": "npm run people:dates:packet -- --book qingshigao --chapter 411 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-411/date-packet.json"
+  },
+  "extractionFingerprintAlignment": {
+    "workOrderBlobSha256": "sha256:9b4b5be3647d4e2bcca41c4357918715c42f2e2dd4c6ff0a064044236257a424",
+    "packetCanonicalExtractionHash": "sha256:962a43641b2d39224f99c54b9135789dd9a0bbef0e19cf33a62617c9ff8706a5",
+    "sameDigest": false,
+    "note": "Expected divergence: blob witness is raw bytes; packet uses JSON.stringify(extraction) canonical digest for date audit binding."
+  }
+}

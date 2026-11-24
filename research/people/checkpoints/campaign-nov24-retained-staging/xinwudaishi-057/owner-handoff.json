@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "057"
+  },
+  "ownerAgentId": "bc-8d95fe00-c958-4dba-a0ed-f89018cb6423",
+  "workerId": "cursor-nov24-retained-staging-w16-o9",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "095c02aa689f5d8c203e522dd89a54af50128f00a50a6d166ed82ceb82419a72",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-xinwudaishi-057-b6423",
+  "audit": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "workOrderPeople": 166,
+    "workOrderClaims": 426
+  },
+  "inputBlobWitness": {
+    "source": "4427f02a929e35d2d47d719764183acf100362da",
+    "extraction": "16bba85bfc060450d3c9e4cd49d3fa9f7e65d7fd",
+    "editorial": "30dac069f70fd4ffa6e12a6fabca879521df4bcd"
+  },
+  "sealedInputs": {
+    "source": "sha256:d50bb0948557d3348077afa4aea337662b6082a21f2835dfa01bf24f1a394aa7",
+    "extraction": "sha256:4bae22d161f7d06b8c58533612cc408aca55d4978b28852429032c64d879330e",
+    "editorial": "sha256:796674b20c34b6b60235b7901c6eeee78862dd2df4e5b12b02b666ff87235a3b"
+  },
+  "extractionBytes": 160982,
+  "sourceCoverage": {
+    "sourceTitle": "Volume 57 Miscellaneous Biographies 37: Li Song, Li Lin, Jia Wei, Duan Xiyao, Zhang Yun, Wang Song, Pei Hao, Wang Renyu, Pei Yu, Wang Yan, Ma Zhongji, Zhao Yanyi",
+    "sentenceCountMeta": 264,
+    "translatedCountMeta": 264,
+    "chineseUnits": 264,
+    "translatedCount": 264,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "missingEnglishUnitIds": []
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-057/date-packet.json",
+    "sha256": "sha256:6edc40ee0105a4981f553865ce24526ac0610f3c055dbda5ff2e11db8d446da9",
+    "sourceHash": "sha256:0aaab286969940f4b98f560e62c5387b49302a8852af44213778da794080f418",
+    "extractionHash": "sha256:df84d5f48e181fe8575d2d2b63d8925d745098dfd87eec5fd3d2a76edffc6242",
+    "itemCount": 341,
+    "peopleCount": 166,
+    "canonicalSourceHash": "sha256:0aaab286969940f4b98f560e62c5387b49302a8852af44213778da794080f418",
+    "canonicalExtractionHash": "sha256:df84d5f48e181fe8575d2d2b63d8925d745098dfd87eec5fd3d2a76edffc6242",
+    "unitCount": 264
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book xinwudaishi --chapter 057",
+    "peopleValidateSummary": "Scoped person data validation passed for xinwudaishi/057: 1 extraction(s), 166 local people, 686 mentions, 807 claims, 0 proposed repair(s), 11 applied repair(s), 11 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book xinwudaishi --chapter 057",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "output": "> records-of-the-grand-historian@1.0.0 people:dates:verify\n> node scripts/people-date-audit.mjs verify --book xinwudaishi --chapter 057\n\n{\n  \"total\": 1,\n  \"counts\": {\n    \"un-audited\": 1\n  },\n  \"chapters\": [\n    {\n      \"book\": \"xinwudaishi\",\n      \"chapter\": \"057\",\n      \"status\": \"un-audited\",\n      \"auditVersion\": 1\n    }\n  ]\n}"
+    },
+    "chronologyStatus": "pending-independent-native-date-audit",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "editorialDecisionCount": 11,
+    "notIndependentApproval": true
+  },
+  "editorialAndExtractionReuse": {
+    "extractionReused": true,
+    "editorialReused": true,
+    "extractionPromptVersion": 7,
+    "ownerExtractionEdits": false,
+    "ownerEditorialEdits": false
+  },
+  "substantiveFindings": "Sealed three-part inputs at pinned staging blobs; extraction and editorial reused without owner edits. Chapter source: 264 Chinese sentences with 0 missing English pair(s); meta reports 264/264 translated. Scoped extraction: 166 people, 426 claims at work-order hash. No native date-audit file; people:dates:verify un-audited. Fresh date packet sealed at sha256:6edc40ee0105a498… with 341 temporal items. Owner does not issue independent date approval.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "mechanism": "Independent reviewer runs native date audit against sealedNativeDatePacket and records with people:dates:record",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-057/date-packet.json",
+      "packetSha256": "sha256:6edc40ee0105a4981f553865ce24526ac0610f3c055dbda5ff2e11db8d446da9",
+      "status": "missing",
+      "packetCanonicalExtractionHash": "sha256:df84d5f48e181fe8575d2d2b63d8925d745098dfd87eec5fd3d2a76edffc6242",
+      "packetCanonicalSourceHash": "sha256:0aaab286969940f4b98f560e62c5387b49302a8852af44213778da794080f418"
+    },
+    "identity": "No cross-chapter identity merge/split in owner scope; chapter extraction at pinned hash awaits date gate before publication readiness."
+  },
+  "candidateValidationCommands": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 057",
+    "datesVerify": "npm run people:dates:verify -- --book xinwudaishi --chapter 057",
+    "datePacket": "npm run people:dates:packet -- --book xinwudaishi --chapter 057 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-057/date-packet.json",
+    "dateRecord": "npm run people:dates:record -- --report <independent-review-report.json>"
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentDateApprovalIssued": false,
+  "independentIdentityApprovalIssued": false,
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry, deploy, or merge.",
+  "fingerprintScheme": {
+    "gitBlobContentSha256": "Witness hashes in sealedInputs are SHA-256 of exact pinned git blob bytes (work-order sourceExtractionSha256 for extraction).",
+    "nativeDatePacketSha256": "Packet sourceHash/extractionHash are sha256(JSON.stringify(...)) per buildDateAuditPacket in scripts/lib/people-date-audit.mjs; independent audit must pin packet file sha256 in sealedNativeDatePacket."
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 057",
+    "datesVerify": "npm run people:dates:verify -- --book xinwudaishi --chapter 057",
+    "datePacket": "npm run people:dates:packet -- --book xinwudaishi --chapter 057 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-057/date-packet.json"
+  },
+  "extractionFingerprintAlignment": {
+    "workOrderBlobSha256": "sha256:4bae22d161f7d06b8c58533612cc408aca55d4978b28852429032c64d879330e",
+    "packetCanonicalExtractionHash": "sha256:df84d5f48e181fe8575d2d2b63d8925d745098dfd87eec5fd3d2a76edffc6242",
+    "sameDigest": false,
+    "note": "Expected divergence: blob witness is raw bytes; packet uses JSON.stringify(extraction) canonical digest for date audit binding."
+  }
+}

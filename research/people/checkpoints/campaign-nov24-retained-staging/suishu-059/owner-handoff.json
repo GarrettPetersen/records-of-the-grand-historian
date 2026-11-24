@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "suishu",
+    "chapter": "059"
+  },
+  "ownerAgentId": "bc-8d95fe00-c958-4dba-a0ed-f89018cb6423",
+  "workerId": "cursor-nov24-retained-staging-w16-o9",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "095c02aa689f5d8c203e522dd89a54af50128f00a50a6d166ed82ceb82419a72",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-suishu-059-b6423",
+  "audit": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "workOrderPeople": 71,
+    "workOrderClaims": 511
+  },
+  "inputBlobWitness": {
+    "source": "d33dbbcc998fd8e7808094b2be8d229d3d2adab2",
+    "extraction": "cdb3570e5a18be3df968a091fea1f1fd61923a40",
+    "editorial": "2c0b36af4dca5537d6475b379af6784dcf066a3e"
+  },
+  "sealedInputs": {
+    "source": "sha256:ae88bc397f085ec89b8018762cdb560b7afa731f983922af348ef7e76bf0c6df",
+    "extraction": "sha256:b13f8f044c959925c99cbe967ffb3066001ff91b3ecfde97ad255c59ad0354d1",
+    "editorial": "sha256:34b77400f86b8bcea9969b302d0673bfb12f78de67b7c5397debafe8876838d9"
+  },
+  "extractionBytes": 161130,
+  "sourceCoverage": {
+    "sourceTitle": "Volume 59 Biographies 24: Three Sons of Emperor Yang",
+    "sentenceCountMeta": 263,
+    "translatedCountMeta": 263,
+    "chineseUnits": 263,
+    "translatedCount": 263,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "missingEnglishUnitIds": []
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/suishu-059/date-packet.json",
+    "sha256": "sha256:ff78e0c41472c2038cf4f189d39c86883ae71d5e1ccf7c6921ae109d50a936ac",
+    "sourceHash": "sha256:080b9ce6fa48aa1b2c2415fd5a30927df14da34ecad8c47f5cd6d1276c2a4af3",
+    "extractionHash": "sha256:0ed14a6ccd46d5fbd7475ccf76db892e330bea2eb34b0a37ce423898b9911a9a",
+    "itemCount": 235,
+    "peopleCount": 71,
+    "canonicalSourceHash": "sha256:080b9ce6fa48aa1b2c2415fd5a30927df14da34ecad8c47f5cd6d1276c2a4af3",
+    "canonicalExtractionHash": "sha256:0ed14a6ccd46d5fbd7475ccf76db892e330bea2eb34b0a37ce423898b9911a9a",
+    "unitCount": 263
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book suishu --chapter 059",
+    "peopleValidateSummary": "Scoped person data validation passed for suishu/059: 1 extraction(s), 71 local people, 562 mentions, 758 claims, 0 proposed repair(s), 11 applied repair(s), 11 editorial decision(s), 1 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book suishu --chapter 059",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "output": "> records-of-the-grand-historian@1.0.0 people:dates:verify\n> node scripts/people-date-audit.mjs verify --book suishu --chapter 059\n\n{\n  \"total\": 1,\n  \"counts\": {\n    \"un-audited\": 1\n  },\n  \"chapters\": [\n    {\n      \"book\": \"suishu\",\n      \"chapter\": \"059\",\n      \"status\": \"un-audited\",\n      \"auditVersion\": 1\n    }\n  ]\n}"
+    },
+    "chronologyStatus": "pending-independent-native-date-audit",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "editorialDecisionCount": 11,
+    "notIndependentApproval": true
+  },
+  "editorialAndExtractionReuse": {
+    "extractionReused": true,
+    "editorialReused": true,
+    "extractionPromptVersion": 7,
+    "ownerExtractionEdits": false,
+    "ownerEditorialEdits": false
+  },
+  "substantiveFindings": "Sealed three-part inputs at pinned staging blobs; extraction and editorial reused without owner edits. Chapter source: 263 Chinese sentences with 0 missing English pair(s); meta reports 263/263 translated. Scoped extraction: 71 people, 511 claims at work-order hash. No native date-audit file; people:dates:verify un-audited. Fresh date packet sealed at sha256:ff78e0c41472c203… with 235 temporal items. Owner does not issue independent date approval.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "mechanism": "Independent reviewer runs native date audit against sealedNativeDatePacket and records with people:dates:record",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/suishu-059/date-packet.json",
+      "packetSha256": "sha256:ff78e0c41472c2038cf4f189d39c86883ae71d5e1ccf7c6921ae109d50a936ac",
+      "status": "missing",
+      "packetCanonicalExtractionHash": "sha256:0ed14a6ccd46d5fbd7475ccf76db892e330bea2eb34b0a37ce423898b9911a9a",
+      "packetCanonicalSourceHash": "sha256:080b9ce6fa48aa1b2c2415fd5a30927df14da34ecad8c47f5cd6d1276c2a4af3"
+    },
+    "identity": "No cross-chapter identity merge/split in owner scope; chapter extraction at pinned hash awaits date gate before publication readiness."
+  },
+  "candidateValidationCommands": {
+    "validateChapter": "npm run people:validate -- --book suishu --chapter 059",
+    "datesVerify": "npm run people:dates:verify -- --book suishu --chapter 059",
+    "datePacket": "npm run people:dates:packet -- --book suishu --chapter 059 --out research/people/checkpoints/campaign-nov24-retained-staging/suishu-059/date-packet.json",
+    "dateRecord": "npm run people:dates:record -- --report <independent-review-report.json>"
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentDateApprovalIssued": false,
+  "independentIdentityApprovalIssued": false,
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry, deploy, or merge.",
+  "fingerprintScheme": {
+    "gitBlobContentSha256": "Witness hashes in sealedInputs are SHA-256 of exact pinned git blob bytes (work-order sourceExtractionSha256 for extraction).",
+    "nativeDatePacketSha256": "Packet sourceHash/extractionHash are sha256(JSON.stringify(...)) per buildDateAuditPacket in scripts/lib/people-date-audit.mjs; independent audit must pin packet file sha256 in sealedNativeDatePacket."
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book suishu --chapter 059",
+    "datesVerify": "npm run people:dates:verify -- --book suishu --chapter 059",
+    "datePacket": "npm run people:dates:packet -- --book suishu --chapter 059 --out research/people/checkpoints/campaign-nov24-retained-staging/suishu-059/date-packet.json"
+  },
+  "extractionFingerprintAlignment": {
+    "workOrderBlobSha256": "sha256:b13f8f044c959925c99cbe967ffb3066001ff91b3ecfde97ad255c59ad0354d1",
+    "packetCanonicalExtractionHash": "sha256:0ed14a6ccd46d5fbd7475ccf76db892e330bea2eb34b0a37ce423898b9911a9a",
+    "sameDigest": false,
+    "note": "Expected divergence: blob witness is raw bytes; packet uses JSON.stringify(extraction) canonical digest for date audit binding."
+  }
+}

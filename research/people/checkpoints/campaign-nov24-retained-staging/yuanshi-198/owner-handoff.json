@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "yuanshi",
+    "chapter": "198"
+  },
+  "ownerAgentId": "bc-8d95fe00-c958-4dba-a0ed-f89018cb6423",
+  "workerId": "cursor-nov24-retained-staging-w16-o9",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "095c02aa689f5d8c203e522dd89a54af50128f00a50a6d166ed82ceb82419a72",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-yuanshi-198-b6423",
+  "audit": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "workOrderPeople": 94,
+    "workOrderClaims": 623
+  },
+  "inputBlobWitness": {
+    "source": "e56068fc577e88fef4d46ab163b9320dfbc5d866",
+    "extraction": "37c38cb776c13bbf59b2256a779e89e5e539d594",
+    "editorial": "93320a90fd9dd97cfa8ef138f29d22ba16c3a389"
+  },
+  "sealedInputs": {
+    "source": "sha256:82fd6249875b4c82957b16d45584881b41a6620c7926fb083984e20d134643d4",
+    "extraction": "sha256:6511af5f56253a2720a203c7fa3068f726aedad10da4243599204c190471b1ce",
+    "editorial": "sha256:bb627ae951dfd614edd08014bb8365a251e4195d2241ade8f4913d1a82f2c281"
+  },
+  "extractionBytes": 160988,
+  "sourceCoverage": {
+    "sourceTitle": "Volume 198 Biographies 85: Filial and Brotherly Acts 1",
+    "sentenceCountMeta": 176,
+    "translatedCountMeta": 176,
+    "chineseUnits": 176,
+    "translatedCount": 176,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "missingEnglishUnitIds": []
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-198/date-packet.json",
+    "sha256": "sha256:b2400bd7cad0246e75eba07354d9cbffcb3b0c9e3b908b14e591f0aff66f1d80",
+    "sourceHash": "sha256:bce65de4a894273bb4be671c91f7273ea39bfe32e20f5754d4d355ed5490b64b",
+    "extractionHash": "sha256:5a3eff90866abd86c40c5610a2342ef68592cfc2b91bc798da9fe569e3162ebc",
+    "itemCount": 237,
+    "peopleCount": 94,
+    "canonicalSourceHash": "sha256:bce65de4a894273bb4be671c91f7273ea39bfe32e20f5754d4d355ed5490b64b",
+    "canonicalExtractionHash": "sha256:5a3eff90866abd86c40c5610a2342ef68592cfc2b91bc798da9fe569e3162ebc",
+    "unitCount": 176
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book yuanshi --chapter 198",
+    "peopleValidateSummary": "Scoped person data validation passed for yuanshi/198: 1 extraction(s), 94 local people, 347 mentions, 981 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book yuanshi --chapter 198",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "output": "> records-of-the-grand-historian@1.0.0 people:dates:verify\n> node scripts/people-date-audit.mjs verify --book yuanshi --chapter 198\n\n{\n  \"total\": 1,\n  \"counts\": {\n    \"un-audited\": 1\n  },\n  \"chapters\": [\n    {\n      \"book\": \"yuanshi\",\n      \"chapter\": \"198\",\n      \"status\": \"un-audited\",\n      \"auditVersion\": 1\n    }\n  ]\n}"
+    },
+    "chronologyStatus": "pending-independent-native-date-audit",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "editorialDecisionCount": 3,
+    "notIndependentApproval": true
+  },
+  "editorialAndExtractionReuse": {
+    "extractionReused": true,
+    "editorialReused": true,
+    "extractionPromptVersion": 7,
+    "ownerExtractionEdits": false,
+    "ownerEditorialEdits": false
+  },
+  "substantiveFindings": "Sealed three-part inputs at pinned staging blobs; extraction and editorial reused without owner edits. Chapter source: 176 Chinese sentences with 0 missing English pair(s); meta reports 176/176 translated. Scoped extraction: 94 people, 623 claims at work-order hash. No native date-audit file; people:dates:verify un-audited. Fresh date packet sealed at sha256:b2400bd7cad0246e… with 237 temporal items. Owner does not issue independent date approval.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "mechanism": "Independent reviewer runs native date audit against sealedNativeDatePacket and records with people:dates:record",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-198/date-packet.json",
+      "packetSha256": "sha256:b2400bd7cad0246e75eba07354d9cbffcb3b0c9e3b908b14e591f0aff66f1d80",
+      "status": "missing",
+      "packetCanonicalExtractionHash": "sha256:5a3eff90866abd86c40c5610a2342ef68592cfc2b91bc798da9fe569e3162ebc",
+      "packetCanonicalSourceHash": "sha256:bce65de4a894273bb4be671c91f7273ea39bfe32e20f5754d4d355ed5490b64b"
+    },
+    "identity": "No cross-chapter identity merge/split in owner scope; chapter extraction at pinned hash awaits date gate before publication readiness."
+  },
+  "candidateValidationCommands": {
+    "validateChapter": "npm run people:validate -- --book yuanshi --chapter 198",
+    "datesVerify": "npm run people:dates:verify -- --book yuanshi --chapter 198",
+    "datePacket": "npm run people:dates:packet -- --book yuanshi --chapter 198 --out research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-198/date-packet.json",
+    "dateRecord": "npm run people:dates:record -- --report <independent-review-report.json>"
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentDateApprovalIssued": false,
+  "independentIdentityApprovalIssued": false,
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry, deploy, or merge.",
+  "fingerprintScheme": {
+    "gitBlobContentSha256": "Witness hashes in sealedInputs are SHA-256 of exact pinned git blob bytes (work-order sourceExtractionSha256 for extraction).",
+    "nativeDatePacketSha256": "Packet sourceHash/extractionHash are sha256(JSON.stringify(...)) per buildDateAuditPacket in scripts/lib/people-date-audit.mjs; independent audit must pin packet file sha256 in sealedNativeDatePacket."
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book yuanshi --chapter 198",
+    "datesVerify": "npm run people:dates:verify -- --book yuanshi --chapter 198",
+    "datePacket": "npm run people:dates:packet -- --book yuanshi --chapter 198 --out research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-198/date-packet.json"
+  },
+  "extractionFingerprintAlignment": {
+    "workOrderBlobSha256": "sha256:6511af5f56253a2720a203c7fa3068f726aedad10da4243599204c190471b1ce",
+    "packetCanonicalExtractionHash": "sha256:5a3eff90866abd86c40c5610a2342ef68592cfc2b91bc798da9fe569e3162ebc",
+    "sameDigest": false,
+    "note": "Expected divergence: blob witness is raw bytes; packet uses JSON.stringify(extraction) canonical digest for date audit binding."
+  }
+}
