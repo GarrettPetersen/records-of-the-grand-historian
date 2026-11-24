@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xintangshu",
+    "chapter": "070"
+  },
+  "ownerAgentId": "bc-bbaefc50-2f40-4364-aece-e97754880133",
+  "workerId": "cursor-nov24-retained-staging-w5-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "39dc761601a40cbb24700ca121def2ef3c7181f2724be3ed793248577ef9f7ee",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-xintangshu-070-80133",
+  "inputBlobWitness": {
+    "source": "efa4961e29ba298f2165b5d892e8780d4306037a",
+    "extraction": "a9f3ebdd6c2a911d203a56c8feafe58c60e22bcf",
+    "dateAudit": "6fd424ebb497eff850224fe9cf08abf9add84e00",
+    "editorial": "77d8d7d04baa4ce981a35a499689d7a2b991e390"
+  },
+  "sealedInputs": {
+    "source": "sha256:617fa63d21277754e2468116cd38dbf825b7b930af9bedde6291f0da744eba38",
+    "extraction": "sha256:2e34abc699620e4d4ca6142c9f6ace4142080404b012437c9b82f509ed7275c6",
+    "dateAudit": "sha256:1c84ecaefbe1c32fe36c92e609a2ce4a77ef0da5ccfd65e6f9d0ef9c524aa6e1",
+    "editorial": "sha256:6cd1421e70b913353c64c8c089ae247ceda3838c79e87fc3861ef9f4744099cb"
+  },
+  "sourceCoverage": {
+    "sentenceCount": 151,
+    "translatedCount": 151,
+    "bothFieldsComplete": true,
+    "missingUnits": []
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book xintangshu --chapter 070",
+    "summary": "Scoped person data validation passed for xintangshu/070: 1 extraction(s), 204 local people, 600 mentions, 1536 claims, 0 proposed repair(s), 17 applied repair(s), 17 editorial decision(s).",
+    "extractionValidate": "data/people/extractions/xintangshu/070.json: ok (204 people, 600 mentions, 1536 claims, 792 candidates)",
+    "chronologyStatus": "research-blocked",
+    "dateAuditSummary": "Fresh independent whole-chapter audit after the canonical Xiang curation: all 151 Chinese units, 423 temporal and active-hint items, and 204 person summaries were checked. The current Xiang record correctly removes the former reversed BC/AD interval and retains an unresolved source-based hold. Unit s0034 identifies Xiang as Shang’s younger brother and Fanyang branch founder but supplies no personal date or defensible chronological bound. The full report is therefore research-blocked rather than approved; no date is invented to close the hold.",
+    "dateAuditFileSha256": "sha256:1c84ecaefbe1c32fe36c92e609a2ce4a77ef0da5ccfd65e6f9d0ef9c524aa6e1",
+    "datesVerify": "research-blocked",
+    "datesVerifyExitCode": 0,
+    "extractionFingerprintMatchesAudit": true,
+    "currentExtractionHash": "sha256:132d656e5cb138bc4fe46da3ecd7d787f7d077480f2a9c051bffa833bc79a79f",
+    "auditedExtractionHash": "sha256:132d656e5cb138bc4fe46da3ecd7d787f7d077480f2a9c051bffa833bc79a79f",
+    "sourceFingerprintMatchesAudit": true
+  },
+  "substantiveFindings": "151 source units with complete English; 204 people and 1536 claims validate. Independent whole-chapter audit remains research-blocked on Xiang (p042) only; all other packet items supported at pinned fingerprints.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "itemIds": [
+        "claim-184",
+        "hints-p042",
+        "p042"
+      ],
+      "taxonomy": "source-limited genealogical person (Xiang / 向)",
+      "problem": "s0034 identifies Xiang as Shang’s younger brother and Fanyang branch founder with no reign, year, lifespan, or personal endpoint; curation correctly removed impossible interval.",
+      "nativeAction": "Retain unresolved claim and research-required hint; obtain separately source-hashed chronology witness before any bound; fresh whole-chapter audit.",
+      "evidenceUnits": [
+        "s0034"
+      ],
+      "clauseCitations": [
+        "弟向，范陽房始祖也。"
+      ]
+    }
+  ],
+  "chapterReady": false,
+  "preservedDateAuditBytes": true,
+  "independentReviewRepeated": false,
+  "canonicalEdits": false,
+  "authorEvidence": {
+    "method": "Verified staging git blobs; full source English scan; scoped people:validate and validate-people-extraction; people:dates:verify; retained native date-audit and editorial bytes without hash substitution.",
+    "completedAt": "2026-11-24T16:29:28.234Z"
+  },
+  "reproduce": {
+    "datesVerify": "npm run people:dates:verify -- --book xintangshu --chapter 070",
+    "validateChapter": "npm run people:validate -- --book xintangshu --chapter 070"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; no sealed input mutation, publication, or global registry."
+}
