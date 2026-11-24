@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "hanshu",
+    "chapter": "022"
+  },
+  "ownerAgentId": "bc-171befa0-4583-4074-a86f-8c58c468382d",
+  "workerId": "cursor-nov24-retained-staging-w3-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "3c98aee976a8cc637024225ec4b35a052744f7cbbaa8f36295381f0baef1adb2",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-hanshu-022-8382d",
+  "inputBlobWitness": {
+    "source": "b218412fb9fd973a7fbd63bb8d90c02c448172e2",
+    "extraction": "0c5388dfbf1e128648dc1811895f8085ca8fe78c",
+    "dateAudit": "296d200758b43f003b69ac26e2a681cc6c1b2484",
+    "editorial": "4ded50d2a9d64a467c90f09f967484d403a05ba1"
+  },
+  "sealedInputs": {
+    "source": "sha256:016fc0c2d01822cd822e4c7b938f24229df28e4c1a0f9376ef6fd2cd047fd9da",
+    "extraction": "sha256:6d4bde908c67cae0afddd3b30da9e8cc4f737948dc5c9930f1f829445441550d",
+    "dateAudit": "sha256:a03df043d016e096b4832ccd9e2d73237f5391578310fe51b8e0af98a60eefe8",
+    "editorial": "sha256:345efaa8a83b6e5d426cf023f10f924bcb6a18f13280af399160df902057cd1a"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 20: Prominent People from the Past Until the Present",
+    "chineseUnits": 31,
+    "translatedCount": 31,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "editorialRepairsReflectedInSource": true
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book hanshu --chapter 022",
+    "summary": "Scoped person data validation passed for hanshu/022: 1 extraction(s), 33 local people, 72 mentions, 267 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s).",
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "chronologyStatus": "research-blocked",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book hanshu --chapter 022",
+      "status": "research-blocked",
+      "findings": 1
+    },
+    "editorialDecisionCount": 2
+  },
+  "substantiveFindings": "All input blobs match dispatch witness. Ancient-biography chapter reviewed end-to-end: Chinese and both English fields complete; 33 people, legendary-antiquity records, and applied repairs align with sealed extraction. Post-curation independent audit reports no repairable defect; qualitative non-Western antiquity records and explicit research holds are preserved without invented dates.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "gate": "date-research-blocked",
+      "summary": "Source-specific research holds on legendary-antiquity Western conversions and paired hints remain unresolved; status is research-blocked, not audited.",
+      "items": ["findings[0] consolidated claim/hint list in date audit"]
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book hanshu --chapter 022",
+    "verifyDates": "npm run people:dates:verify -- --book hanshu --chapter 022"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; sealed staging inputs unchanged."
+}
