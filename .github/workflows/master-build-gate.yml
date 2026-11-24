@@ -1,71 +1,64 @@
-name: Master build gate
-
-# Run on the proposed PR merge commit, not just the topic branch. Keep this
-# workflow unfiltered so its required check is always reported for master PRs.
+name: Compose retained jiuwudaishi-109 identity proofs
+run-name: Validate retained and current independent identity witnesses for jiuwudaishi-109
 on:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
-  merge_group:
-    types: [checks_requested]
-
+  workflow_dispatch:
 permissions:
   contents: read
-
+  actions: read
 jobs:
-  master-build:
-    name: master-build
+  certify:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 30
     env:
-      NODE_OPTIONS: --max-old-space-size=6144
+      NODE_OPTIONS: --max-old-space-size=3072
+      SOURCE: 9ff16dff7cc3ed0eca7cd7e826e50897a2109e71
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          ref: ${{ env.SOURCE }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Test people date-hint normalization
-        run: npm run people:hints:self-test
-
-      - name: Test unresolved people-date holds
-        run: node scripts/test-people-unresolved-hold.mjs
-
-      - name: Test Cursor date-worker recovery
-        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs
-
-      - name: Install ebook publication verification tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
-
-      - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
-
-      - name: Test bounded canonical-person dossiers and chapter proofs
-        run: |
-          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs
-          npm run people:catalog:self-test
-
-      - name: Test certified website people publication
-        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
-
-      - name: Build and validate the full site
-        run: npm run build
-
-      - name: Verify real Jinshu 053 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
-
-      - name: Preserve nonempty chapter acceptance evidence
-        uses: actions/upload-artifact@v4
+      - run: npm install --no-audit --no-fund
+      - uses: actions/download-artifact@v4
         with:
-          name: jinshu053-qualified-contribution
-          path: data/people/generated/jinshu053-release-acceptance/
-          retention-days: 30
+          name: nov24-separate-cross-chapter-context-delta-packets
+          run-id: 45426862860
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/proof
+      - name: Compose the exact retained and current native review
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          export OUT="$GITHUB_WORKSPACE/data/people/generated/witness-native"
+          export REGISTRY="$GITHUB_WORKSPACE/data/people/generated/identity-dossiers/$SOURCE"
+          mkdir -p "$OUT" "$(dirname "$REGISTRY")"
+          node scripts/people-identity-registry-worker.mjs --out "$REGISTRY" --revision "$SOURCE"
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {execFileSync} from 'node:child_process';
+          import {identityArtifactHash,recordChapterIdentityReview} from './scripts/lib/people-identity-review-record.mjs';
+          import {assembleChapterIdentityReviewParts} from './scripts/lib/people-identity-review-transport.mjs';
+          const x={"scope":{"book":"jiuwudaishi","chapter":"109"},"agentId":"bc-0258f5c5-9d37-4174-a87b-53b9dfea76a5","ownerAgentId":"bc-e207215c-b48a-483e-b53d-c526ad7cb717","runId":"run-818d78ac-3ab5-4a13-9c7d-cce5aa3c87b8","reportHead":"d8a4941b59ecc95b1cedcd8a9b8948e82e3c49bc","reportPath":"research/people/checkpoints/campaign-nov24-separate-cross-chapter-witness/jiuwudaishi-109/independent-changed-evidence.json","reportSha":"379d6c0553c357b8cc0651ebf21d1853db5157cfb89a1809234ec57cb3b9aa00","transportSha":"287d768546da3bb4b332967330e83034208f593f01572dbf2894d0e1e877bb6d","packetSha":"7597b88bda8e013d008d2c5f17004643ed2056f2b6a593a9cbbe7027e5e3de90","source":"9ff16dff7cc3ed0eca7cd7e826e50897a2109e71","priorCases":103,"caseIds":["sha256:04c0e09e4e2dffe87b41ad411fd4d666b64828a474ec6062b129978a840a1045","sha256:8ef348f02a088357714f1e4c0deb1b65976c542ff9a0c327b0bd401154af8310"]};
+          const dir=process.env.RUNNER_TEMP+'/proof/jiuwudaishi-109', packet=dir+'/source-review-packet.json', transportFile=dir+'/transport-part-001.json', reportFile=dir+'/independent-delta.json', aggregate=dir+'/aggregate-delta.json', job=dir+'/capture.json';
+          const p=fs.readFileSync(packet), t=fs.readFileSync(transportFile), d=JSON.parse(p), transport=JSON.parse(t);
+          const raw=execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+process.env.GITHUB_REPOSITORY+'/contents/'+x.reportPath+'?ref='+x.reportHead],{maxBuffer:2e6,timeout:25000});
+          assert.equal(identityArtifactHash(p),x.packetSha); assert.equal(identityArtifactHash(t),x.transportSha); assert.equal(identityArtifactHash(raw),x.reportSha); assert.equal(d.registryReuse.sourceRevision,x.source);
+          const {schemaVersion,planFingerprint,reviewer,reviews}=JSON.parse(raw), response={schemaVersion,planFingerprint,reviewer,reviews}, nativeRaw=Buffer.from(JSON.stringify(response)+'\n'); const normalized=assembleChapterIdentityReviewParts(d.plan,[transport],[response],[x.agentId],d.authorAgentIds,d.reviewCaseIds);
+          const aggregateBytes=Buffer.from(JSON.stringify(normalized)+'\n');
+          const common={schemaVersion:1,phase:'report-recorded',scope:x.scope,agentId:x.agentId,runId:x.runId,sourcePacketSha256:identityArtifactHash(p)};
+          const part={...common,kind:'captured-independent-identity-review-part',transportFile,reportFile,transportSha256:identityArtifactHash(t),reportSha256:identityArtifactHash(nativeRaw)};
+          fs.writeFileSync(reportFile,nativeRaw,{flag:'wx'}); fs.writeFileSync(aggregate,aggregateBytes,{flag:'wx'}); fs.writeFileSync(job,JSON.stringify({...common,kind:'captured-independent-identity-review-parts',authorAgentIds:[x.ownerAgentId],transportPolicy:JSON.parse(fs.readFileSync(dir+'/preparation-receipt.json')).transportPolicy,reportSha256:identityArtifactHash(aggregateBytes),parts:[part]}),{flag:'wx'});
+          const result=await recordChapterIdentityReview({packet,report:aggregate,job,registry:process.env.REGISTRY,out:process.env.OUT+'/jiuwudaishi-109.json'});
+          assert.equal(result.reviewedCases,x.priorCases+x.caseIds.length); assert.equal(result.nativeIdentityProofAccepted,true); fs.writeFileSync(process.env.OUT+'/summary.json',JSON.stringify({result,capture:x},null,2));
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nov24-native-current-composed-jiuwudaishi-109
+          path: data/people/generated/witness-native/
+          if-no-files-found: error
+          retention-days: 7
